@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partes de Enfermería – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Partes de enfermería</h3>
+            <p><a href="../enfermeria.html">← Volver a Enfermería</a></p>
+            <p>Sistema de registro y comunicación de enfermería entre turnos. Registre incidencias, evolución de pacientes y observaciones relevantes para garantizar la continuidad asistencial.</p>
+        </section>
+
+        <section>
+            <h3>Crear nuevo parte de enfermería</h3>
+            <form action="#" method="post">
+                <label for="unidad">Unidad/Planta</label>
+                <select id="unidad" name="unidad" required>
+                    <option value="">Seleccione unidad</option>
+                    <option value="uci">UCI</option>
+                    <option value="urgencias">Urgencias</option>
+                    <option value="planta3">Planta 3 - Medicina Interna</option>
+                    <option value="planta4">Planta 4 - Cirugía</option>
+                    <option value="planta5">Planta 5 - Traumatología</option>
+                    <option value="pediatria">Pediatría</option>
+                </select>
+
+                <label for="turno">Turno</label>
+                <select id="turno" name="turno" required>
+                    <option value="">Seleccione turno</option>
+                    <option value="manana">Mañana (7:00-15:00)</option>
+                    <option value="tarde">Tarde (15:00-22:00)</option>
+                    <option value="noche">Noche (22:00-7:00)</option>
+                </select>
+
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" name="fecha" required>
+
+                <label for="num_pacientes">Número de pacientes en unidad</label>
+                <input type="number" id="num_pacientes" name="num_pacientes" min="0" required>
+
+                <label for="incidencias">Incidencias destacadas</label>
+                <textarea id="incidencias" name="incidencias" rows="6" placeholder="Ingreso de pacientes, altas, traslados, complicaciones, problemas técnicos, etc."></textarea>
+
+                <label for="evoluciones">Evolución de pacientes</label>
+                <textarea id="evoluciones" name="evoluciones" rows="6" placeholder="Estado general de los pacientes, cambios en tratamientos, resultados de pruebas relevantes..."></textarea>
+
+                <label for="observaciones">Observaciones y recomendaciones para próximo turno</label>
+                <textarea id="observaciones" name="observaciones" rows="4"></textarea>
+
+                <label for="firma">Enfermero/a responsable</label>
+                <input type="text" id="firma" name="firma" required>
+
+                <button type="submit">Guardar parte de enfermería</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Partes recientes</h3>
+            <div class="card">
+                <h4>UCI - Turno de noche (23/11/2025)</h4>
+                <p><strong>Responsable:</strong> Enf. Luis Martínez<br>
+                <strong>Pacientes:</strong> 8/10 camas ocupadas</p>
+                <p><strong>Incidencias:</strong> Ingreso de paciente post-quirúrgico de cirugía cardíaca a las 23:45h. Paciente de cama 5 presenta fiebre de 38.2°C, se avisa a médico de guardia.</p>
+                <p><strong>Observaciones:</strong> Paciente cama 3 pendiente de extubación valorar por mañana. Revisar analítica paciente cama 7.</p>
+                <p><button>Ver parte completo</button></p>
+            </div>
+            <div class="card">
+                <h4>Planta 3 - Turno de tarde (23/11/2025)</h4>
+                <p><strong>Responsable:</strong> Enf. María González<br>
+                <strong>Pacientes:</strong> 28/30 camas ocupadas</p>
+                <p><strong>Incidencias:</strong> Alta de 3 pacientes. Ingreso de 2 pacientes desde urgencias. Caída sin consecuencias del paciente habitación 315.</p>
+                <p><strong>Observaciones:</strong> Paciente hab. 310 presenta dolor no controlado, ajustar analgesia. Pte. 318 estreñimiento, pendiente de valoración.</p>
+                <p><button>Ver parte completo</button></p>
+            </div>
+            <div class="card">
+                <h4>Urgencias - Turno de mañana (23/11/2025)</h4>
+                <p><strong>Responsable:</strong> Enf. Carmen Ruiz<br>
+                <strong>Atenciones:</strong> 42 pacientes</p>
+                <p><strong>Incidencias:</strong> Alta afluencia durante la mañana. Código ictus activado a las 10:30h. Stock bajo de material de curas, solicitar reposición.</p>
+                <p><strong>Observaciones:</strong> Boxes 2 y 5 necesitan limpieza profunda. Revisar caducidades de medicación de urgencias.</p>
+                <p><button>Ver parte completo</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Consultar histórico de partes</h3>
+            <form action="#" method="get">
+                <label for="unidad_buscar">Unidad</label>
+                <select id="unidad_buscar" name="unidad">
+                    <option value="">Todas</option>
+                    <option value="uci">UCI</option>
+                    <option value="urgencias">Urgencias</option>
+                    <option value="planta3">Planta 3</option>
+                    <option value="planta4">Planta 4</option>
+                    <option value="planta5">Planta 5</option>
+                </select>
+
+                <label for="fecha_desde">Desde</label>
+                <input type="date" id="fecha_desde" name="fecha_desde">
+
+                <label for="fecha_hasta">Hasta</label>
+                <input type="date" id="fecha_hasta" name="fecha_hasta">
+
+                <button type="submit">Buscar partes</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Plantillas y modelos</h3>
+            <p>Descargue plantillas estandarizadas para diferentes situaciones:</p>
+            <ul>
+                <li><a href="#">Plantilla de parte estándar</a></li>
+                <li><a href="#">Plantilla de incidencia crítica</a></li>
+                <li><a href="#">Plantilla de traslado de paciente</a></li>
+                <li><a href="#">Plantilla de control de inventario</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Estadísticas de la unidad</h3>
+            <p>Acceda a estadísticas sobre ocupación, incidencias y actividad de su unidad.</p>
+            <p><button>Ver estadísticas</button> <button>Generar informe mensual</button></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>

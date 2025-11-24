@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnos y Horarios – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Gestión de turnos y horarios</h3>
+            <p><a href="../administracion.html">← Volver a Administración</a></p>
+            <p>Sistema centralizado para la consulta y gestión de turnos, horarios del personal y programación de recursos. Facilita la planificación y permite realizar cambios dinámicos según las necesidades del servicio.</p>
+        </section>
+
+        <section>
+            <h3>Mi cuadrante del mes</h3>
+            <div class="card">
+                <h4>Diciembre 2025</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Día</th>
+                            <th>Turno</th>
+                            <th>Horario</th>
+                            <th>Ubicación</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1 Lun</td>
+                            <td>Mañana</td>
+                            <td>7:00-15:00</td>
+                            <td>Planta 3</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>2 Mar</td>
+                            <td>Mañana</td>
+                            <td>7:00-15:00</td>
+                            <td>Planta 3</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>3 Mié</td>
+                            <td>Tarde</td>
+                            <td>15:00-22:00</td>
+                            <td>Planta 3</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>4 Jue</td>
+                            <td>Tarde</td>
+                            <td>15:00-22:00</td>
+                            <td>Planta 3</td>
+                            <td>-</td>
+                        </tr>
+                        <tr style="background-color: #ffe0e0;">
+                            <td>5 Vie</td>
+                            <td>Noche</td>
+                            <td>22:00-7:00</td>
+                            <td>Urgencias</td>
+                            <td>Guardia</td>
+                        </tr>
+                        <tr style="background-color: #e0ffe0;">
+                            <td>6 Sáb</td>
+                            <td>Libre</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr style="background-color: #e0ffe0;">
+                            <td>7 Dom</td>
+                            <td>Libre</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><button>Descargar mi cuadrante</button> <button>Ver calendario completo</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Solicitar cambio de turno</h3>
+            <form action="#" method="post">
+                <label for="turno_actual">Turno que deseo cambiar</label>
+                <input type="date" id="turno_actual" name="turno_actual" required>
+
+                <label for="motivo_cambio">Motivo del cambio</label>
+                <select id="motivo_cambio" name="motivo" required>
+                    <option value="">Seleccione</option>
+                    <option value="personal">Motivos personales</option>
+                    <option value="medico">Cita médica</option>
+                    <option value="familiar">Asunto familiar</option>
+                    <option value="formacion">Formación</option>
+                    <option value="otro">Otro</option>
+                </select>
+
+                <label for="compañero_cambio">Compañero con quien se intercambia (opcional)</label>
+                <input type="text" id="compañero_cambio" name="compañero" placeholder="Nombre del compañero">
+
+                <label for="turno_propuesto">Turno propuesto a cambio (si aplica)</label>
+                <input type="date" id="turno_propuesto" name="turno_propuesto">
+
+                <label for="comentarios_cambio">Comentarios adicionales</label>
+                <textarea id="comentarios_cambio" name="comentarios" rows="3"></textarea>
+
+                <button type="submit">Solicitar cambio</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Cuadrantes por departamento</h3>
+            <div class="card">
+                <h4>Consultar cuadrante de otro departamento</h4>
+                <form action="#" method="get">
+                    <label for="departamento_cuadrante">Departamento</label>
+                    <select id="departamento_cuadrante" name="departamento" required>
+                        <option value="">Seleccione</option>
+                        <option value="enfermeria">Enfermería</option>
+                        <option value="medicina">Medicina Interna</option>
+                        <option value="cirugia">Cirugía</option>
+                        <option value="urgencias">Urgencias</option>
+                        <option value="uci">UCI</option>
+                        <option value="radiologia">Radiología</option>
+                        <option value="laboratorio">Laboratorio</option>
+                    </select>
+
+                    <label for="mes_cuadrante">Mes</label>
+                    <select id="mes_cuadrante" name="mes">
+                        <option value="12">Diciembre 2025</option>
+                        <option value="1">Enero 2026</option>
+                        <option value="2">Febrero 2026</option>
+                    </select>
+
+                    <button type="submit">Ver cuadrante</button>
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <h3>Disponibilidad de quirófanos</h3>
+            <div class="card">
+                <h4>Programación quirúrgica semanal</h4>
+                <p>Consulte la disponibilidad y programación de los quirófanos del hospital.</p>
+                <p><button>Ver programación quirófanos</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Guardias y disponibilidad</h3>
+            <div class="card">
+                <h4>Localización de especialistas de guardia</h4>
+                <p>Consulte qué especialistas están de guardia hoy y sus datos de contacto.</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Especialidad</th>
+                            <th>Profesional de guardia</th>
+                            <th>Teléfono/Ext</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Medicina Interna</td>
+                            <td>Dr. Alberto Fernández</td>
+                            <td>Ext. 2100</td>
+                        </tr>
+                        <tr>
+                            <td>Cirugía General</td>
+                            <td>Dra. Carmen Jiménez</td>
+                            <td>Ext. 2200</td>
+                        </tr>
+                        <tr>
+                            <td>Traumatología</td>
+                            <td>Dr. Miguel Torres</td>
+                            <td>Ext. 2300</td>
+                        </tr>
+                        <tr>
+                            <td>Anestesia</td>
+                            <td>Dra. Laura Sánchez</td>
+                            <td>Ext. 2400</td>
+                        </tr>
+                        <tr>
+                            <td>Radiología</td>
+                            <td>Dr. Javier Ruiz</td>
+                            <td>Ext. 2500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h3>Estadísticas de turnos</h3>
+            <div class="card">
+                <h4>Mi resumen mensual</h4>
+                <p><strong>Turnos de mañana:</strong> 12<br>
+                <strong>Turnos de tarde:</strong> 8<br>
+                <strong>Turnos de noche:</strong> 4<br>
+                <strong>Guardias realizadas:</strong> 2<br>
+                <strong>Días libres:</strong> 8</p>
+                <p><button>Ver historial completo</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Normativa de turnos</h3>
+            <p>Consulte la normativa vigente sobre turnos, descansos y compensaciones:</p>
+            <ul>
+                <li><a href="#">Convenio colectivo: normativa de turnos</a></li>
+                <li><a href="#">Política de cambios de turno</a></li>
+                <li><a href="#">Compensaciones por guardias y festivos</a></li>
+                <li><a href="#">Descansos obligatorios</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Solicitudes pendientes</h3>
+            <div class="card">
+                <h4>Mis solicitudes de cambio de turno</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha solicitada</th>
+                            <th>Motivo</th>
+                            <th>Estado</th>
+                            <th>Fecha respuesta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15/12/2025</td>
+                            <td>Cita médica</td>
+                            <td style="color: orange;">Pendiente</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>10/11/2025</td>
+                            <td>Asunto familiar</td>
+                            <td style="color: green;">Aprobado</td>
+                            <td>12/11/2025</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>

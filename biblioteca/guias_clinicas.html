@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guías Clínicas – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Guías clínicas y protocolos</h3>
+            <p><a href="../biblioteca.html">← Volver a Biblioteca</a></p>
+            <p>Repositorio de guías de práctica clínica basadas en evidencia, protocolos terapéuticos y documentos de referencia organizados por especialidad médica.</p>
+        </section>
+
+        <section>
+            <h3>Buscador de guías clínicas</h3>
+            <form action="#" method="get">
+                <label for="buscar_guia">Buscar por palabra clave</label>
+                <input type="text" id="buscar_guia" name="buscar" placeholder="Ej: diabetes, hipertensión, neumonía...">
+
+                <label for="especialidad_guia">Filtrar por especialidad</label>
+                <select id="especialidad_guia" name="especialidad">
+                    <option value="">Todas las especialidades</option>
+                    <option value="cardiologia">Cardiología</option>
+                    <option value="neurologia">Neurología</option>
+                    <option value="neumologia">Neumología</option>
+                    <option value="endocrino">Endocrinología</option>
+                    <option value="digestivo">Digestivo</option>
+                    <option value="oncologia">Oncología</option>
+                    <option value="nefrologia">Nefrología</option>
+                    <option value="pediatria">Pediatría</option>
+                </select>
+
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Guías por especialidad</h3>
+            <div class="card">
+                <h4>Cardiología</h4>
+                <ul>
+                    <li><a href="#">Guía ESC de síndrome coronario agudo (2023)</a></li>
+                    <li><a href="#">Guía de fibrilación auricular (2024)</a></li>
+                    <li><a href="#">Manejo de insuficiencia cardíaca (2024)</a></li>
+                    <li><a href="#">Guía de prevención cardiovascular (2023)</a></li>
+                    <li><a href="#">Hipertensión arterial: diagnóstico y tratamiento (2024)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Neurología</h4>
+                <ul>
+                    <li><a href="#">Guía de ictus agudo (AHA/ASA 2024)</a></li>
+                    <li><a href="#">Manejo de epilepsia (ILAE 2023)</a></li>
+                    <li><a href="#">Cefaleas: clasificación y tratamiento (IHS 2023)</a></li>
+                    <li><a href="#">Enfermedad de Parkinson: guía de práctica clínica (2024)</a></li>
+                    <li><a href="#">Esclerosis múltiple: actualización terapéutica (2024)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Neumología</h4>
+                <ul>
+                    <li><a href="#">Guía GOLD de EPOC (2025)</a></li>
+                    <li><a href="#">Asma bronquial: guía GINA (2024)</a></li>
+                    <li><a href="#">Neumonía adquirida en la comunidad (ATS/IDSA 2024)</a></li>
+                    <li><a href="#">Tromboembolismo pulmonar (ESC 2024)</a></li>
+                    <li><a href="#">Enfermedad pulmonar intersticial (ATS/ERS 2023)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Endocrinología y Metabolismo</h4>
+                <ul>
+                    <li><a href="#">Diabetes mellitus tipo 2 (ADA 2025)</a></li>
+                    <li><a href="#">Diabetes mellitus tipo 1 (ADA 2025)</a></li>
+                    <li><a href="#">Trastornos tiroideos (ATA 2024)</a></li>
+                    <li><a href="#">Manejo de obesidad (SEEDO 2024)</a></li>
+                    <li><a href="#">Dislipidemia (ESC/EAS 2024)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Oncología</h4>
+                <ul>
+                    <li><a href="#">Cáncer de pulmón (NCCN 2025)</a></li>
+                    <li><a href="#">Cáncer colorrectal (ESMO 2024)</a></li>
+                    <li><a href="#">Cáncer de mama (NCCN 2025)</a></li>
+                    <li><a href="#">Cáncer de próstata (EAU 2024)</a></li>
+                    <li><a href="#">Linfomas (NCCN 2025)</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h3>Guías multidisciplinares</h3>
+            <div class="card">
+                <h4>Cuidados críticos y emergencias</h4>
+                <ul>
+                    <li><a href="#">Sepsis y shock séptico: guía Surviving Sepsis (2024)</a></li>
+                    <li><a href="#">Ventilación mecánica en SDRA (2024)</a></li>
+                    <li><a href="#">Reanimación cardiopulmonar (ERC 2025)</a></li>
+                    <li><a href="#">Manejo del politraumatizado (ATLS 2023)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Infectología</h4>
+                <ul>
+                    <li><a href="#">Tratamiento antibiótico empírico (SEIMC 2024)</a></li>
+                    <li><a href="#">VIH: guía de tratamiento antirretroviral (2024)</a></li>
+                    <li><a href="#">Hepatitis C: guía de tratamiento (EASL 2024)</a></li>
+                    <li><a href="#">Infecciones en paciente inmunodeprimido (2024)</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h3>Guías de organismos internacionales</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Organismo</th>
+                        <th>Descripción</th>
+                        <th>Acceso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>NICE (UK)</td>
+                        <td>National Institute for Health and Care Excellence</td>
+                        <td><button>Ver guías</button></td>
+                    </tr>
+                    <tr>
+                        <td>UpToDate</td>
+                        <td>Plataforma de información médica basada en evidencia</td>
+                        <td><button>Acceder</button></td>
+                    </tr>
+                    <tr>
+                        <td>Cochrane Library</td>
+                        <td>Revisiones sistemáticas de evidencia científica</td>
+                        <td><button>Acceder</button></td>
+                    </tr>
+                    <tr>
+                        <td>WHO Guidelines</td>
+                        <td>Guías de la Organización Mundial de la Salud</td>
+                        <td><button>Ver guías</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>Actualizaciones recientes</h3>
+            <div class="card">
+                <h4>Novedades de noviembre 2025</h4>
+                <ul>
+                    <li>✓ Actualizada guía ESC de fibrilación auricular (v.2024)</li>
+                    <li>✓ Nueva guía ADA de diabetes mellitus tipo 2 (2025)</li>
+                    <li>✓ Revisión de guía GOLD de EPOC (2025)</li>
+                    <li>✓ Actualización de algoritmos de RCP (ERC 2025)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h3>Guías en idioma español</h3>
+            <p>Repositorio de guías clínicas publicadas por sociedades científicas españolas:</p>
+            <ul>
+                <li><a href="#">Sociedad Española de Cardiología (SEC)</a></li>
+                <li><a href="#">Sociedad Española de Neumología (SEPAR)</a></li>
+                <li><a href="#">Sociedad Española de Neurología (SEN)</a></li>
+                <li><a href="#">Sociedad Española de Medicina Interna (SEMI)</a></li>
+                <li><a href="#">Sociedad Española de Endocrinología (SEEN)</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Solicitar inclusión de nueva guía</h3>
+            <p>Si desea sugerir la inclusión de una nueva guía clínica en la biblioteca:</p>
+            <form action="#" method="post">
+                <label for="titulo_guia">Título de la guía</label>
+                <input type="text" id="titulo_guia" name="titulo" required>
+
+                <label for="organismo">Organismo/Sociedad que la publica</label>
+                <input type="text" id="organismo" name="organismo" required>
+
+                <label for="url_guia">URL (si está disponible online)</label>
+                <input type="url" id="url_guia" name="url">
+
+                <label for="justificacion_guia">Justificación de su inclusión</label>
+                <textarea id="justificacion_guia" name="justificacion" rows="3" required></textarea>
+
+                <button type="submit">Enviar solicitud</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos en Línea – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Cursos en línea</h3>
+            <p><a href="../formacion.html">← Volver a Formación</a></p>
+            <p>Plataforma de e-learning del hospital con cursos autoformativos, módulos interactivos y material multimedia para la formación continua del personal sanitario y administrativo.</p>
+        </section>
+
+        <section>
+            <h3>Mis cursos activos</h3>
+            <div class="card">
+                <h4>Actualización en protocolos de seguridad del paciente</h4>
+                <p><strong>Progreso:</strong> 65% completado (13/20 módulos)<br>
+                <strong>Tiempo estimado restante:</strong> 2 horas<br>
+                <strong>Fecha límite:</strong> 15 de diciembre de 2025</p>
+                <p><button>Continuar curso</button></p>
+            </div>
+            <div class="card">
+                <h4>Comunicación efectiva con el paciente</h4>
+                <p><strong>Progreso:</strong> 30% completado (3/10 módulos)<br>
+                <strong>Tiempo estimado restante:</strong> 5 horas<br>
+                <strong>Fecha límite:</strong> 31 de enero de 2026</p>
+                <p><button>Continuar curso</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Catálogo de cursos disponibles</h3>
+            <div class="card">
+                <h4>Área clínica y asistencial</h4>
+                <ul>
+                    <li><a href="#">Soporte vital básico y avanzado (8h) ⭐ Obligatorio</a></li>
+                    <li><a href="#">Actualización en RCP (4h) ⭐ Obligatorio</a></li>
+                    <li><a href="#">Manejo de vía aérea (6h)</a></li>
+                    <li><a href="#">Farmacología clínica aplicada (12h)</a></li>
+                    <li><a href="#">Interpretación de ECG (8h)</a></li>
+                    <li><a href="#">Manejo del paciente politraumatizado (10h)</a></li>
+                    <li><a href="#">Cuidados paliativos y final de vida (8h)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Seguridad del paciente</h4>
+                <ul>
+                    <li><a href="#">Identificación segura del paciente (2h) ⭐ Obligatorio</a></li>
+                    <li><a href="#">Prevención de errores de medicación (4h) ⭐ Obligatorio</a></li>
+                    <li><a href="#">Higiene de manos y control de infecciones (3h) ⭐ Obligatorio</a></li>
+                    <li><a href="#">Prevención de caídas (2h)</a></li>
+                    <li><a href="#">Prevención de úlceras por presión (3h)</a></li>
+                    <li><a href="#">Notificación de eventos adversos (2h)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Habilidades profesionales</h4>
+                <ul>
+                    <li><a href="#">Trabajo en equipo en entorno sanitario (6h)</a></li>
+                    <li><a href="#">Gestión del estrés y burnout (5h)</a></li>
+                    <li><a href="#">Liderazgo en salud (8h)</a></li>
+                    <li><a href="#">Comunicación con pacientes y familias (6h)</a></li>
+                    <li><a href="#">Resolución de conflictos (4h)</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Normativa y aspectos legales</h4>
+                <ul>
+                    <li><a href="#">Protección de datos en el ámbito sanitario (RGPD) (3h) ⭐ Obligatorio</a></li>
+                    <li><a href="#">Consentimiento informado (2h)</a></li>
+                    <li><a href="#">Aspectos ético-legales en la práctica clínica (4h)</a></li>
+                    <li><a href="#">Prevención de riesgos laborales (4h) ⭐ Obligatorio</a></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Tecnología e informática</h4>
+                <ul>
+                    <li><a href="#">Manejo de historia clínica electrónica (3h)</a></li>
+                    <li><a href="#">Telemedicina y consulta virtual (4h)</a></li>
+                    <li><a href="#">Ciberseguridad en sanidad (2h) ⭐ Obligatorio</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h3>Cursos por categoría profesional</h3>
+            <form action="#" method="get">
+                <label for="categoria">Filtrar por categoría profesional</label>
+                <select id="categoria" name="categoria">
+                    <option value="">Todos los cursos</option>
+                    <option value="medicos">Médicos</option>
+                    <option value="enfermeria">Enfermería</option>
+                    <option value="tcae">TCAE</option>
+                    <option value="administrativo">Personal administrativo</option>
+                    <option value="tecnico">Técnicos sanitarios</option>
+                    <option value="todos">Todos los profesionales</option>
+                </select>
+                <button type="submit">Filtrar</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Cursos obligatorios pendientes</h3>
+            <div class="card" style="border-left: 4px solid orange;">
+                <h4>⚠️ Tiene 3 cursos obligatorios pendientes</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Curso</th>
+                            <th>Duración</th>
+                            <th>Fecha límite</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ciberseguridad en sanidad</td>
+                            <td>2 horas</td>
+                            <td style="color: red;">30/11/2025</td>
+                            <td><button>Comenzar</button></td>
+                        </tr>
+                        <tr>
+                            <td>RGPD en el ámbito sanitario</td>
+                            <td>3 horas</td>
+                            <td>15/12/2025</td>
+                            <td><button>Comenzar</button></td>
+                        </tr>
+                        <tr>
+                            <td>Identificación del paciente</td>
+                            <td>2 horas</td>
+                            <td>31/12/2025</td>
+                            <td><button>Comenzar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h3>Cursos completados</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Fecha finalización</th>
+                        <th>Calificación</th>
+                        <th>Certificado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Soporte vital básico</td>
+                        <td>15/10/2025</td>
+                        <td>Apto (90%)</td>
+                        <td><button>Descargar</button></td>
+                    </tr>
+                    <tr>
+                        <td>Higiene de manos</td>
+                        <td>20/09/2025</td>
+                        <td>Apto (95%)</td>
+                        <td><button>Descargar</button></td>
+                    </tr>
+                    <tr>
+                        <td>Trabajo en equipo</td>
+                        <td>05/08/2025</td>
+                        <td>Apto (88%)</td>
+                        <td><button>Descargar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>Estadísticas de mi formación</h3>
+            <div class="card">
+                <h4>Resumen del año 2025</h4>
+                <p><strong>Cursos completados:</strong> 8<br>
+                <strong>Horas de formación:</strong> 52 horas<br>
+                <strong>Cursos en progreso:</strong> 2<br>
+                <strong>Certificados obtenidos:</strong> 8<br>
+                <strong>Puntuación media:</strong> 91%</p>
+                <p><button>Ver informe detallado</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Funcionalidades de la plataforma</h3>
+            <ul>
+                <li>📱 Acceso desde cualquier dispositivo (ordenador, tablet, móvil)</li>
+                <li>⏱️ Aprende a tu ritmo: los cursos se guardan automáticamente</li>
+                <li>📊 Evaluaciones automáticas con feedback inmediato</li>
+                <li>📜 Certificados digitales descargables</li>
+                <li>🔔 Notificaciones de fechas límite y nuevos cursos</li>
+                <li>📚 Material descargable en PDF</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Ayuda y soporte técnico</h3>
+            <p>Si tiene problemas técnicos con la plataforma de e-learning:</p>
+            <p><strong>Email:</strong> elearning@hmsv.es<br>
+            <strong>Teléfono:</strong> Ext. 5000<br>
+            <strong>Horario:</strong> Lunes a viernes, 9:00-18:00h</p>
+            <p><a href="#">Ver preguntas frecuentes</a> | <a href="#">Manual de usuario</a></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>

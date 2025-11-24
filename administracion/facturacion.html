@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Facturación y finanzas</h3>
+            <p><a href="../administracion.html">← Volver a Administración</a></p>
+            <p>Gestión de la facturación hospitalaria, consulta de estadísticas financieras y administración de convenios con aseguradoras y entidades públicas.</p>
+        </section>
+
+        <section>
+            <h3>Panel de facturación</h3>
+            <div class="card">
+                <h4>Resumen mensual - Noviembre 2025</h4>
+                <p><strong>Facturas emitidas:</strong> 2,347<br>
+                <strong>Importe total facturado:</strong> €1,845,320<br>
+                <strong>Facturas pendientes de cobro:</strong> 312<br>
+                <strong>Tasa de cobro:</strong> 86.7%</p>
+                <p><button>Ver informe detallado</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Consulta de facturas</h3>
+            <form action="#" method="get">
+                <label for="numero_factura">Número de factura</label>
+                <input type="text" id="numero_factura" name="numero_factura" placeholder="FAC-2025-">
+
+                <label for="paciente">Nombre del paciente</label>
+                <input type="text" id="paciente" name="paciente">
+
+                <label for="aseguradora">Aseguradora/Entidad</label>
+                <select id="aseguradora" name="aseguradora">
+                    <option value="">Todas</option>
+                    <option value="sns">Servicio Nacional de Salud</option>
+                    <option value="mapfre">Mapfre Salud</option>
+                    <option value="adeslas">Adeslas</option>
+                    <option value="sanitas">Sanitas</option>
+                    <option value="asisa">Asisa</option>
+                    <option value="particular">Particular</option>
+                </select>
+
+                <label for="estado">Estado</label>
+                <select id="estado" name="estado">
+                    <option value="">Todos</option>
+                    <option value="emitida">Emitida</option>
+                    <option value="enviada">Enviada</option>
+                    <option value="cobrada">Cobrada</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="reclamada">Reclamada</option>
+                </select>
+
+                <label for="fecha_desde">Fecha desde</label>
+                <input type="date" id="fecha_desde" name="fecha_desde">
+
+                <label for="fecha_hasta">Fecha hasta</label>
+                <input type="date" id="fecha_hasta" name="fecha_hasta">
+
+                <button type="submit">Buscar facturas</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Facturas pendientes de revisión</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nº Factura</th>
+                        <th>Paciente</th>
+                        <th>Aseguradora</th>
+                        <th>Importe</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>FAC-2025-2340</td>
+                        <td>García López, Juan</td>
+                        <td>Adeslas</td>
+                        <td>€1,245.50</td>
+                        <td>15/11/2025</td>
+                        <td style="color: orange;">Pendiente</td>
+                        <td><button>Revisar</button></td>
+                    </tr>
+                    <tr>
+                        <td>FAC-2025-2338</td>
+                        <td>Martínez Ruiz, María</td>
+                        <td>SNS</td>
+                        <td>€3,890.00</td>
+                        <td>14/11/2025</td>
+                        <td style="color: red;">Reclamada</td>
+                        <td><button>Revisar</button></td>
+                    </tr>
+                    <tr>
+                        <td>FAC-2025-2335</td>
+                        <td>Fernández Soto, Carlos</td>
+                        <td>Sanitas</td>
+                        <td>€875.25</td>
+                        <td>13/11/2025</td>
+                        <td style="color: orange;">Pendiente</td>
+                        <td><button>Revisar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>Tarifas y aranceles</h3>
+            <div class="card">
+                <h4>Consultar tarifario vigente</h4>
+                <p>Acceda al tarifario actualizado de procedimientos, consultas e ingresos hospitalarios.</p>
+                <p><button>Ver tarifario SNS</button> <button>Ver tarifas aseguradoras privadas</button></p>
+            </div>
+            <div class="card">
+                <h4>Simulador de facturación</h4>
+                <p>Calcule el importe estimado de un procedimiento o estancia hospitalaria según la entidad pagadora.</p>
+                <p><button>Acceder al simulador</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Convenios con aseguradoras</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Aseguradora</th>
+                        <th>Tipo de convenio</th>
+                        <th>Vigencia</th>
+                        <th>Documentación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Adeslas</td>
+                        <td>Concierto general</td>
+                        <td>Hasta 31/12/2026</td>
+                        <td><button>Ver convenio</button></td>
+                    </tr>
+                    <tr>
+                        <td>Sanitas</td>
+                        <td>Concierto general</td>
+                        <td>Hasta 30/06/2026</td>
+                        <td><button>Ver convenio</button></td>
+                    </tr>
+                    <tr>
+                        <td>Mapfre Salud</td>
+                        <td>Concierto quirúrgico</td>
+                        <td>Hasta 31/12/2025</td>
+                        <td><button>Ver convenio</button></td>
+                    </tr>
+                    <tr>
+                        <td>Asisa</td>
+                        <td>Concierto parcial</td>
+                        <td>Hasta 31/03/2026</td>
+                        <td><button>Ver convenio</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>Estadísticas de facturación</h3>
+            <div class="card">
+                <h4>Informes disponibles</h4>
+                <ul>
+                    <li><a href="#">Facturación mensual por servicio</a></li>
+                    <li><a href="#">Facturación por aseguradora</a></li>
+                    <li><a href="#">Análisis de cobros y morosidad</a></li>
+                    <li><a href="#">Comparativa anual</a></li>
+                    <li><a href="#">Evolución de facturación trimestral</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h3>Gestión de reclamaciones</h3>
+            <div class="card">
+                <h4>Facturas reclamadas por aseguradoras</h4>
+                <p>Revise las facturas que han sido objeto de reclamación o devolución y gestione la documentación complementaria necesaria.</p>
+                <p><button>Ver reclamaciones pendientes</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Documentación administrativa</h3>
+            <ul>
+                <li><a href="#">Manual de codificación CIE-10</a></li>
+                <li><a href="#">Guía de facturación hospitalaria</a></li>
+                <li><a href="#">Procedimientos de reclamación</a></li>
+                <li><a href="#">Normativa de facturación del SNS</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Soporte y consultas</h3>
+            <p>Para consultas sobre facturación, contacte con el departamento:</p>
+            <p><strong>Email:</strong> facturacion@hmsv.es<br>
+            <strong>Teléfono interno:</strong> Ext. 3400<br>
+            <strong>Horario:</strong> Lunes a viernes, 8:00-15:00h</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>

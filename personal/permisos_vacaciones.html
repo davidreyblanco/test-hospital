@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permisos y Vacaciones – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Solicitudes de permisos y vacaciones</h3>
+            <p><a href="../personal.html">← Volver a Área de Personal</a></p>
+            <p>Gestione sus solicitudes de vacaciones y permisos de forma sencilla. El sistema le permite consultar sus días disponibles, realizar nuevas solicitudes y verificar el estado de las peticiones pendientes.</p>
+        </section>
+
+        <section>
+            <h3>Resumen de días disponibles</h3>
+            <div class="card">
+                <h4>Año 2025</h4>
+                <p><strong>Días de vacaciones totales:</strong> 30 días</p>
+                <p><strong>Días disfrutados:</strong> 18 días</p>
+                <p><strong>Días pendientes:</strong> 12 días</p>
+                <p><strong>Días solicitados (pendientes de aprobación):</strong> 3 días</p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Nueva solicitud</h3>
+            <form action="#" method="post">
+                <label for="tipo">Tipo de solicitud</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Seleccione una opción</option>
+                    <option value="vacaciones">Vacaciones</option>
+                    <option value="asuntos_propios">Asuntos propios</option>
+                    <option value="permiso_medico">Permiso médico</option>
+                    <option value="permiso_familiar">Permiso familiar</option>
+                    <option value="permiso_formacion">Permiso formación</option>
+                </select>
+
+                <label for="fecha_inicio">Fecha de inicio</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+
+                <label for="fecha_fin">Fecha de fin</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" required>
+
+                <label for="motivo">Motivo (opcional)</label>
+                <textarea id="motivo" name="motivo" rows="3"></textarea>
+
+                <label for="documento">Adjuntar documentación (si procede)</label>
+                <input type="file" id="documento" name="documento">
+
+                <button type="submit">Enviar solicitud</button>
+            </form>
+        </section>
+
+        <section>
+            <h3>Solicitudes recientes</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha fin</th>
+                        <th>Días</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Vacaciones</td>
+                        <td>20/12/2025</td>
+                        <td>22/12/2025</td>
+                        <td>3</td>
+                        <td style="color: orange;">Pendiente</td>
+                    </tr>
+                    <tr>
+                        <td>Vacaciones</td>
+                        <td>01/11/2025</td>
+                        <td>07/11/2025</td>
+                        <td>7</td>
+                        <td style="color: green;">Aprobado</td>
+                    </tr>
+                    <tr>
+                        <td>Asuntos propios</td>
+                        <td>15/10/2025</td>
+                        <td>15/10/2025</td>
+                        <td>1</td>
+                        <td style="color: green;">Aprobado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>Tipos de permisos disponibles</h3>
+            <div class="card">
+                <h4>Vacaciones anuales</h4>
+                <p>Corresponden 30 días naturales de vacaciones al año. Deben solicitarse con al menos 15 días de antelación y requieren aprobación del responsable de departamento.</p>
+            </div>
+            <div class="card">
+                <h4>Asuntos propios</h4>
+                <p>Hasta 6 días al año para trámites personales. Requieren solicitud previa de al menos 48 horas.</p>
+            </div>
+            <div class="card">
+                <h4>Permisos médicos</h4>
+                <p>Para asistir a consultas médicas propias o de familiares directos. Es necesario presentar justificante médico.</p>
+            </div>
+            <div class="card">
+                <h4>Permisos familiares</h4>
+                <p>Por matrimonio, nacimiento, fallecimiento o enfermedad grave de familiar. Los días concedidos dependen del grado de parentesco según convenio.</p>
+            </div>
+            <div class="card">
+                <h4>Permisos de formación</h4>
+                <p>Para asistir a cursos, congresos o actividades formativas relacionadas con la actividad profesional.</p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Calendario de vacaciones del equipo</h3>
+            <p>Consulte el calendario de vacaciones de su departamento para coordinar mejor sus ausencias y garantizar la cobertura del servicio.</p>
+            <p><button>Ver calendario del departamento</button></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>

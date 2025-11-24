@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario y Sesiones – Hospital Miguel Servet de Villanueva</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Miguel Servet de Villanueva</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../personal.html">Personal</a></li>
+                <li><a href="../servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="../enfermeria.html">Enfermería</a></li>
+                <li><a href="../administracion.html">Administración</a></li>
+                <li><a href="../biblioteca.html">Biblioteca</a></li>
+                <li><a href="../formacion.html">Formación</a></li>
+                <li><a href="../directorio.html">Directorio</a></li>
+                <li><a href="../contacto.html">Contacto</a></li>
+                <li><a href="../mapa.html">Mapa del sitio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section>
+            <h3>Calendario de sesiones y turnos</h3>
+            <p><a href="../servicios_clinicos.html">← Volver a Servicios Clínicos</a></p>
+            <p>Consulte el calendario de sesiones clínicas, comités, guardias y programación de quirófanos. Manténgase informado sobre las actividades docentes y científicas del hospital.</p>
+        </section>
+
+        <section>
+            <h3>Sesiones clínicas de esta semana</h3>
+            <div class="card">
+                <h4>Lunes 25 de noviembre - 14:00h</h4>
+                <p><strong>Sesión:</strong> Casos clínicos de Medicina Interna<br>
+                <strong>Lugar:</strong> Sala de conferencias (Planta 2)<br>
+                <strong>Ponente:</strong> Dra. Carmen Ruiz<br>
+                <strong>Tema:</strong> "Síndrome de Cushing: presentación atípica"</p>
+                <p><button>Añadir a mi calendario</button></p>
+            </div>
+            <div class="card">
+                <h4>Miércoles 27 de noviembre - 13:30h</h4>
+                <p><strong>Sesión:</strong> Comité de Tumores<br>
+                <strong>Lugar:</strong> Sala de juntas (Planta 3)<br>
+                <strong>Participantes:</strong> Oncología, Cirugía, Radiología, Anatomía Patológica<br>
+                <strong>Tema:</strong> Revisión de casos oncológicos semanales</p>
+                <p><button>Añadir a mi calendario</button></p>
+            </div>
+            <div class="card">
+                <h4>Jueves 28 de noviembre - 15:00h</h4>
+                <p><strong>Sesión:</strong> Bibliográfica de Cardiología<br>
+                <strong>Lugar:</strong> Sala de conferencias (Planta 2)<br>
+                <strong>Ponente:</strong> Dr. Miguel Ángel Torres<br>
+                <strong>Tema:</strong> "Novedades en anticoagulación oral: Revisión de guías ESC 2025"</p>
+                <p><button>Añadir a mi calendario</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Calendario mensual de sesiones</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Día</th>
+                        <th>Hora</th>
+                        <th>Tipo de sesión</th>
+                        <th>Servicio</th>
+                        <th>Sala</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>02/12/2025</td>
+                        <td>14:00</td>
+                        <td>Casos clínicos</td>
+                        <td>Medicina Interna</td>
+                        <td>Sala conferencias</td>
+                    </tr>
+                    <tr>
+                        <td>04/12/2025</td>
+                        <td>13:30</td>
+                        <td>Comité de Mortalidad</td>
+                        <td>Multidisciplinar</td>
+                        <td>Sala juntas</td>
+                    </tr>
+                    <tr>
+                        <td>05/12/2025</td>
+                        <td>15:00</td>
+                        <td>Bibliográfica</td>
+                        <td>Neurología</td>
+                        <td>Sala conferencias</td>
+                    </tr>
+                    <tr>
+                        <td>09/12/2025</td>
+                        <td>14:00</td>
+                        <td>Gran Ronda</td>
+                        <td>Cirugía General</td>
+                        <td>Sala conferencias</td>
+                    </tr>
+                    <tr>
+                        <td>11/12/2025</td>
+                        <td>13:30</td>
+                        <td>Comité de Tumores</td>
+                        <td>Oncología</td>
+                        <td>Sala juntas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>Programación de quirófanos</h3>
+            <div class="card">
+                <h4>Consultar programación semanal</h4>
+                <p>Acceda a la programación actualizada de todos los quirófanos del hospital, incluyendo horarios, cirujanos y tipo de intervención.</p>
+                <form action="#" method="get">
+                    <label for="fecha">Seleccione fecha</label>
+                    <input type="date" id="fecha" name="fecha">
+                    
+                    <label for="quirofano">Quirófano</label>
+                    <select id="quirofano" name="quirofano">
+                        <option value="todos">Todos</option>
+                        <option value="q1">Quirófano 1</option>
+                        <option value="q2">Quirófano 2</option>
+                        <option value="q3">Quirófano 3</option>
+                        <option value="q4">Quirófano 4</option>
+                        <option value="q5">Quirófano 5 (Urgencias)</option>
+                    </select>
+                    
+                    <button type="submit">Consultar programación</button>
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <h3>Guardias médicas</h3>
+            <div class="card">
+                <h4>Consultar tabla de guardias</h4>
+                <p>Visualice el calendario de guardias de su servicio y compruebe la disponibilidad de especialistas de otros departamentos.</p>
+                <form action="#" method="get">
+                    <label for="servicio">Servicio</label>
+                    <select id="servicio" name="servicio">
+                        <option value="">Seleccione servicio</option>
+                        <option value="medicina">Medicina Interna</option>
+                        <option value="cirugia">Cirugía General</option>
+                        <option value="traumatologia">Traumatología</option>
+                        <option value="pediatria">Pediatría</option>
+                        <option value="anestesia">Anestesia</option>
+                        <option value="radiologia">Radiología</option>
+                    </select>
+                    
+                    <label for="mes">Mes</label>
+                    <select id="mes" name="mes">
+                        <option value="11">Noviembre 2025</option>
+                        <option value="12">Diciembre 2025</option>
+                        <option value="1">Enero 2026</option>
+                    </select>
+                    
+                    <button type="submit">Ver calendario</button>
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <h3>Comités hospitalarios</h3>
+            <div class="card">
+                <h4>Comité de Tumores</h4>
+                <p><strong>Frecuencia:</strong> Semanal (miércoles 13:30h)<br>
+                <strong>Coordinador:</strong> Dr. José Luis Martín (Oncología)</p>
+            </div>
+            <div class="card">
+                <h4>Comité de Mortalidad</h4>
+                <p><strong>Frecuencia:</strong> Mensual (primer lunes de mes, 13:30h)<br>
+                <strong>Coordinador:</strong> Dr. Alberto Fernández (Dirección Médica)</p>
+            </div>
+            <div class="card">
+                <h4>Comité de Infecciones</h4>
+                <p><strong>Frecuencia:</strong> Quincenal (jueves 14:00h)<br>
+                <strong>Coordinador:</strong> Dra. Isabel García (Medicina Preventiva)</p>
+            </div>
+            <div class="card">
+                <h4>Comité de Ética Asistencial</h4>
+                <p><strong>Frecuencia:</strong> Mensual (tercer jueves de mes, 16:00h)<br>
+                <strong>Coordinador:</strong> Dr. Javier Romero (Medicina Interna)</p>
+            </div>
+            <div class="card">
+                <h4>Comité de Farmacia y Terapéutica</h4>
+                <p><strong>Frecuencia:</strong> Trimestral<br>
+                <strong>Coordinador:</strong> Dra. Elena Pascual (Farmacia Hospitalaria)</p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Ateneos y grandes rondas</h3>
+            <p>Sesiones multidisciplinares de alto nivel científico con presentación de casos complejos y actualización en temas relevantes.</p>
+            <div class="card">
+                <h4>Próximo Ateneo Clínico General</h4>
+                <p><strong>Fecha:</strong> 12 de diciembre de 2025, 17:00h<br>
+                <strong>Tema:</strong> "Abordaje del paciente con fiebre de origen desconocido"<br>
+                <strong>Ponente invitado:</strong> Prof. Dr. Antonio Sánchez (Hospital La Paz, Madrid)<br>
+                <strong>Lugar:</strong> Auditorio principal</p>
+                <p><button>Inscribirse</button></p>
+            </div>
+        </section>
+
+        <section>
+            <h3>Solicitar sala para sesión</h3>
+            <p>Si necesita reservar una sala para una sesión clínica o reunión de servicio:</p>
+            <form action="#" method="post">
+                <label for="sala">Sala solicitada</label>
+                <select id="sala" name="sala" required>
+                    <option value="">Seleccione</option>
+                    <option value="conferencias">Sala de conferencias (60 personas)</option>
+                    <option value="juntas">Sala de juntas (20 personas)</option>
+                    <option value="seminario1">Sala seminario 1 (15 personas)</option>
+                    <option value="seminario2">Sala seminario 2 (15 personas)</option>
+                    <option value="auditorio">Auditorio (150 personas)</option>
+                </select>
+                
+                <label for="fecha_solicitud">Fecha solicitada</label>
+                <input type="date" id="fecha_solicitud" name="fecha_solicitud" required>
+                
+                <label for="hora_inicio">Hora de inicio</label>
+                <input type="time" id="hora_inicio" name="hora_inicio" required>
+                
+                <label for="hora_fin">Hora de fin</label>
+                <input type="time" id="hora_fin" name="hora_fin" required>
+                
+                <label for="motivo">Motivo de la sesión</label>
+                <input type="text" id="motivo" name="motivo" required>
+                
+                <button type="submit">Solicitar reserva</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
+        <p><a href="../contacto.html">Soporte técnico</a> | <a href="../mapa.html">Mapa del sitio</a></p>
+    </footer>
+</body>
+</html>
