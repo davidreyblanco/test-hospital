@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enfermería – Hospital Miguel Servet de Villanueva</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 <body>
     <header>
@@ -13,7 +14,7 @@
             <ul>
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="personal.html">Personal</a></li>
-                <li><a href="servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="servicios_clinicos.html">Servicios Clínicos</a></li>
                 <li><a href="enfermeria.html" class="active">Enfermería</a></li>
                 <li><a href="administracion.html">Administración</a></li>
                 <li><a href="biblioteca.html">Biblioteca</a></li>
@@ -27,38 +28,669 @@
 
     <div class="container">
         <section>
-            <h3>Área de Enfermería</h3>
-            <p>En esta sección, el personal de enfermería puede acceder a los reportes diarios, protocolos y herramientas necesarias para su trabajo. La intranet fomenta la comunicación horizontal y garantiza que la información sea accesible desde cualquier dispositivo.</p>
+            <h3>Dashboard de Enfermería</h3>
+            <p>Bienvenido al área específica del personal de enfermería. Aquí encontrará herramientas especializadas, protocolos actualizados y recursos para optimizar la atención al paciente.</p>
         </section>
 
+        <!-- Indicadores rápidos -->
         <section>
-            <h3>Partes de enfermería</h3>
-            <p>Registre y consulte los partes de enfermería para cada unidad. Este sistema unificado permite compartir información relevante sobre el estado de los pacientes y coordinar las actividades del equipo asistencial.</p>
-            <p><a href="enfermeria/partes_enfermeria.html"><button>Acceder a partes de enfermería</button></a></p>
+            <h3>Indicadores del día</h3>
+            <div class="card-grid">
+                <div class="card dashboard-card">
+                    <h4>📋 Partes Pendientes</h4>
+                    <div class="metrico">12</div>
+                    <p>Partes de enfermería por completar</p>
+                </div>
+                <div class="card dashboard-card">
+                    <h4>👥 Pacientes Activos</h4>
+                    <div class="metrico">85</div>
+                    <p>Pacientes en todas las unidades</p>
+                </div>
+                <div class="card dashboard-card">
+                    <h4>⚠️ Alertas Activas</h4>
+                    <div class="metrico">3</div>
+                    <p>Alertas que requieren atención</p>
+                </div>
+                <div class="card dashboard-card">
+                    <h4>📅 Próximos Turnos</h4>
+                    <div class="metrico">24</div>
+                    <p>Enfermeros en turno próximo</p>
+                </div>
+            </div>
         </section>
 
+        <!-- Herramientas de cálculo -->
         <section>
-            <h3>Partes de cirugía</h3>
-            <p>Acceda a los informes postquirúrgicos y listas de verificación de cirugía segura. Los profesionales pueden actualizar el estado de los pacientes en tiempo real y notificar a otros equipos cuando las intervenciones concluyan.</p>
-            <p><a href="#"><button>Ver partes de cirugía</button></a></p>
+            <h3>Herramientas de cálculo</h3>
+            <div class="calculadoras-grid">
+                <div class="card calc-card" onclick="abrirCalculadora('goteo')">
+                    <h4>💧 Calculadora de Goteo</h4>
+                    <p>Calcule la velocidad de perfusión IV</p>
+                    <button class="btn-small">Abrir Calculadora</button>
+                </div>
+                <div class="card calc-card" onclick="abrirCalculadora('imc')">
+                    <h4>⚖️ Calculadora IMC</h4>
+                    <p>Índice de Masa Corporal</p>
+                    <button class="btn-small">Abrir Calculadora</button>
+                </div>
+                <div class="card calc-card" onclick="abrirCalculadora('dosis')">
+                    <h4>💊 Cálculo de Dosis</h4>
+                    <p>Dosificación pediátrica</p>
+                    <button class="btn-small">Abrir Calculadora</button>
+                </div>
+                <div class="card calc-card" onclick="abrirCalculadora('balance')">
+                    <h4>📊 Balance Hídrico</h4>
+                    <p>Cálculo de balance 24h</p>
+                    <button class="btn-small">Abrir Calculadora</button>
+                </div>
+            </div>
         </section>
 
+        <!-- Escalas de valoración -->
         <section>
-            <h3>Protocolos de enfermería</h3>
-            <p>Consulte las guías y protocolos específicos para enfermería, incluyendo procedimientos de administración de medicamentos, cuidados postoperatorios y técnicas de movilización. Estos documentos se actualizan periódicamente para garantizar las mejores prácticas.</p>
-            <p><a href="enfermeria/protocolos.html"><button>Consultar protocolos</button></a></p>
+            <h3>Escalas de valoración clínica</h3>
+            <div class="escalas-grid">
+                <div class="card escala-card">
+                    <h4>Caídas (Downton)</h4>
+                    <p>Evaluación del riesgo de caídas</p>
+                    <button onclick="mostrarEscala('downton')" class="btn-small">Realizar Evaluación</button>
+                </div>
+                <div class="card escala-card">
+                    <h4>Úlceras (Braden)</h4>
+                    <p>Riesgo de úlceras por presión</p>
+                    <button onclick="mostrarEscala('braden')" class="btn-small">Realizar Evaluación</button>
+                </div>
+                <div class="card escala-card">
+                    <h4>Dolor (EVA)</h4>
+                    <p>Escala visual analógica del dolor</p>
+                    <button onclick="mostrarEscala('eva')" class="btn-small">Evaluar Dolor</button>
+                </div>
+                <div class="card escala-card">
+                    <h4>Confusión (CAM)</h4>
+                    <p>Evaluación de delirium</p>
+                    <button onclick="mostrarEscala('cam')" class="btn-small">Evaluar Confusión</button>
+                </div>
+                <div class="card escala-card">
+                    <h4>Norton</h4>
+                    <p>Valoración de riesgo de úlceras</p>
+                    <button onclick="mostrarEscala('norton')" class="btn-small">Realizar Evaluación</button>
+                </div>
+                <div class="card escala-card">
+                    <h4>Barthel</h4>
+                    <p>Índice de independencia</p>
+                    <button onclick="mostrarEscala('barthel')" class="btn-small">Evaluar Independencia</button>
+                </div>
+            </div>
         </section>
 
+        <!-- Accesos rápidos -->
         <section>
-            <h3>Capacitación y desarrollo</h3>
-            <p>Encuentre cursos, talleres y módulos de formación especialmente dirigidos al personal de enfermería. La formación continua es esencial para adaptarse a la innovación constante en el sector salud.</p>
-            <p><a href="formacion/cursos_online.html"><button>Ver cursos disponibles</button></a></p>
+            <h3>Accesos rápidos</h3>
+            <div class="accesos-rapidos">
+                <div class="card acceso-item">
+                    <h4>📋 Partes de Enfermería</h4>
+                    <p>Registro y consulta de partes de enfermería por unidad</p>
+                    <a href="enfermeria/partes_enfermeria.html" class="btn-link">Acceder →</a>
+                </div>
+                <div class="card acceso-item">
+                    <h4>🩺 Partes de Cirugía</h4>
+                    <p>Informes postquirúrgicos y listas de verificación</p>
+                    <a href="enfermeria/partes_cirugia.html" class="btn-link">Acceder →</a>
+                </div>
+                <div class="card acceso-item">
+                    <h4>📖 Protocolos de Enfermería</h4>
+                    <p>Guías y procedimientos específicos de enfermería</p>
+                    <a href="enfermeria/protocolos.html" class="btn-link">Acceder →</a>
+                </div>
+                <div class="card acceso-item">
+                    <h4>📚 Biblioteca de Enfermería</h4>
+                    <p>Recursos formativos y documentación especializada</p>
+                    <a href="biblioteca/guias_clinicas.html" class="btn-link">Acceder →</a>
+                </div>
+                <div class="card acceso-item">
+                    <h4>🎓 Formación Continua</h4>
+                    <p>Cursos y talleres específicos para enfermería</p>
+                    <a href="formacion.html" class="btn-link">Acceder →</a>
+                </div>
+                <div class="card acceso-item">
+                    <h4>👥 Comunicación</h4>
+                    <p>Canal con supervisores y coordinación</p>
+                    <a href="contacto.html" class="btn-link">Acceder →</a>
+                </div>
+            </div>
         </section>
+
+        <!-- Alertas y avisos -->
+        <section>
+            <h3>Alertas y avisos importantes</h3>
+            <div class="alertas-container">
+                <div class="alerta alerta-info">
+                    <strong>📢 Actualización Protocolo COVID-19</strong>
+                    <p>Se ha actualizado el protocolo de actuación ante casos sospechosos. Consulte la sección de protocolos para más información.</p>
+                    <small>Actualizado: 24/11/2025 14:30h</small>
+                </div>
+                <div class="alerta alerta-warning">
+                    <strong>⚠️ Revisión Equipos de RCP</strong>
+                    <p>Recordatorio: revisión mensual de carros de RCP antes del fin de semana.</p>
+                    <small>Vence: 30/11/2025</small>
+                </div>
+                <div class="alerta alerta-success">
+                    <strong>✅ Formación Completada</strong>
+                    <p>94% del personal de enfermería ha completado la formación en seguridad del paciente.</p>
+                    <small>Meta: 100% antes del 15/12/2025</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendario de turnos -->
+        <section>
+            <h3>Calendario de turnos de enfermería</h3>
+            <div class="calendario-turnos">
+                <div class="filtros-turnos">
+                    <label for="filtro-unidad">Filtrar por unidad:</label>
+                    <select id="filtro-unidad" onchange="filtrarTurnos()">
+                        <option value="">Todas las unidades</option>
+                        <option value="urgencias">Urgencias</option>
+                        <option value="uci">UCI</option>
+                        <option value="planta1">Planta 1 - Medicina</option>
+                        <option value="planta2">Planta 2 - Cirugía</option>
+                        <option value="pediatria">Pediatría</option>
+                    </select>
+                    <button onclick="generarCalendarioActual()" class="btn-small">Hoy</button>
+                    <button onclick="generarCalendarioActual()" class="btn-small">Esta Semana</button>
+                </div>
+                <div id="calendario-container">
+                    <!-- El calendario se generará dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Indicadores de calidad -->
+        <section>
+            <h3>Indicadores de calidad</h3>
+            <div class="indicadores-grid">
+                <div class="card indicador">
+                    <h4>Tasa de Caídas</h4>
+                    <div class="valor-indicador bueno">2.1%</div>
+                    <p>Porcentaje de pacientes con caídas</p>
+                    <small>Objetivo: < 3% | Último mes</small>
+                </div>
+                <div class="card indicador">
+                    <h4>Úlceras por Presión</h4>
+                    <div class="valor-indicador bueno">1.2%</div>
+                    <p>Incidencia de úlceras nuevas</p>
+                    <small>Objetivo: < 2% | Último mes</small>
+                </div>
+                <div class="card indicador">
+                    <h4>Administración de Medicación</h4>
+                    <div class="valor-indicador excelente">99.8%</div>
+                    <p>Administración correcta a tiempo</p>
+                    <small>Objetivo: > 95% | Último mes</small>
+                </div>
+                <div class="card indicador">
+                    <h4>Satisfacción Pacientes</h4>
+                    <div class="valor-indicador bueno">4.3/5</div>
+                    <p>Puntuación media enfermería</p>
+                    <small>Objetivo: > 4.0 | Últimos 3 meses</small>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para calculadoras -->
+    <div id="modal-calculadora" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal('modal-calculadora')">&times;</span>
+            <h3 id="calc-titulo">Calculadora</h3>
+            <div id="calc-contenido">
+                <!-- Contenido de la calculadora se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para escalas -->
+    <div id="modal-escala" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal('modal-escala')">&times;</span>
+            <h3 id="escala-titulo">Escala de Valoración</h3>
+            <div id="escala-contenido">
+                <!-- Contenido de la escala se cargará dinámicamente -->
+            </div>
+        </div>
     </div>
 
     <footer>
         <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
         <p><a href="contacto.html">Soporte técnico</a> | <a href="mapa.html">Mapa del sitio</a></p>
     </footer>
+
+    <script>
+        // Funciones específicas para la página de enfermería
+        
+        function abrirCalculadora(tipo) {
+            const modal = document.getElementById('modal-calculadora');
+            const titulo = document.getElementById('calc-titulo');
+            const contenido = document.getElementById('calc-contenido');
+            
+            let html = '';
+            
+            switch(tipo) {
+                case 'goteo':
+                    titulo.textContent = 'Calculadora de Goteo';
+                    html = `
+                        <form onsubmit="calcularGoteo(event)">
+                            <label>Volumen total (ml):</label>
+                            <input type="number" id="volumen" required>
+                            <label>Tiempo (horas):</label>
+                            <input type="number" id="tiempo" required>
+                            <label>Factor gotero (gotas/ml):</label>
+                            <select id="factor">
+                                <option value="10">10 (Estándar)</option>
+                                <option value="15">15 (Microgotero)</option>
+                                <option value="20">20 (Macrogotero)</option>
+                            </select>
+                            <button type="submit">Calcular Goteo</button>
+                            <div id="resultado-goteo" style="margin-top: 1rem; font-weight: bold;"></div>
+                        </form>
+                    `;
+                    break;
+                case 'imc':
+                    titulo.textContent = 'Calculadora IMC';
+                    html = `
+                        <form onsubmit="calcularIMC(event)">
+                            <label>Peso (kg):</label>
+                            <input type="number" id="peso" step="0.1" required>
+                            <label>Altura (cm):</label>
+                            <input type="number" id="altura" required>
+                            <button type="submit">Calcular IMC</button>
+                            <div id="resultado-imc" style="margin-top: 1rem;"></div>
+                        </form>
+                    `;
+                    break;
+                case 'dosis':
+                    titulo.textContent = 'Cálculo de Dosis Pediátrica';
+                    html = `
+                        <form onsubmit="calcularDosis(event)">
+                            <label>Dosis por kg (mg/kg):</label>
+                            <input type="number" id="dosisKg" step="0.1" required>
+                            <label>Peso del niño (kg):</label>
+                            <input type="number" id="pesoNino" step="0.1" required>
+                            <label>Concentración (mg/ml):</label>
+                            <input type="number" id="concentracion" step="0.1" required>
+                            <button type="submit">Calcular Dosis</button>
+                            <div id="resultado-dosis" style="margin-top: 1rem;"></div>
+                        </form>
+                    `;
+                    break;
+                case 'balance':
+                    titulo.textContent = 'Calculadora de Balance Hídrico';
+                    html = `
+                        <form onsubmit="calcularBalance(event)">
+                            <label>Ingresos (ml):</label>
+                            <input type="number" id="ingresos" required>
+                            <label>Egresos (ml):</label>
+                            <input type="number" id="egresos" required>
+                            <button type="submit">Calcular Balance</button>
+                            <div id="resultado-balance" style="margin-top: 1rem;"></div>
+                        </form>
+                    `;
+                    break;
+            }
+            
+            contenido.innerHTML = html;
+            abrirModal('modal-calculadora');
+        }
+
+        function calcularGoteo(event) {
+            event.preventDefault();
+            const volumen = parseFloat(document.getElementById('volumen').value);
+            const tiempo = parseFloat(document.getElementById('tiempo').value);
+            const factor = parseFloat(document.getElementById('factor').value);
+            
+            const gotasPorMinuto = Math.round((volumen * factor) / (tiempo * 60));
+            const mlPorHora = Math.round(volumen / tiempo);
+            
+            document.getElementById('resultado-goteo').innerHTML = `
+                <strong>Resultado:</strong><br>
+                ${gotasPorMinuto} gotas/minuto<br>
+                ${mlPorHora} ml/hora
+            `;
+        }
+
+        function calcularIMC(event) {
+            event.preventDefault();
+            const peso = parseFloat(document.getElementById('peso').value);
+            const altura = parseFloat(document.getElementById('altura').value) / 100;
+            
+            const imc = peso / (altura * altura);
+            let categoria = '';
+            let color = '';
+            
+            if (imc < 18.5) {
+                categoria = 'Bajo peso';
+                color = '#007bff';
+            } else if (imc < 25) {
+                categoria = 'Peso normal';
+                color = '#28a745';
+            } else if (imc < 30) {
+                categoria = 'Sobrepeso';
+                color = '#ffc107';
+            } else {
+                categoria = 'Obesidad';
+                color = '#dc3545';
+            }
+            
+            document.getElementById('resultado-imc').innerHTML = `
+                <strong>IMC:</strong> ${imc.toFixed(1)}<br>
+                <strong>Categoría:</strong> <span style="color: ${color};">${categoria}</span>
+            `;
+        }
+
+        function calcularDosis(event) {
+            event.preventDefault();
+            const dosisKg = parseFloat(document.getElementById('dosisKg').value);
+            const pesoNino = parseFloat(document.getElementById('pesoNino').value);
+            const concentracion = parseFloat(document.getElementById('concentracion').value);
+            
+            const dosisTotal = dosisKg * pesoNino;
+            const volumen = dosisTotal / concentracion;
+            
+            document.getElementById('resultado-dosis').innerHTML = `
+                <strong>Dosis total:</strong> ${dosisTotal} mg<br>
+                <strong>Volumen a administrar:</strong> ${volumen.toFixed(2)} ml
+            `;
+        }
+
+        function calcularBalance(event) {
+            event.preventDefault();
+            const ingresos = parseFloat(document.getElementById('ingresos').value);
+            const egresos = parseFloat(document.getElementById('egresos').value);
+            
+            const balance = ingresos - egresos;
+            const color = balance >= 0 ? '#28a745' : '#dc3545';
+            
+            document.getElementById('resultado-balance').innerHTML = `
+                <strong>Balance hídrico:</strong> <span style="color: ${color};">${balance} ml</span><br>
+                <em>${balance >= 0 ? 'Positivo' : 'Negativo'}</em>
+            `;
+        }
+
+        function mostrarEscala(tipo) {
+            const modal = document.getElementById('modal-escala');
+            const titulo = document.getElementById('escala-titulo');
+            const contenido = document.getElementById('escala-contenido');
+            
+            let html = '';
+            
+            switch(tipo) {
+                case 'downton':
+                    titulo.textContent = 'Escala de Riesgo de Caídas (Downton)';
+                    html = `
+                        <form onsubmit="evaluarDownton(event)">
+                            <label>Caídas previas:</label>
+                            <select name="caidas"><option value="0">No</option><option value="1">Sí</option></select>
+                            <label>Medicación:</label>
+                            <select name="medicacion"><option value="0">Ninguna</option><option value="1">Tranquilizantes/Antidepresivos</option><option value="2">Diuréticos</option></select>
+                            <label>Deficiencias sensoriales:</label>
+                            <select name="sensorias"><option value="0">Ninguna</option><option value="1">Visuales/Auditivas</option></select>
+                            <label>Estado mental:</label>
+                            <select name="mental"><option value="0">Orientado</option><option value="1">Confuso</option></select>
+                            <label>Marcha:</label>
+                            <select name="marcha"><option value="0">Normal</option><option value="1">Insegura</option><option value="2">Imposible</option></select>
+                            <button type="submit">Evaluar Riesgo</button>
+                            <div id="resultado-downton" style="margin-top: 1rem;"></div>
+                        </form>
+                    `;
+                    break;
+                case 'eva':
+                    titulo.textContent = 'Escala Visual Analógica del Dolor (EVA)';
+                    html = `
+                        <div style="text-align: center; margin: 2rem 0;">
+                            <p>Marque su nivel de dolor en la escala:</p>
+                            <input type="range" id="eva-slider" min="0" max="10" value="5" 
+                                   onchange="actualizarEVA()" style="width: 80%;">
+                            <div style="font-size: 1.5rem; margin: 1rem 0;">
+                                Dolor: <span id="eva-valor">5</span>/10
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #666;">
+                                <span>Sin dolor</span>
+                                <span>Dolor moderado</span>
+                                <span>Dolor máximo</span>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                // Otros casos para las demás escalas...
+            }
+            
+            contenido.innerHTML = html;
+            abrirModal('modal-escala');
+        }
+
+        function evaluarDownton(event) {
+            event.preventDefault();
+            // Lógica simplificada de evaluación
+            const form = event.target;
+            const datos = new FormData(form);
+            let puntuacion = 0;
+            
+            for (let [key, value] of datos.entries()) {
+                puntuacion += parseInt(value);
+            }
+            
+            let nivelRiesgo = '';
+            let color = '';
+            
+            if (puntuacion <= 2) {
+                nivelRiesgo = 'Bajo riesgo';
+                color = '#28a745';
+            } else if (puntuacion <= 4) {
+                nivelRiesgo = 'Riesgo moderado';
+                color = '#ffc107';
+            } else {
+                nivelRiesgo = 'Alto riesgo';
+                color = '#dc3545';
+            }
+            
+            document.getElementById('resultado-downton').innerHTML = `
+                <strong>Puntuación:</strong> ${puntuacion}/11<br>
+                <strong>Nivel de riesgo:</strong> <span style="color: ${color};">${nivelRiesgo}</span>
+            `;
+        }
+
+        function actualizarEVA() {
+            document.getElementById('eva-valor').textContent = document.getElementById('eva-slider').value;
+        }
+
+        function generarCalendarioActual() {
+            // Simular calendario de turnos
+            const container = document.getElementById('calendario-container');
+            const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+            const turnos = ['Mañana', 'Tarde', 'Noche'];
+            
+            let html = '<table class="table calendario-turnos"><tr><th>Unidad</th>';
+            
+            // Header con días de la semana
+            for (let dia of diasSemana) {
+                html += `<th>${dia}</th>`;
+            }
+            html += '</tr>';
+            
+            const unidades = ['Urgencias', 'UCI', 'Planta 1', 'Planta 2', 'Pediatría'];
+            
+            for (let unidad of unidades) {
+                html += `<tr><td><strong>${unidad}</strong></td>`;
+                for (let i = 0; i < 7; i++) {
+                    const turnoAleatorio = turnos[Math.floor(Math.random() * turnos.length)];
+                    html += `<td>${turnoAleatorio}</td>`;
+                }
+                html += '</tr>';
+            }
+            
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            generarCalendarioActual();
+            
+            // Mostrar bienvenida después de un tiempo
+            setTimeout(() => {
+                mostrarNotificacion('¡Bienvenido al Dashboard de Enfermería!', 'success');
+            }, 1500);
+        });
+    </script>
+
+    <style>
+        .dashboard-card {
+            text-align: center;
+            border-left: 4px solid #0e6db8;
+        }
+
+        .metrico {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0e6db8;
+            margin: 0.5rem 0;
+        }
+
+        .calculadoras-grid, .escalas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .calc-card, .escala-card {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .calc-card:hover, .escala-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .accesos-rapidos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .acceso-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .alertas-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .alerta {
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+
+        .alerta-info {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .alerta-warning {
+            background-color: #fff3e0;
+            border-left-color: #ff9800;
+        }
+
+        .alerta-success {
+            background-color: #e8f5e8;
+            border-left-color: #4caf50;
+        }
+
+        .filtros-turnos {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .indicadores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .indicador {
+            text-align: center;
+        }
+
+        .valor-indicador {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .valor-indicador.bueno { color: #28a745; }
+        .valor-indicador.excelente { color: #007bff; }
+        .valor-indicador.alerta { color: #ffc107; }
+        .valor-indicador.critico { color: #dc3545; }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            background-color: #0e6db8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-small:hover {
+            background-color: #094f86;
+        }
+
+        .btn-link {
+            color: #0e6db8;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: auto;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        .calendario-turnos {
+            overflow-x: auto;
+        }
+
+        .calendario-turnos th,
+        .calendario-turnos td {
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .calendario-turnos th:first-child,
+        .calendario-turnos td:first-child {
+            font-weight: bold;
+            background-color: #f0f5fa;
+        }
+
+        @media (max-width: 768px) {
+            .calculadoras-grid, .escalas-grid, .indicadores-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filtros-turnos {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
 </body>
 </html>

@@ -46,6 +46,12 @@ nav a:hover {
   text-decoration: underline;
 }
 
+nav a.active {
+  background-color: rgba(255, 214, 90, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
 .hero {
   background-image: url('img_hospital.png');
   background-size: cover;
@@ -98,6 +104,7 @@ section h3 {
 .table {
   width: 100%;
   border-collapse: collapse;
+  margin: 1rem 0;
 }
 
 .table th, .table td {
@@ -109,6 +116,26 @@ section h3 {
 .table th {
   background-color: #f0f5fa;
   color: #0e6db8;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.table th:hover {
+  background-color: #e3f2fd;
+}
+
+.table th.orden-asc::after {
+  content: " ↑";
+  color: #0e6db8;
+  font-weight: bold;
+}
+
+.table th.orden-desc::after {
+  content: " ↓";
+  color: #0e6db8;
+  font-weight: bold;
 }
 
 form {
@@ -121,11 +148,23 @@ form label {
   font-weight: bold;
 }
 
-form input, form textarea {
+form input, form textarea, form select {
   padding: 0.6rem;
   margin-top: 0.3rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1rem;
+}
+
+form input.error, form textarea.error, form select.error {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+form input.error:focus, form textarea.error:focus, form select.error:focus {
+  outline: none;
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
 }
 
 form button {
@@ -137,6 +176,7 @@ form button {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.2s ease;
 }
 
 form button:hover {
@@ -158,4 +198,421 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
+}
+
+/* Estilos específicos para el directorio del personal */
+.filtros-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.filtro-grupo {
+  display: flex;
+  flex-direction: column;
+}
+
+.filtro-grupo label {
+  font-weight: bold;
+  color: #0e6db8;
+  margin-bottom: 0.3rem;
+}
+
+.filtro-grupo input, .filtro-grupo select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.estadisticas-directorio {
+  background-color: #e8f4fd;
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #0e6db8;
+}
+
+.estadisticas-directorio p {
+  margin: 0;
+  font-weight: bold;
+  color: #0e6db8;
+}
+
+/* Estados de empleados */
+.status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+  min-width: 60px;
+}
+
+.status.disponible {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status.ausente {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Organigrama */
+.organigrama-container {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.nivel-jerarquico {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.cargo-directivo, .cargo-medio, .cargo-supervision, .cargo-administrativo {
+  background-color: #ffffff;
+  border: 2px solid #0e6db8;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem auto;
+  max-width: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cargo-directivo {
+  background: linear-gradient(135deg, #0e6db8, #1565c0);
+  color: white;
+}
+
+.cargo-directivo strong {
+  font-size: 1.2rem;
+}
+
+.cargo-medio ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  text-align: left;
+}
+
+.cargo-medio li {
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #e0e7ef;
+}
+
+.cargo-medio li:last-child {
+  border-bottom: none;
+}
+
+/* Tarjetas de contactos de emergencia */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.card-grid .card {
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-grid .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-grid .card h4 {
+  color: #0e6db8;
+  margin-bottom: 0.5rem;
+}
+
+.card-grid .card p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Estilos para formularios de contacto */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.char-counter {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 0.3rem;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.checkbox-group label {
+  margin: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #0e6db8;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #094f86;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-loading {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilos para FAQ */
+.faq-container {
+  margin: 1rem 0;
+}
+
+.faq-item {
+  border: 1px solid #e0e7ef;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.faq-question {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.faq-question:hover {
+  background-color: #e9ecef;
+}
+
+.faq-question h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #0e6db8;
+  flex: 1;
+}
+
+.faq-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0e6db8;
+  margin-left: 1rem;
+}
+
+.faq-answer {
+  padding: 1rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e0e7ef;
+  display: none;
+}
+
+.faq-answer p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.faq-answer a {
+  color: #0e6db8;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.faq-answer a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para estado del sistema */
+.system-status {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-indicator:last-child {
+  margin-bottom: 0;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.online {
+  background-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.status-dot.maintenance {
+  background-color: #ffc107;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+.status-dot.offline {
+  background-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+}
+
+.status-text {
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+/* Estilos para tablas de horarios */
+.schedule-table {
+  margin-top: 1rem;
+}
+
+.schedule-table .table {
+  font-size: 0.9rem;
+}
+
+.schedule-table .table th,
+.schedule-table .table td {
+  padding: 0.7rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .filtros-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .organigrama-container {
+    padding: 0.5rem;
+  }
+  
+  .cargo-directivo, .cargo-medio, .cargo-supervision, .cargo-administrativo {
+    margin: 0.5rem;
+    max-width: none;
+  }
+  
+  .table {
+    font-size: 0.9rem;
+  }
+  
+  .table th, .table td {
+    padding: 0.3rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0.5rem 1rem;
+  }
+  
+  header h1 {
+    font-size: 1.4rem;
+  }
+  
+  nav ul {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  nav li {
+    margin-right: 0;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+  
+  section {
+    padding: 1rem;
+  }
+  
+  .hero {
+    padding: 2rem 1rem;
+  }
+  
+  .hero h2 {
+    font-size: 1.8rem;
+  }
+  
+  .table {
+    font-size: 0.8rem;
+  }
+  
+  .table th, .table td {
+    padding: 0.2rem;
+  }
 }

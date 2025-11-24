@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Directorio del Personal – Hospital Miguel Servet de Villanueva</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 <body>
     <header>
@@ -13,7 +14,7 @@
             <ul>
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="personal.html">Personal</a></li>
-                <li><a href="servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="servicios_clinicos.html">Servicios Clínicos</a></li>
                 <li><a href="enfermeria.html">Enfermería</a></li>
                 <li><a href="administracion.html">Administración</a></li>
                 <li><a href="biblioteca.html">Biblioteca</a></li>
@@ -32,55 +33,327 @@
         </section>
 
         <section>
-            <h3>Listado de empleados</h3>
-            <table class="table">
+            <h3>Filtros de búsqueda</h3>
+            <div class="filtros-container">
+                <div class="filtro-grupo">
+                    <label for="busqueda">Buscar por nombre o puesto:</label>
+                    <input type="text" id="busqueda" placeholder="Escriba el nombre, apellido o puesto..." onkeyup="filtrarTabla()">
+                </div>
+                <div class="filtro-grupo">
+                    <label for="filtro-departamento">Filtrar por departamento:</label>
+                    <select id="filtro-departamento" onchange="filtrarTabla()">
+                        <option value="">Todos los departamentos</option>
+                        <option value="Cardiología">Cardiología</option>
+                        <option value="Urgencias">Urgencias</option>
+                        <option value="Enfermería">Enfermería</option>
+                        <option value="Administración">Administración</option>
+                        <option value="Farmacia">Farmacia</option>
+                        <option value="Medicina Intensiva">Medicina Intensiva</option>
+                        <option value="Pediatría">Pediatría</option>
+                        <option value="Traumatología">Traumatología</option>
+                        <option value="Radiología">Radiología</option>
+                        <option value="Laboratorio">Laboratorio</option>
+                        <option value="Anestesiología">Anestesiología</option>
+                        <option value="Neurología">Neurología</option>
+                    </select>
+                </div>
+                <div class="filtro-grupo">
+                    <label for="filtro-categoria">Filtrar por categoría:</label>
+                    <select id="filtro-categoria" onchange="filtrarTabla()">
+                        <option value="">Todas las categorías</option>
+                        <option value="Jefe de servicio">Jefe de servicio</option>
+                        <option value="Médico especialista">Médico especialista</option>
+                        <option value="Médico residente">Médico residente</option>
+                        <option value="Supervisor de turno">Supervisor de turno</option>
+                        <option value="Enfermero">Enfermero</option>
+                        <option value="Auxiliar de enfermería">Auxiliar de enfermería</option>
+                        <option value="Gestora de facturación">Gestora de facturación</option>
+                        <option value="Técnico de farmacia">Técnico de farmacia</option>
+                        <option value="Farmacéutico">Farmacéutico</option>
+                        <option value="Técnico superior">Técnico superior</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>Directorio completo de empleados</h3>
+            <div class="estadisticas-directorio">
+                <p><strong>Total de empleados:</strong> <span id="total-empleados">24</span> | <strong>Mostrando:</strong> <span id="empleados-mostrados">24</span></p>
+            </div>
+            <table class="table" id="tabla-empleados">
                 <thead>
                     <tr>
-                        <th>Nombre y apellidos</th>
-                        <th>Departamento</th>
-                        <th>Puesto</th>
-                        <th>Email</th>
-                        <th>Teléfono</th>
+                        <th onclick="ordenar(0)">Nombre y apellidos</th>
+                        <th onclick="ordenar(1)">Departamento</th>
+                        <th onclick="ordenar(2)">Puesto</th>
+                        <th onclick="ordenar(3)">Email</th>
+                        <th onclick="ordenar(4)">Extensión</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Dr. Manuel Gómez</td>
                         <td>Cardiología</td>
-                        <td>Médico especialista</td>
+                        <td>Jefe de servicio</td>
                         <td>manuel.gomez@hmsv.es</td>
-                        <td>910 111 111</td>
+                        <td>1111</td>
+                        <td><span class="status disponible">Activo</span></td>
                     </tr>
                     <tr>
                         <td>Dra. Ana Rodríguez</td>
                         <td>Urgencias</td>
-                        <td>Jefa de servicio</td>
+                        <td>Jefe de servicio</td>
                         <td>ana.rodriguez@hmsv.es</td>
-                        <td>910 222 222</td>
+                        <td>2222</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Carlos Ruiz</td>
+                        <td>Medicina Intensiva</td>
+                        <td>Jefe de servicio</td>
+                        <td>carlos.ruiz@hmsv.es</td>
+                        <td>3333</td>
+                        <td><span class="status disponible">Activo</span></td>
                     </tr>
                     <tr>
                         <td>Enf. Luis Martínez</td>
                         <td>Enfermería</td>
                         <td>Supervisor de turno</td>
                         <td>luis.martinez@hmsv.es</td>
-                        <td>910 333 333</td>
+                        <td>3333</td>
+                        <td><span class="status disponible">Activo</span></td>
                     </tr>
                     <tr>
-                        <td>Maria López</td>
-                        <td>Administración</td>
-                        <td>Gestora de facturación</td>
-                        <td>maria.lopez@hmsv.es</td>
-                        <td>910 444 444</td>
+                        <td>Dra. María Sánchez</td>
+                        <td>Pediatría</td>
+                        <td>Médico especialista</td>
+                        <td>maria.sanchez@hmsv.es</td>
+                        <td>4444</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Antonio López</td>
+                        <td>Traumatología</td>
+                        <td>Médico especialista</td>
+                        <td>antonio.lopez@hmsv.es</td>
+                        <td>5555</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Enf. Carmen González</td>
+                        <td>Urgencias</td>
+                        <td>Enfermero</td>
+                        <td>carmen.gonzalez@hmsv.es</td>
+                        <td>2222</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Francisco Martín</td>
+                        <td>Radiología</td>
+                        <td>Médico especialista</td>
+                        <td>francisco.martin@hmsv.es</td>
+                        <td>6666</td>
+                        <td><span class="status disponible">Activo</span></td>
                     </tr>
                     <tr>
                         <td>Pablo Sánchez</td>
                         <td>Farmacia</td>
                         <td>Técnico de farmacia</td>
                         <td>pablo.sanchez@hmsv.es</td>
-                        <td>910 555 555</td>
+                        <td>7777</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dra. Laura Fernández</td>
+                        <td>Anestesiología</td>
+                        <td>Médico especialista</td>
+                        <td>laura.fernandez@hmsv.es</td>
+                        <td>8888</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Maria López</td>
+                        <td>Administración</td>
+                        <td>Gestora de facturación</td>
+                        <td>maria.lopez@hmsv.es</td>
+                        <td>9999</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. José García</td>
+                        <td>Neurología</td>
+                        <td>Médico especialista</td>
+                        <td>jose.garcia@hmsv.es</td>
+                        <td>1001</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Enf. Andrea Torres</td>
+                        <td>Medicina Intensiva</td>
+                        <td>Enfermero</td>
+                        <td>andrea.torres@hmsv.es</td>
+                        <td>3333</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Miguel Herrera</td>
+                        <td>Cardiología</td>
+                        <td>Médico residente</td>
+                        <td>miguel.herrera@hmsv.es</td>
+                        <td>1111</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Teresa Ruiz</td>
+                        <td>Laboratorio</td>
+                        <td>Técnico superior</td>
+                        <td>teresa.ruiz@hmsv.es</td>
+                        <td>1100</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Enf. Roberto Castro</td>
+                        <td>Pediatría</td>
+                        <td>Enfermero</td>
+                        <td>roberto.castro@hmsv.es</td>
+                        <td>4444</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dra. Sofía Morales</td>
+                        <td>Urgencias</td>
+                        <td>Médico residente</td>
+                        <td>sofia.morales@hmsv.es</td>
+                        <td>2222</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Ana Jiménez</td>
+                        <td>Farmacia</td>
+                        <td>Farmacéutico</td>
+                        <td>ana.jimenez@hmsv.es</td>
+                        <td>7777</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Enf. David Romero</td>
+                        <td>Traumatología</td>
+                        <td>Auxiliar de enfermería</td>
+                        <td>david.romero@hmsv.es</td>
+                        <td>5555</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Ricardo Vega</td>
+                        <td>Radiología</td>
+                        <td>Médico residente</td>
+                        <td>ricardo.vega@hmsv.es</td>
+                        <td>6666</td>
+                        <td><span class="status ausente">Vacaciones</span></td>
+                    </tr>
+                    <tr>
+                        <td>Patricia Moreno</td>
+                        <td>Administración</td>
+                        <td>Técnico superior</td>
+                        <td>patricia.moreno@hmsv.es</td>
+                        <td>9999</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Enf. Sandra Díaz</td>
+                        <td>Anestesiología</td>
+                        <td>Enfermero</td>
+                        <td>sandra.diaz@hmsv.es</td>
+                        <td>8888</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Fernando Silva</td>
+                        <td>Neurología</td>
+                        <td>Médico residente</td>
+                        <td>fernando.silva@hmsv.es</td>
+                        <td>1001</td>
+                        <td><span class="status disponible">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Enf. Marta Guerrero</td>
+                        <td>Laboratorio</td>
+                        <td>Enfermero</td>
+                        <td>marta.guerrero@hmsv.es</td>
+                        <td>1100</td>
+                        <td><span class="status disponible">Activo</span></td>
                     </tr>
                 </tbody>
             </table>
+        </section>
+
+        <section>
+            <h3>Organigrama del hospital</h3>
+            <div class="organigrama-container">
+                <div class="nivel-jerarquico">
+                    <div class="cargo-directivo">
+                        <strong>Dirección Médica</strong>
+                        <p>Dr. Eduardo Mendoza</p>
+                    </div>
+                </div>
+                <div class="nivel-jerarquico">
+                    <div class="cargo-medio">
+                        <strong>Jefes de Servicio</strong>
+                        <ul>
+                            <li>Cardiología - Dr. Manuel Gómez</li>
+                            <li>Urgencias - Dra. Ana Rodríguez</li>
+                            <li>Medicina Intensiva - Dr. Carlos Ruiz</li>
+                            <li>Pediatría - Dra. María Sánchez</li>
+                            <li>Traumatología - Dr. Antonio López</li>
+                            <li>Radiología - Dr. Francisco Martín</li>
+                            <li>Anestesiología - Dra. Laura Fernández</li>
+                            <li>Neurología - Dr. José García</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="nivel-jerarquico">
+                    <div class="cargo-supervision">
+                        <strong>Supervisión de Enfermería</strong>
+                        <p>Enf. Luis Martínez</p>
+                    </div>
+                    <div class="cargo-administrativo">
+                        <strong>Administración</strong>
+                        <p>Maria López - Gestora de Facturación</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>Contactos de emergencia y departamentos clave</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Emergencias Médicas</h4>
+                    <p><strong>Ext. 1000</strong><br>Urgencias 24h</p>
+                </div>
+                <div class="card">
+                    <h4>Seguridad</h4>
+                    <p><strong>Ext. 2000</strong><br>Seguridad 24h</p>
+                </div>
+                <div class="card">
+                    <h4>Mantenimiento</h4>
+                    <p><strong>Ext. 3000</strong><br>7:00 - 19:00h</p>
+                </div>
+                <div class="card">
+                    <h4>Farmacia</h4>
+                    <p><strong>Ext. 7777</strong><br>8:00 - 20:00h</p>
+                </div>
+                <div class="card">
+                    <h4>Laboratorio</h4>
+                    <p><strong>Ext. 1100</strong><br>7:00 - 15:00h</p>
+                </div>
+                <div class="card">
+                    <h4>Centralita Principal</h4>
+                    <p><strong>910 000 000</strong><br>Información general</p>
+                </div>
+            </div>
         </section>
     </div>
 

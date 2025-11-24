@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto y Soporte – Hospital Miguel Servet de Villanueva</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 <body>
     <header>
@@ -13,7 +14,7 @@
             <ul>
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="personal.html">Personal</a></li>
-                <li><a href="servicios_clinicos.html">Servicios Clínicos</a></li>
+                <li><a href="servicios_clinicos.html">Servicios Clínicos</a></li>
                 <li><a href="enfermeria.html">Enfermería</a></li>
                 <li><a href="administracion.html">Administración</a></li>
                 <li><a href="biblioteca.html">Biblioteca</a></li>
@@ -27,42 +28,261 @@
 
     <div class="container">
         <section>
-            <h3>Contacto y soporte técnico</h3>
-            <p>Si necesita asistencia técnica, tiene sugerencias o desea informar un problema, complete el formulario a continuación. Nuestro equipo de soporte se pondrá en contacto con usted lo antes posible.</p>
+            <h3>Centro de Soporte y Contacto</h3>
+            <p>Nuestro equipo de soporte está disponible para ayudarle con cualquier consulta técnica, sugerencia o problema que pueda surgir. Complete el formulario a continuación o utilice los canales de contacto alternativos para una respuesta más rápida.</p>
         </section>
 
         <section>
-            <h3>Formulario de contacto</h3>
-            <form action="#" method="post">
-                <label for="nombre">Nombre y apellidos</label>
-                <input type="text" id="nombre" name="nombre" required>
+            <h3>Formulario de contacto avanzado</h3>
+            <form id="form-contacto" onsubmit="enviarFormulario(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre y apellidos *</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Correo electrónico *</label>
+                        <input type="email" id="correo" name="correo" required>
+                    </div>
+                </div>
 
-                <label for="correo">Correo electrónico</label>
-                <input type="email" id="correo" name="correo" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departamento">Departamento/Área</label>
+                        <select id="departamento" name="departamento">
+                            <option value="">Seleccione departamento</option>
+                            <option value="Cardiología">Cardiología</option>
+                            <option value="Urgencias">Urgencias</option>
+                            <option value="Medicina Intensiva">Medicina Intensiva</option>
+                            <option value="Pediatría">Pediatría</option>
+                            <option value="Traumatología">Traumatología</option>
+                            <option value="Enfermería">Enfermería</option>
+                            <option value="Administración">Administración</option>
+                            <option value="Farmacia">Farmacia</option>
+                            <option value="Laboratorio">Laboratorio</option>
+                            <option value="Radiología">Radiología</option>
+                            <option value="IT/Soporte">IT/Soporte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Extensión/Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="Ej: 1234">
+                    </div>
+                </div>
 
-                <label for="asunto">Asunto</label>
-                <input type="text" id="asunto" name="asunto" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipo-consulta">Tipo de consulta *</label>
+                        <select id="tipo-consulta" name="tipo-consulta" required>
+                            <option value="">Seleccione tipo</option>
+                            <option value="soporte-tecnico">Soporte técnico</option>
+                            <option value="sugerencia">Sugerencia de mejora</option>
+                            <option value="problema">Problema con la intranet</option>
+                            <option value="nuevo-funcionario">Nuevo empleado</option>
+                            <option value="formacion">Formación/Manual</option>
+                            <option value="contenido">Actualización de contenido</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prioridad">Prioridad</label>
+                        <select id="prioridad" name="prioridad">
+                            <option value="baja">Baja</option>
+                            <option value="media" selected>Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                </div>
 
-                <label for="mensaje">Mensaje</label>
-                <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+                <label for="asunto">Asunto *</label>
+                <input type="text" id="asunto" name="asunto" required placeholder="Resumen breve del problema o consulta">
 
-                <button type="submit">Enviar mensaje</button>
+                <label for="mensaje">Mensaje detallado *</label>
+                <textarea id="mensaje" name="mensaje" rows="6" required 
+                          placeholder="Describa el problema o consulta con el mayor detalle posible. Indique los pasos que ha seguido y cualquier mensaje de error que haya aparecido."></textarea>
+                <div class="char-counter">
+                    <span id="contador-mensaje">0 caracteres</span>
+                </div>
+
+                <label for="anexos">Archivos adjuntos (opcional)</label>
+                <input type="file" id="anexos" name="anexos" multiple accept=".pdf,.doc,.docx,.jpg,.png,.txt">
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="urgente" name="urgente">
+                    <label for="urgente">Esta consulta requiere atención inmediata</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="privacidad" name="privacidad" required>
+                    <label for="privacidad">Acepto el tratamiento de mis datos conforme a la política de privacidad *</label>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span class="btn-text">Enviar consulta</span>
+                    <span class="btn-loading" style="display: none;">Enviando...</span>
+                </button>
             </form>
         </section>
 
         <section>
+            <h3>Canales de contacto alternativos</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>📞 Centralita Principal</h4>
+                    <p><strong>910 000 000</strong><br>Información general<br>Lun-Vie: 8:00-20:00h</p>
+                </div>
+                <div class="card">
+                    <h4>🔧 Soporte Técnico</h4>
+                    <p><strong>Ext. 5000</strong><br>Problemas con sistemas<br>Lun-Vie: 7:00-19:00h</p>
+                </div>
+                <div class="card">
+                    <h4>📧 Email Soporte</h4>
+                    <p><strong>soporte@hmsv.es</strong><br>Soporte no urgente<br>Respuesta en 24-48h</p>
+                </div>
+                <div class="card">
+                    <h4>🚨 emergencias</h4>
+                    <p><strong>Ext. 9999</strong><br>Solo para urgencias<br>24 horas</p>
+                </div>
+                <div class="card">
+                    <h4>👥 Mesa de Ayuda</h4>
+                    <p><strong>Planta 0</strong><br>Oficina IT<br>Lun-Vie: 8:00-18:00h</p>
+                </div>
+                <div class="card">
+                    <h4>💬 Chat Interno</h4>
+                    <p><strong>Aplicación Teams</strong><br>Soporte rápido<br>Lun-Vie: 8:00-17:00h</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
             <h3>Preguntas frecuentes</h3>
-            <div class="card">
-                <h4>¿Cómo puedo recuperar mi contraseña?</h4>
-                <p>Si ha olvidado su contraseña, puede solicitar un restablecimiento mediante el botón “¿Olvidó su contraseña?” en la página de inicio de sesión.</p>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>¿Cómo puedo recuperar mi contraseña de la intranet?</h4>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Si ha olvidado su contraseña, puede utilizar el enlace "¿Olvidó su contraseña?" en la página de login. Recibirá un correo con instrucciones para restablecerla. Si persiste el problema, contacte con soporte técnico (Ext. 5000).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>¿Dónde encuentro los manuales y protocolos actualizados?</h4>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Todos los manuales y protocolos se encuentran en la sección <a href="biblioteca.html">Biblioteca</a>. Están organizados por categorías: Guías clínicas, Normativas, Manuales y Formularios. Puede buscar documentos específicos utilizando los filtros disponibles.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>¿Cómo solicito vacaciones o permisos?</h4>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Las solicitudes de vacaciones y permisos se gestionan a través del <a href="personal.html">Área de Personal</a>. En la sección "Solicitudes de permisos y vacaciones" encontrará el formulario correspondiente. Recuerde solicitar con al menos 15 días de antelación.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>¿La intranet funciona desde casa o fuera del hospital?</h4>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí, puede acceder a la intranet desde cualquier ubicación con conexión a internet. Debe utilizar sus credenciales habituales del hospital. Para accesos remotos, se recomienda utilizar una conexión segura (VPN si está disponible).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>¿Cómo actualizo mis datos personales en el sistema?</h4>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Para actualizar datos personales (dirección, teléfono, contactos de emergencia), complete el formulario "Comunicación de cambio de datos personales" disponible en <a href="biblioteca/formularios_institucionales.html">Biblioteca > Formularios</a>. También puede solicitarlos en el departamento de Recursos Humanos.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>¿Qué hago si encuentro un error en un documento o protocolo?</h4>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Si detecta un error en algún documento o protocolo, notifíquelo inmediatamente utilizando el formulario de contacto indicando: título del documento, sección específica, error encontrado y corrección propuesta. El equipo responsable revisará y actualizará el documento.</p>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <h4>¿Dónde encuentro los manuales y protocolos?</h4>
-                <p>Todos los manuales y protocolos se encuentran disponibles en la sección de Biblioteca. También puede acceder a través de los enlaces rápidos en la página de inicio.</p>
+        </section>
+
+        <section>
+            <h3>Estado del sistema</h3>
+            <div class="system-status">
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span class="status-text"><strong>Sistema Principal:</strong> Operativo</span>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span class="status-text"><strong>Base de Datos:</strong> Operativo</span>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot maintenance"></span>
+                    <span class="status-text"><strong>Mantenimiento programado:</strong> Dom 25/11 02:00-04:00h</span>
+                </div>
             </div>
-            <div class="card">
-                <h4>¿Cómo solicito vacaciones?</h4>
-                <p>Las solicitudes de vacaciones se gestionan en el área de Personal, dentro de la sección “Solicitudes de permisos y vacaciones”.</p>
+        </section>
+
+        <section>
+            <h3>Horarios de atención</h3>
+            <div class="schedule-table">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Departamento</th>
+                            <th>Horario</th>
+                            <th>Contacto</th>
+                            <th>Tipo de consulta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Soporte Técnico IT</td>
+                            <td>Lun-Vie: 7:00-19:00h</td>
+                            <td>Ext. 5000</td>
+                            <td>Problemas técnicos, accesos</td>
+                        </tr>
+                        <tr>
+                            <td>Mesa de Ayuda</td>
+                            <td>Lun-Vie: 8:00-18:00h</td>
+                            <td>Planta 0, Oficina IT</td>
+                            <td>Consultas presenciales</td>
+                        </tr>
+                        <tr>
+                            <td>Recursos Humanos</td>
+                            <td>Lun-Vie: 8:00-15:00h</td>
+                            <td>Ext. 6000</td>
+                            <td>Vacaciones, permisos, RRHH</td>
+                        </tr>
+                        <tr>
+                            <td>Administración</td>
+                            <td>Lun-Vie: 8:00-17:00h</td>
+                            <td>Ext. 7000</td>
+                            <td>Gestión administrativa</td>
+                        </tr>
+                        <tr>
+                            <td>Emergencias (solo urgencias)</td>
+                            <td>24 horas</td>
+                            <td>Ext. 9999</td>
+                            <td>Fallos críticos del sistema</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
     </div>
@@ -71,5 +291,86 @@
         <p>&copy; 2025 Hospital Miguel Servet de Villanueva – Todos los derechos reservados.</p>
         <p><a href="contacto.html">Soporte técnico</a> | <a href="mapa.html">Mapa del sitio</a></p>
     </footer>
+
+    <script>
+        // Funciones específicas para la página de contacto
+        
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const icon = element.querySelector('.faq-icon');
+            
+            // Cerrar todas las otras FAQs
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer && item.style.display === 'block') {
+                    item.style.display = 'none';
+                    item.previousElementSibling.querySelector('.faq-icon').textContent = '+';
+                }
+            });
+            
+            // Toggle de la FAQ actual
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.textContent = '+';
+            } else {
+                answer.style.display = 'block';
+                icon.textContent = '-';
+            }
+        }
+
+        function enviarFormulario(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const btn = form.querySelector('button[type="submit"]');
+            const btnText = btn.querySelector('.btn-text');
+            const btnLoading = btn.querySelector('.btn-loading');
+            
+            // Mostrar estado de carga
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            
+            // Simular envío
+            setTimeout(() => {
+                // Restaurar botón
+                btn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                
+                // Mostrar confirmación
+                mostrarNotificacion('Su consulta ha sido enviada correctamente. Recibirá una respuesta en 24-48 horas.', 'success');
+                
+                // Limpiar formulario
+                form.reset();
+                actualizarContador('mensaje');
+            }, 2000);
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Contador de caracteres
+            const mensaje = document.getElementById('mensaje');
+            const contador = document.getElementById('contador-mensaje');
+            
+            if (mensaje && contador) {
+                mensaje.addEventListener('input', function() {
+                    const count = this.value.length;
+                    contador.textContent = `${count} caracteres`;
+                    
+                    if (count > 1000) {
+                        contador.style.color = '#dc3545';
+                    } else {
+                        contador.style.color = '#6c757d';
+                    }
+                });
+            }
+            
+            // Mostrar FAQ inicial
+            document.querySelectorAll('.faq-answer').forEach(answer => {
+                answer.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
