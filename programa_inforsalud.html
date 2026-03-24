@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infors@lud 2026 · Programa Interactivo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f5f8;color:#1a1a2e;min-height:100vh}
+
+header{
+  background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 70%,#e84545 100%);
+  color:white;padding:20px 32px;display:flex;align-items:center;gap:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3)
+}
+.logo{font-size:2rem;font-weight:800;letter-spacing:-1px}
+.logo span{color:#ff6b35}
+.event-info{font-size:.8rem;opacity:.75;margin-top:2px}
+.header-badge{
+  margin-left:auto;background:rgba(255,107,53,.2);border:1px solid rgba(255,107,53,.5);
+  color:#ff6b35;padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:600;white-space:nowrap
+}
+
+.controls{
+  background:white;padding:16px 32px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;
+  border-bottom:1px solid #e0e0e0;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  position:sticky;top:0;z-index:100
+}
+.ctrl-group{display:flex;flex-direction:column;gap:3px}
+.ctrl-group label{font-size:.68rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px}
+input[type=text],select{
+  border:1.5px solid #dde1e7;border-radius:7px;padding:7px 11px;font-size:.85rem;
+  outline:none;transition:border-color .2s,box-shadow .2s;background:#fafafa;color:#1a1a2e
+}
+input[type=text]{width:240px}
+select{min-width:140px;cursor:pointer}
+input:focus,select:focus{border-color:#0f3460;box-shadow:0 0 0 3px rgba(15,52,96,.1);background:white}
+.btn-reset{
+  padding:7px 18px;border-radius:7px;border:none;cursor:pointer;
+  background:#e84545;color:white;font-size:.83rem;font-weight:600;transition:background .2s;margin-left:auto
+}
+.btn-reset:hover{background:#c73434}
+
+.view-toggle{display:flex;gap:6px;margin-left:4px}
+.view-btn{
+  padding:7px 14px;border-radius:7px;border:1.5px solid #dde1e7;cursor:pointer;
+  background:#fafafa;font-size:.8rem;font-weight:600;color:#666;transition:all .15s
+}
+.view-btn.active{background:#0f3460;color:white;border-color:#0f3460}
+
+.stats{
+  padding:8px 32px;background:#f0f3f7;border-bottom:1px solid #e4e8ef;
+  font-size:.8rem;color:#666;display:flex;align-items:center;gap:18px
+}
+.stats strong{color:#0f3460}
+
+/* AGENDA VIEW */
+.agenda-day{margin-bottom:28px}
+.day-header{
+  background:linear-gradient(90deg,#0f3460,#1a5276);color:white;
+  padding:10px 24px;border-radius:10px 10px 0 0;font-weight:700;font-size:.95rem;
+  display:flex;align-items:center;gap:12px
+}
+.day-header .day-date{opacity:.7;font-weight:400;font-size:.82rem}
+
+.timeline-row{
+  display:grid;gap:0;border-left:3px solid #0f3460;margin-left:20px
+}
+.time-block{
+  display:flex;gap:0;border-bottom:1px solid #e8eaed;
+  background:white
+}
+.time-block:last-child{border-bottom:none;border-radius:0 0 8px 8px}
+.time-label{
+  width:90px;min-width:90px;padding:12px 10px;text-align:right;
+  font-size:.75rem;font-weight:700;color:#0f3460;border-right:1px solid #e8eaed;
+  line-height:1.3;display:flex;align-items:flex-start;justify-content:flex-end
+}
+.sessions-row{display:flex;flex:1;gap:0}
+.session-slot{
+  flex:1;padding:10px 14px;border-right:1px solid #f0f0f0;cursor:pointer;
+  transition:background .15s;position:relative
+}
+.session-slot:last-child{border-right:none}
+.session-slot:hover{background:#f0f4ff}
+.session-slot.tipo-debate{border-top:3px solid #e84545}
+.session-slot.tipo-tecnologica{border-top:3px solid #0e9aa7}
+.session-slot.tipo-comunicaciones{border-top:3px solid #7c3aed}
+.session-slot.tipo-medicina{border-top:3px solid #16a34a}
+.session-slot.tipo-farmacia{border-top:3px solid #d97706}
+.session-slot.tipo-enfermeria{border-top:3px solid #db2777}
+.session-slot.tipo-institucional{border-top:3px solid #6366f1}
+.session-slot.tipo-clausura{border-top:3px solid #f59e0b}
+.session-slot.tipo-innovacion{border-top:3px solid #059669}
+.session-slot.tipo-conferencia{border-top:3px solid #8b5cf6}
+.slot-sala{font-size:.65rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.slot-title{font-size:.82rem;font-weight:700;color:#1a1a2e;line-height:1.3;margin-bottom:3px}
+.slot-subtitle{font-size:.73rem;color:#555;line-height:1.35;margin-bottom:5px}
+.slot-modera{font-size:.7rem;color:#0f3460;font-style:italic}
+.slot-count{
+  display:inline-block;margin-top:4px;background:#f0f4ff;color:#0f3460;
+  padding:2px 7px;border-radius:10px;font-size:.68rem;font-weight:600
+}
+.slot-empty{color:#ccc;font-size:.78rem;font-style:italic;padding:12px 14px}
+
+.break-row{
+  background:#fef9ec;padding:8px 24px 8px 112px;
+  font-size:.78rem;color:#92400e;font-weight:600;
+  border-bottom:1px solid #fde68a;display:flex;align-items:center;gap:8px
+}
+.break-row::before{content:'☕';font-size:.9rem}
+
+/* CARDS VIEW */
+.cards-grid{display:grid;gap:14px;padding:20px 32px}
+.card{
+  background:white;border-radius:12px;border:1px solid #e8eaed;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);overflow:hidden;
+  transition:box-shadow .2s,transform .15s;cursor:pointer
+}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-1px)}
+.card-header{
+  padding:13px 18px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid #f4f4f4
+}
+.tipo-badge{
+  padding:3px 9px;border-radius:5px;font-size:.68rem;font-weight:700;
+  white-space:nowrap;text-transform:uppercase;letter-spacing:.3px
+}
+.badge-debate{background:#fde8e8;color:#b91c1c}
+.badge-tecnologica{background:#e0f7f9;color:#0e7490}
+.badge-comunicaciones{background:#ede9fe;color:#6d28d9}
+.badge-medicina{background:#dcfce7;color:#166534}
+.badge-farmacia{background:#fef3c7;color:#92400e}
+.badge-enfermeria{background:#fce7f3;color:#9d174d}
+.badge-institucional{background:#e0e7ff;color:#3730a3}
+.badge-clausura{background:#fffbeb;color:#92400e}
+.badge-innovacion{background:#d1fae5;color:#065f46}
+.badge-conferencia{background:#f5f3ff;color:#6d28d9}
+.badge-posters{background:#f1f5f9;color:#475569}
+.card-title{font-size:.95rem;font-weight:700;color:#1a1a2e;flex:1}
+.card-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.meta-chip{
+  padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600
+}
+.chip-dia{background:#f0e6ff;color:#7c3aed}
+.chip-hora{background:#e0f0ff;color:#0f3460}
+.chip-sala-1{background:#fff0f0;color:#b91c1c}
+.chip-sala-2{background:#e0f7f9;color:#0e7490}
+.chip-sala-3{background:#f3e8ff;color:#7c3aed}
+.expand-icon{color:#aaa;font-size:.9rem;transition:transform .2s;margin-left:6px;user-select:none}
+.card.open .expand-icon{transform:rotate(180deg);color:#0f3460}
+.card-body{display:none;padding:14px 18px}
+.card.open .card-body{display:block}
+.subtitle-text{font-size:.85rem;color:#333;font-style:italic;margin-bottom:12px;line-height:1.5;
+  padding:8px 12px;background:#fafafa;border-radius:6px;border-left:3px solid #0f3460}
+.people-section{margin-bottom:10px}
+.people-label{font-size:.68rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.person-row{
+  display:flex;align-items:flex-start;gap:10px;padding:7px 10px;
+  border-radius:7px;margin-bottom:4px;background:#f8f9fa
+}
+.person-role{
+  font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:10px;
+  white-space:nowrap;margin-top:1px
+}
+.role-modera{background:#dbeafe;color:#1e40af}
+.role-ponente{background:#dcfce7;color:#166534}
+.role-presenta{background:#f3e8ff;color:#7c3aed}
+.role-imparte{background:#fce7f3;color:#9d174d}
+.role-preside{background:#fef3c7;color:#92400e}
+.role-participa{background:#f0fdf4;color:#15803d}
+.role-time{background:#f0f4ff;color:#3730a3}
+.person-info{flex:1}
+.person-name{font-size:.85rem;font-weight:700;color:#1a1a2e}
+.person-cargo{font-size:.75rem;color:#555;line-height:1.4}
+.person-entidad{font-size:.73rem;color:#0f3460;font-weight:500}
+.ponencia-text{font-size:.78rem;color:#333;font-style:italic;margin-top:3px}
+.comms-list{margin-top:4px}
+.comm-item{
+  font-size:.78rem;color:#333;padding:5px 10px;border-radius:5px;
+  background:#f8f9fa;margin-bottom:4px;line-height:1.4
+}
+.comm-item::before{content:'▸ ';color:#0f3460;font-size:.7rem}
+
+.content{padding:20px 32px}
+.empty-state{text-align:center;padding:60px;color:#aaa;font-size:.9rem}
+
+/* MODAL */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;
+  align-items:center;justify-content:center;padding:20px
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:white;border-radius:16px;max-width:680px;width:100%;
+  max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)
+}
+.modal-header{
+  padding:20px 24px;border-bottom:1px solid #f0f0f0;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  position:sticky;top:0;background:white;z-index:1
+}
+.modal-close{
+  font-size:1.4rem;cursor:pointer;color:#aaa;border:none;background:none;
+  padding:0 4px;line-height:1;flex-shrink:0
+}
+.modal-close:hover{color:#333}
+.modal-body{padding:20px 24px}
+
+@media(max-width:640px){
+  header,.controls,.stats,.content,.cards-grid{padding-left:16px;padding-right:16px}
+  input[type=text]{width:100%}
+  .time-label{width:60px;min-width:60px;font-size:.65rem;padding:8px 6px}
+  .sessions-row{flex-direction:column}
+  .session-slot{border-right:none;border-bottom:1px solid #f0f0f0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Infors<span>@</span>lud 2026</div>
+    <div class="event-info">XXIX Congreso Nacional de Informática de la Salud · 24–26 Marzo · Madrid</div>
+  </div>
+  <div class="header-badge">#inforsalud26</div>
+</header>
+
+<div class="controls">
+  <div class="ctrl-group">
+    <label>Buscar ponente, empresa o tema</label>
+    <input type="text" id="searchInput" placeholder="Ej: IA, Genomcore, Raquel…" oninput="applyFilters()">
+  </div>
+  <div class="ctrl-group">
+    <label>Día</label>
+    <select id="filterDia" onchange="applyFilters()">
+      <option value="">Todos los días</option>
+      <option value="Mar 24/03">Martes 24/03</option>
+      <option value="Mie 25/03">Miércoles 25/03</option>
+      <option value="Jue 26/03">Jueves 26/03</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Sala</label>
+    <select id="filterSala" onchange="applyFilters()">
+      <option value="">Todas las salas</option>
+      <option value="Sala 1">Sala 1</option>
+      <option value="Sala 2">Sala 2</option>
+      <option value="Sala 3">Sala 3</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Tipo de sesión</label>
+    <select id="filterTipo" onchange="applyFilters()">
+      <option value="">Todos los tipos</option>
+      <option value="Sesión Debate">Sesiones Debate</option>
+      <option value="Sesión Tecnológica">Sesiones Tecnológicas</option>
+      <option value="Sesión Comunicaciones">Comunicaciones</option>
+      <option value="Sesión Medicina Digital">Medicina Digital</option>
+      <option value="Sesión Farmacia Digital">Farmacia Digital</option>
+      <option value="Sesión Enfermería Digital">Enfermería Digital</option>
+      <option value="Sesión Innovación">Proyectos Innovadores</option>
+      <option value="Institucional">Institucional</option>
+    </select>
+  </div>
+  <div class="view-toggle">
+    <button class="view-btn active" id="btnAgenda" onclick="setView('agenda')">📅 Agenda</button>
+    <button class="view-btn" id="btnCards" onclick="setView('cards')">🗂 Tarjetas</button>
+  </div>
+  <button class="btn-reset" onclick="resetFilters()">✕ Limpiar</button>
+</div>
+
+<div class="stats">
+  <span>Mostrando <strong id="countVisible">0</strong> de <strong id="countTotal">0</strong> sesiones</span>
+  <span>·</span>
+  <span style="display:flex;gap:10px;flex-wrap:wrap">
+    <span style="color:#b91c1c">■ Debate</span>
+    <span style="color:#0e9aa7">■ Tecnológica</span>
+    <span style="color:#7c3aed">■ Comunicaciones</span>
+    <span style="color:#16a34a">■ Medicina</span>
+    <span style="color:#d97706">■ Farmacia</span>
+    <span style="color:#db2777">■ Enfermería</span>
+  </span>
+</div>
+
+<div id="agendaView" class="content"></div>
+<div id="cardsView" class="cards-grid" style="display:none"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div id="modalTitle" style="flex:1"></div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const DATA = [{"id": "mar-inauguracion", "dia": "Mar 24/03", "hora": "16:30–17:00", "sala": "Sala 1", "tipo": "Institucional", "titulo": "Inauguración Oficial", "subtitulo": "", "modera": [], "ponentes": [{"nombre": "Juan Fernando Muñoz Montalvo", "cargo": "Secretario General de Salud Digital, Información e Innovación del SNS", "entidad": "Ministerio de Sanidad", "rol": "Preside"}, {"nombre": "Ruth del Campo Becares", "cargo": "Directora General del Dato", "entidad": "Ministerio para la Transformación Digital y de la Función Pública", "rol": "Interviene"}, {"nombre": "Luciano Sáez Ayerra", "cargo": "Presidente", "entidad": "Sociedad Española de Informática de la Salud", "rol": "Interviene"}], "comunicaciones": []}, {"id": "mar-conferencia-apertura", "dia": "Mar 24/03", "hora": "17:30–18:00", "sala": "Sala 1", "tipo": "Conferencia", "titulo": "Conferencia de Apertura", "subtitulo": "Retos estratégicos de la Salud Digital y la innovación en el SNS: Una tarea compartida", "modera": [], "ponentes": [{"nombre": "Daniel Aparicio", "cargo": "Director Editorial Área de Salud", "entidad": "Unidad Editorial", "rol": "Presenta"}, {"nombre": "Juan Fernando Muñoz Montalvo", "cargo": "Secretario General de Salud Digital, Información e Innovación del SNS", "entidad": "Ministerio de Sanidad", "rol": "Imparte"}], "comunicaciones": []}, {"id": "mar-debate-apertura", "dia": "Mar 24/03", "hora": "18:00–19:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate", "subtitulo": "La Estrategia de Salud Digital: Clave para la Renovación del SNS", "modera": [{"nombre": "Noemí Cívicos Villa", "cargo": "Directora General de Salud Digital y Sistemas de Información para el SNS", "entidad": "Ministerio de Sanidad"}], "ponentes": [{"nombre": "Alberto Jara Sánchez", "cargo": "Director-Gerente del Servicio de Salud de Castilla - La Mancha", "entidad": "SESCAM", "rol": "Ponente"}, {"nombre": "Bernardo Valdivieso Martínez", "cargo": "Secretario Autonómico de Planificación, Información y Transformación", "entidad": "Conselleria de Sanitat de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "Luis Carretero Alcántara", "cargo": "Gerente del Servicio Cántabro de Salud", "entidad": "Servicio Cántabro de Salud", "rol": "Ponente"}, {"nombre": "Adasat Goya González", "cargo": "Director del Servicio Canario de la Salud", "entidad": "Servicio Canario de la Salud", "rol": "Ponente"}, {"nombre": "Jon Guajardo Remacha", "cargo": "Director Gerente", "entidad": "Servicio Navarro de Salud", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mar-posters-s2", "dia": "Mar 24/03", "hora": "19:00–20:30", "sala": "Sala 2", "tipo": "Presentación Posters", "titulo": "Presentación de Posters", "subtitulo": "", "modera": [], "ponentes": [], "comunicaciones": ["Securización de identidades mediante la federación del aplicativo de farmacia con Active Directory", "Receta electrónica del SCS: decisiones seguras en la prescripción de triptanes", "Aplicación de IA en la predicción del absentismo", "Proyecto piloto para la mejora de la accesibilidad a las consultas de oftalmología de la Región Sanitaria de Lleida", "Gobierno de terminología clínica en el Servicio Cántabro de Salud", "HUBSERVE: Plataforma digital para la gestión integrada de estudios e investigación clínica en entornos hospitalarios", "Automatización del proceso clínico-epidemiológico de las EDO en el Servicio Cántabro de Salud", "Integración de geolocalización en tiempo real en el área quirúrgica", "Transformación digital del ámbito quirúrgico y crítico: Integración de ICCA con HCIS", "Registro automatizado mediante tecnología NFC de adherencia y resultados reportados por el paciente", "SECURESEND – Plataforma segura para la transferencia cifrada de archivos clínicos con trazabilidad y doble factor de autenticación"]}, {"id": "mar-posters-s3", "dia": "Mar 24/03", "hora": "19:00–20:30", "sala": "Sala 3", "tipo": "Presentación Posters", "titulo": "Presentación de Posters", "subtitulo": "", "modera": [], "ponentes": [], "comunicaciones": ["Algoritmo de distribución equitativa de cargas de trabajo en urgencias según triaje y ubicación", "Sistema SADME ALERTAS: Plataforma para la supervisión de dispensadores, neveras y comunicaciones críticas en el entorno hospitalario", "Registro centralizado de vacunación", "Implantación de herramienta de descubrimiento y control de dispositivos IY, IoT e IoMT", "Real World Evidence sobre tratamientos biológicos en psoriasis: patrones de usos y persistencia en un hospital andaluz", "Gestión integrada de la incapacidad temporal en el SESPA: el módulo ITAPAH en la plataforma SAGITARIO", "Análisis de requisitos para la licitación de un LIS centralizado en una red interhospitalaria de Anatomía Patológica", "Implantación de un sistema de direccionamiento de pacientes en Atención Primaria", "Reutilización de software sanitario entre CCAA: una experiencia sostenible de cribados poblacionales", "Integración de equipos de electrocardiografía en la red asistencial del SESPA", "Salud digital para la migraña: integración de nuevas tecnologías bajo el paradigma 3P"]}, {"id": "mie-debate1", "dia": "Mie 25/03", "hora": "09:30–11:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 1", "subtitulo": "Balance 2021–2026 – Principales logros de la transformación digital en salud", "modera": [{"nombre": "Raquel Yotti Álvarez", "cargo": "Comisionada PERTE para la Salud de Vanguardia", "entidad": "Ministerio de Ciencia, Innovación y Universidades"}], "ponentes": [{"nombre": "María Fe Lapeña Gutiérrez", "cargo": "Subdirectora General de Servicios Digitales de Salud", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Óscar Fernández Torre", "cargo": "Director General de Planificación, Ordenación, Gestión del Conocimiento y Salud Digital", "entidad": "Consejería de Salud del Gobierno de Cantabria", "rol": "Ponente"}, {"nombre": "María José Tarazón Muñoz", "cargo": "Subdirectora General de TIC para la Salud", "entidad": "Conselleria de Sanitat de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "Lidia Clara Rodríguez García", "cargo": "Directora General de Planificación, Gestión del Conocimiento y Transformación Digital Sanitaria", "entidad": "Consejería de Salud del Principado de Asturias", "rol": "Ponente"}, {"nombre": "Eva Aurín Pardo", "cargo": "Desarrollo de Negocio Sanidad", "entidad": "Telefónica España", "rol": "Ponente"}, {"nombre": "Laura Born Navarro", "cargo": "Responsable de Estrategia Tecnológica e Innovación en Salud", "entidad": "Microsoft", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st1", "dia": "Mie 25/03", "hora": "09:00–11:15", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 1", "subtitulo": "", "modera": [{"nombre": "Roberto Pizarro Santos", "cargo": "Subdirector de Sistemas de Información", "entidad": "Servicio Extremeño de Salud"}], "ponentes": [{"nombre": "Oscar Gil", "cargo": "Director Tecnología y Transformación Digital", "entidad": "IQVIA España", "rol": "09:00–09:15", "ponencia": "Digitalización de la relación con el paciente: del análisis poblacional a una asistencia personalizada y participativa"}, {"nombre": "Estefania Moran", "cargo": "Digital Solutions Product Lead", "entidad": "Roche Diagnostics", "rol": "09:15–09:30", "ponencia": "Del dato a la decisión clínica en el triaje del dolor torácico. Implementación del algoritmo Chest Pain Triage (CE) en urgencias"}, {"nombre": "Oscar Flores", "cargo": "CEO", "entidad": "Genomcore", "rol": "09:30–09:45", "ponencia": "Medicina de Precisión, IA Agéntica y Soberanía"}, {"nombre": "Nina Claveria", "cargo": "Product Solution Director", "entidad": "Orion Health", "rol": "09:45–10:00", "ponencia": "DARWEN™ AI: Reduciendo la carga cognitiva en la Historia Clínica Compartida"}, {"nombre": "Gonzalo Belmonte Rodríguez", "cargo": "Manager", "entidad": "Doc Planner", "rol": "10:00–10:15", "ponencia": "Omnicanalidad inteligente en Salud: cómo la IA está transformando la experiencia del paciente y la eficiencia operativa"}, {"nombre": "Victor Manuel Piñeiro Torres", "cargo": "Solutions Engineer", "entidad": "Inycom", "rol": "10:15–10:30", "ponencia": "Implementa 2FA y ahorra más de 30 minutos diarios por médico o enfermer@ en Urgencias"}, {"nombre": "Jesús Doña Fernández", "cargo": "SLBD Business Development Director", "entidad": "Fujitsu", "rol": "10:30–10:45", "ponencia": "De la promesa tecnológica a la medicina 5P real"}, {"nombre": "Jerónimo Mediavilla Bragado", "cargo": "Key Account Manager", "entidad": "Glintt Healthcare", "rol": "10:45–11:00", "ponencia": "Humanizar a través de la innovación, del paciente pasivo al paciente conectado"}, {"nombre": "Adrián Rodrigo Salas", "cargo": "Business Solutions", "entidad": "GMV", "rol": "11:00–11:15", "ponencia": "uTile Suite para espacios de datos en Salud"}], "comunicaciones": []}, {"id": "mie-com1", "dia": "Mie 25/03", "hora": "09:30–11:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 1", "subtitulo": "", "modera": [{"nombre": "Jenaro Bejarano García", "cargo": "Subdirector Oficina de Gobierno del Dato e Inteligencia Artificial", "entidad": "Servicio Canario de la Salud"}], "ponentes": [], "comunicaciones": ["Visión multidimensional de los diagnósticos en la estación clínica de Atención Primaria de Cataluña", "Nuevo seguimiento clínico de la AP de Cataluña, unificado la Historia del Paciente", "Implantación de un sistema digital de gestión de turnos en Atención Primaria: experiencia organizativa", "Reorganización y humanización en AP mediante autogestión de turnos", "AP CUIDA2: Continuidad de cuidados apoyada en soluciones digitales", "Impacto de la pandemia de COVID-19 en las visitas por depresión en AP en Catalunya", "Actualización farmacoterapéutica con gamificación en Atención Primaria"]}, {"id": "mie-debate2", "dia": "Mie 25/03", "hora": "11:30–13:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 2", "subtitulo": "Innovación asistencial y TIC: telesalud, terapias digitales, nuevos modelos de atención", "modera": [{"nombre": "Gonzalo Tamayo Medel", "cargo": "Viceconsejero de Salud y Transformación Digital", "entidad": "Departamento Vasco de Salud"}], "ponentes": [{"nombre": "Benigno Rosón Calvo", "cargo": "Subdirector General de Sistemas y Tecnologías de la Información", "entidad": "Servicio Gallego de Salud", "rol": "Ponente"}, {"nombre": "José María Jover", "cargo": "Secretario General de la Federación de Asociaciones Científico Médicas Españolas", "entidad": "FACME", "rol": "Ponente"}, {"nombre": "Ines Gallego Camiña", "cargo": "Directora General de Transformación, Planificación y Digitalización en Salud", "entidad": "Departamento Vasco de Salud", "rol": "Ponente"}, {"nombre": "Amador Ruiz Torrejón", "cargo": "Coordinador de Sistemas de Información Asistencial", "entidad": "Servicio de Salud de las Islas Baleares", "rol": "Ponente"}, {"nombre": "Marisa Felipe Gil", "cargo": "Directora General", "entidad": "Dedalus Iberia", "rol": "Ponente"}, {"nombre": "Jesús Castellano Alarcón", "cargo": "Healthcare Business Consultor", "entidad": "Fujitsu", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st2", "dia": "Mie 25/03", "hora": "11:30–13:00", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 2", "subtitulo": "", "modera": [{"nombre": "Pilar Viñado Villuendas", "cargo": "Vocal Asesora en la Secretaría General de Salud Digital, Información e Innovación", "entidad": "Ministerio de Sanidad"}], "ponentes": [{"nombre": "Sara Muñoz González", "cargo": "Enfermera", "entidad": "Hospital Sureste", "rol": "11:30–11:45", "ponencia": "Un caso real de implantación de inteligencia clínica con beneficio para el paciente"}, {"nombre": "Irene Montero Díaz", "cargo": "Health Data Responsible Spain & IO", "entidad": "NTT DATA", "rol": "11:45–12:00", "ponencia": "La Normalización y Estandarización de Datos Sanitarios al servicio del Paciente"}, {"nombre": "Erik Isusquiza García", "cargo": "Responsable del Área Comercial", "entidad": "Ulma Medical Technologies", "rol": "12:00–12:15", "ponencia": "Inteligencia artificial aplicada al cribado de la Retinopatía Diabética"}, {"nombre": "Alberto Fuentes", "cargo": "Sales Engineer", "entidad": "InterSystems Iberia SL", "rol": "12:15–12:30", "ponencia": "Agentes de IA integrados en sistemas clínicos: interoperabilidad, control y confianza"}, {"nombre": "María Fernanda Aguirre", "cargo": "Manager Salud Digital", "entidad": "Grupo Oesia", "rol": "12:30–12:45", "ponencia": "El lugar de la IA en la práctica clínica. Aplicaciones reales en el proceso asistencial"}, {"nombre": "Julia Molina", "cargo": "Directora de Negocio", "entidad": "Salesforce", "rol": "12:45–13:00", "ponencia": "Cada llamada que resuelve el canal ciudadano inteligente es un profesional que vuelve a mirar al paciente"}], "comunicaciones": []}, {"id": "mie-com2", "dia": "Mie 25/03", "hora": "11:30–13:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 2", "subtitulo": "", "modera": [{"nombre": "Juan Carlos Oliva Pérez", "cargo": "Director-Gerente", "entidad": "Fundación Rioja Salud"}], "ponentes": [], "comunicaciones": ["Implantación de un sistema de teledermatología asistido por IA para el diagnóstico y seguimiento de lesiones cutáneas en AP", "Hacia una arquitectura de salud conectada en genómica clínica: OMOP, Phenopackets y Beacon", "EPISTEMAI: Plataforma integral de IA para investigación biomédica", "Clasificación automática de diagnósticos de urgencias mediante BERT", "Transformación digital en el contexto del programa BPSO® en el Servicio Canario de la Salud", "DARWIN EU: experiencia del Hospital 12 de Octubre en evidencia del mundo real", "Interoperabilidad HIS-RFID: eficiencia y trazabilidad de material de alto valor en el CHUIMI"]}, {"id": "mie-debate3", "dia": "Mie 25/03", "hora": "13:00–14:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 3", "subtitulo": "Accesibilidad digital y participación del paciente: Hacia un sistema sanitario más cercano", "modera": [{"nombre": "José Francisco Soto Bonel", "cargo": "Presidente", "entidad": "Sociedad Española de Directivos de la Salud"}], "ponentes": [{"nombre": "Carina Escobar Manero", "cargo": "Presidenta", "entidad": "Plataforma de Organización de Pacientes", "rol": "Ponente"}, {"nombre": "Nuria Ruiz Hombrebueno", "cargo": "Directora General de Salud Digital", "entidad": "Consejería de Digitalización de la Comunidad de Madrid", "rol": "Ponente"}, {"nombre": "Benjamín Juez Fernández", "cargo": "Subdirector de Informática y Sistemas de Información", "entidad": "OSAKIDETZA - Servicio Vasco de Salud", "rol": "Ponente"}, {"nombre": "Gabriel Rojo Rodríguez", "cargo": "Subdirector de Humanización, Atención al Usuario y Formación", "entidad": "Servicio de Salud de las Illes Baleares", "rol": "Ponente"}, {"nombre": "Ángel Hortal Reina", "cargo": "Director de Desarrollo de Negocio Global Sanidad", "entidad": "Indra Group", "rol": "Ponente"}, {"nombre": "Pablo Camba", "cargo": "Healthcare Account Executive", "entidad": "T-Systems", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st3", "dia": "Mie 25/03", "hora": "13:00–14:30", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 3", "subtitulo": "", "modera": [{"nombre": "Josean Vizcay Urrutia", "cargo": "Director General de Telecomunicaciones y Digitalización", "entidad": "Departamento de Universidad, Innovación y Transformación Digital del Gobierno de Navarra"}], "ponentes": [{"nombre": "Carlos Arpón Zufiaur", "cargo": "Técnico Responsable de Área Corporativa", "entidad": "OSAKIDETZA", "rol": "13:00–13:15", "ponencia": "Migración en el Sistema Vasco de Salud de un almacenamiento de imagen radiológica distribuido a una centralización optimizada"}, {"nombre": "César Aparicio Menéndez", "cargo": "Socio Director", "entidad": "ÁlamoConsulting", "rol": "13:15–13:30", "ponencia": "Modelo de Adopción y Gobierno de la IA"}, {"nombre": "Laura Madrenas Pérez-Maldonado", "cargo": "Ingeniera biomédica, Unidad de Ingeniería Biomédica", "entidad": "Hospital Germans Trias i Pujol", "rol": "13:30–13:45", "ponencia": "Synapse 3D. Mejoras en Cirugía con IA e imagen 3D. Experiencia Práctica"}, {"nombre": "Ana Butler", "cargo": "Support and Deployment Engineer", "entidad": "Logipren", "rol": "13:45–14:00", "ponencia": "Errored de prescripción en pediatría: un riesgo evitable, una solución digital"}, {"nombre": "Guillermo Rodríguez Lozano", "cargo": "Modality Sales Specialist in Enterprise Informatics", "entidad": "Philips", "rol": "14:00–14:15", "ponencia": "Del dato aislado a la decisión clínica: Estrategias de IA para un diagnóstico integrado"}, {"nombre": "Pablo Hervás Ballesteros", "cargo": "Healthcare Transformation Director", "entidad": "GSK", "rol": "14:15–14:30", "ponencia": "GSK Gate2Health: innovación abierta para la transformación digital del sistema sanitario"}], "comunicaciones": []}, {"id": "mie-com3", "dia": "Mie 25/03", "hora": "13:00–14:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 3", "subtitulo": "", "modera": [{"nombre": "Javier Quiles del Río", "cargo": "Subdirector de Sistemas de Información del Área Sanitaria de Santiago de Compostela y Barbanza", "entidad": "SERGAS"}], "ponentes": [], "comunicaciones": ["Interoperabilidad de las TIC y la comunicación: circuito del medicamento", "Arquitectura para la gestión de proyectos informáticos en salud pública", "Modelo de integración de receta electrónica para la dispensación a residencias desde el hospital", "IRUDIGILTZA: La llave para la compartición de estudios de imágenes médicas", "Análisis de vulnerabilidades de diseño en aplicaciones para la salud pública", "PROMs integrados en cuadro de mando clínico: mejora del programa de telemedicina en apnea del sueño", "Automatización trazable de la evaluación farmacoeconómica mediante IA en el SNS", "Mejora de la seguridad en la prescripción mediante flujos automatizados en la historia de primaria"]}, {"id": "mie-debate4", "dia": "Mie 25/03", "hora": "16:00–17:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 4", "subtitulo": "Interoperabilidad y datos en red: Construyendo un SNS conectado y basado en el dato", "modera": [{"nombre": "Josep Manuel Pomar Reynes", "cargo": "Director Gerente", "entidad": "Institut Català de la Salut"}], "ponentes": [{"nombre": "Julia Calabuig Pérez", "cargo": "Directora General de Información Sanitaria Calidad y Evaluación", "entidad": "Conselleria de Sanitat de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "Antoni Joan Colombas Salas", "cargo": "Subdirector de Gestión y Gobernanza del Dato", "entidad": "Govern de les Illes Balears", "rol": "Ponente"}, {"nombre": "María Dolores Tomé Cotarelo", "cargo": "Vocal Asesora del Gabinete Técnico, Secretaría General de Salud Digital, Información e Innovación del SNS", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Carlos Telleria Orriols", "cargo": "Director de la Agencia del Dato de Aragón", "entidad": "Gobierno de Aragón", "rol": "Ponente"}, {"nombre": "David G. Pisano", "cargo": "Clinical Bioinformatic Director", "entidad": "Genomcore", "rol": "Ponente"}, {"nombre": "Gonzalo Montesdeoca Zamora", "cargo": "Director", "entidad": "NTT DATA", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st4", "dia": "Mie 25/03", "hora": "16:00–17:30", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 4", "subtitulo": "", "modera": [{"nombre": "Noelia Sánchez Pérez", "cargo": "Subdirectora de Desarrollo e Inteligencia de Negocio", "entidad": "Departamento de Sanidad del Gobierno de Aragón"}], "ponentes": [{"nombre": "Enrique Borja Rodríguez", "cargo": "Jefe de Servicio – Laboratorio de Bioquímica Clínica y Patología Molecular", "entidad": "Hospital Clínico Universitario de Valencia", "rol": "16:00–16:15", "ponencia": "Claves de éxito para la selección de un SIL de laboratorio"}, {"nombre": "Raúl Martínez Santiago", "cargo": "Subdirector de Gestión y Servicios Generales", "entidad": "Servicio de Salud Cántabro", "rol": "16:15–16:30", "ponencia": ""}, {"nombre": "Manuel Pérez Vallina", "cargo": "Ex Subdirector de Gestión de Procesos", "entidad": "Servicio Cántabro de Salud", "rol": "16:30–16:45", "ponencia": "Cómo Cantabria impulsa la atención digital avanzada: orquestación de procesos asistenciales"}, {"nombre": "Alejandro Ramos", "cargo": "Digital Portfolio Executive", "entidad": "Siemens Healthineers", "rol": "16:45–17:15", "ponencia": "Reimaginando la práctica clínica en la era digital"}, {"nombre": "David de Mena García", "cargo": "DP IT Content Manager", "entidad": "Leica Biosystems", "rol": "17:15–17:30", "ponencia": "Aperio HALO AP Image Management Solution. Más allá del visor"}, {"nombre": "Rafael Comendador", "cargo": "Responsable de Desarrollo de Soluciones de IA", "entidad": "CGM Clinical España", "rol": "17:30–17:45", "ponencia": "CGM Health Assistant. Integración de Agentes de IA en los sistemas de información asistenciales"}], "comunicaciones": []}, {"id": "mie-com4", "dia": "Mie 25/03", "hora": "16:00–17:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 4", "subtitulo": "", "modera": [{"nombre": "Álvaro Alonso Zorita", "cargo": "Vocal Asesor del Gabinete Técnico", "entidad": "Ministerio de Sanidad"}], "ponentes": [], "comunicaciones": ["Codificación automática de CMAS con redes neuronales y embeddings en el Servicio Balear de Salud", "Diseño e implementación de un cribado de retinopatía diabética con IA en La Rioja", "Análisis automatizado de datos de investigación con REDCap y R: piloto en una cohorte hospitalaria", "Transición de cuentas genéricas a entornos kioskos conforme al esquema nacional de seguridad", "Plataforma de integración de datos en oncología de precisión para comités moleculares de tumores", "Transformación digital SCS: gestión integral de RRHH. El salto a GIROWEB", "Implantación de un proceso digital para la captación y detección en estadios preclínicos de DT1", "ONTOGUIDE: Sistema interoperable de soporte clínico basado en ontologías"]}, {"id": "mie-debate5", "dia": "Mie 25/03", "hora": "18:00–19:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 5", "subtitulo": "Inteligencia artificial en la asistencia sanitaria", "modera": [{"nombre": "Juan Ángel Morejudo Flores", "cargo": "Director Gerente de la Agencia de Transformación Digital", "entidad": "Junta de Castilla La Mancha"}], "ponentes": [{"nombre": "Emilio Vivancos Rubio", "cargo": "Responsable de la Oficina Autonómica de IA", "entidad": "Consejería de Sanidad de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "José Carmelo Albillos", "cargo": "Presidente", "entidad": "Sociedad Española de Radiología Médica", "rol": "Ponente"}, {"nombre": "Carlos Gallego Pérez", "cargo": "Director de Salud Digital", "entidad": "Sistema de Salud de Catalunya (CatSalut)", "rol": "Ponente"}, {"nombre": "Francisco Javier Pérez Fernández", "cargo": "Medical IT Sales Manager", "entidad": "Fujifilm Healthcare España SL", "rol": "Ponente"}, {"nombre": "Luis Ruiz de la Prada", "cargo": "WMR Regional Business Leader", "entidad": "Solventum", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st5", "dia": "Mie 25/03", "hora": "18:00–20:00", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 5", "subtitulo": "", "modera": [{"nombre": "Javier Manzano Martín", "cargo": "Responsable de Área de Desarrollo de Sistemas de Información de la Dirección General de Salud Digital", "entidad": "Servicio de Salud de Castilla La Mancha"}], "ponentes": [{"nombre": "Iñigo González", "cargo": "Director de Marketing y Comunicación", "entidad": "Dexcom", "rol": "18:00–18:15", "ponencia": ""}, {"nombre": "Juan Ruiz Alzola", "cargo": "CEO EBATINCA", "entidad": "Cibernos Salud. Técnicas Competitivas", "rol": "18:15–18:30", "ponencia": "StaRT: Conectando conocimientos y prácticas en radioterapia"}, {"nombre": "Xavier Lleixa", "cargo": "CTO y cofundador", "entidad": "Digimevo", "rol": "18:30–18:45", "ponencia": "Del cribado poblacional a la intervención digital: la plataforma pionera de eSalud mental de Catalunya"}, {"nombre": "David Moner Cano", "cargo": "Director de Producción y Consultor", "entidad": "Veratech for Health SL", "rol": "18:45–19:00", "ponencia": "Rompiendo las barreras de la Interoperabilidad entre estándares"}, {"nombre": "Julián Lorenzo", "cargo": "Director de la Alianza con Microsoft", "entidad": "Laberit", "rol": "19:00–19:15", "ponencia": "Transformar la sanidad no es digitalizar: es reinventar el modelo asistencial"}, {"nombre": "Rubén Anaut", "cargo": "CEO", "entidad": "Vitio", "rol": "19:15–19:30", "ponencia": "Telemonitorización: del piloto a la práctica clínica real"}, {"nombre": "Ángel Alberich Bayarri", "cargo": "CEO", "entidad": "Quibim", "rol": "19:30–19:45", "ponencia": "Del algoritmo a la infraestructura clínica: la integración como motor de la IA médica"}, {"nombre": "José Luis Solórzano Rendón", "cargo": "Facultativo Especialista - Servicio de Anatomía Patológica", "entidad": "Smart in Medical Iberia", "rol": "19:45–20:00", "ponencia": "Del tejido al dato: Biobanco digital como infraestructura para la medicina de precisión en la estrategia digital del SNS"}], "comunicaciones": []}, {"id": "mie-com5", "dia": "Mie 25/03", "hora": "18:00–19:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 5", "subtitulo": "", "modera": [{"nombre": "Antonio Moragues Jaume", "cargo": "Subdirector de Innovación, Tecnología y Proyectos", "entidad": "Hospital Universitario Son Llátzer"}], "ponentes": [], "comunicaciones": ["Asegurando la gobernanza del software sanitario a través de la automatización del CICD", "Command Center Clínico-operativo para la toma de decisiones en tiempo real de un hospital de tercer nivel", "Garantizar el acceso a la especialidad de Dermatología en un contexto de alta demanda utilizando TIC", "Plan de Acogida", "Diseño e implementación de un algoritmo para la automatización del registro de éxitus en TRASCAN", "Minería de procesos aplicado a procesos asistenciales"]}, {"id": "jue-ciberseguridad", "dia": "Jue 26/03", "hora": "09:30–11:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate de Ciberseguridad", "subtitulo": "Ciberseguridad: Clave en la Estrategia de Salud Digital del SNS", "modera": [{"nombre": "Alejandro Las Heras Vázquez", "cargo": "Consejero Delegado de la Agencia de Ciberseguridad", "entidad": "Comunidad de Madrid"}], "ponentes": [{"nombre": "Miguel Ángel Benito Tovar", "cargo": "Subdirector de Transformación, Innovación y Salud Digital", "entidad": "Servicio de Salud de las Islas Baleares", "rol": "Ponente"}, {"nombre": "Enrique Jesús Quintanilla Cabañero", "cargo": "Subdirector General de Infraestructura Tecnológica Sanitaria", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Javier Candau", "cargo": "Subdirector General del Centro Criptológico Nacional", "entidad": "CCN", "rol": "Ponente"}, {"nombre": "Juan Díez González", "cargo": "Responsable de Ciberseguridad para Sectores Estratégicos Sanitario, Alimentario y de Investigación", "entidad": "Head of Cybersecurity for Strategic Healthcare, Food and Research Sectors", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-st6", "dia": "Jue 26/03", "hora": "09:00–11:15", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 6", "subtitulo": "", "modera": [{"nombre": "Raúl Martínez Santiago", "cargo": "Subdirector Tecnologías y Sistemas de Información", "entidad": "Hospital Universitario Marqués de Valdecilla"}], "ponentes": [{"nombre": "David Gómez García", "cargo": "Account Executive", "entidad": "Appian", "rol": "09:00–09:15", "ponencia": "Orquestación de procesos y transformación de aplicaciones en los servicios de Salud"}, {"nombre": "Antonio Martí Polo", "cargo": "Lead Account Executive", "entidad": "Uphill Health", "rol": "09:15–09:30", "ponencia": "Del PADP a la implementación real: Orquestación y coordinación regional impulsadas por IA"}, {"nombre": "Pedro Vivancos Vicente", "cargo": "Director de Estrategia en Innovación", "entidad": "Invox Medical", "rol": "09:30–09:45", "ponencia": "Integración de IA y voz para la documentación clínica en atención primaria y hospitalaria"}, {"nombre": "Juan Manuel López Fernández", "cargo": "CTO – Unidad de Healthcare", "entidad": "RICOH", "rol": "09:45–10:00", "ponencia": "IA Privada en Sanidad: Soluciones On Premise para un Dato Seguro"}, {"nombre": "Jorge Pérez Hermilla", "cargo": "Director", "entidad": "Tandem Health España", "rol": "10:00–10:15", "ponencia": "IA en consultas: presente, pasado y futuro"}, {"nombre": "Juan Luis Torrejón Guadalupe", "cargo": "AI Project Manager", "entidad": "Telefónica Tech", "rol": "10:15–10:30", "ponencia": "OSAGEN: plataforma genómica de Osakidetza"}, {"nombre": "Rubén Morales Linares", "cargo": "Director de Tecnología y Producto", "entidad": "IndraMind Cybersecurity", "rol": "10:30–10:45", "ponencia": "Smart MDR AI-SOC Agent. El SOC más avanzado e inteligente para la Sanidad Conectada"}, {"nombre": "Laura Muñoz Fernández", "cargo": "Servicio de Salud", "entidad": "Principado de Asturias", "rol": "10:45–11:00", "ponencia": "Plataforma de TELEMONITORIZACIÓN de Pacientes del Sistema de Salud del Principado de Asturias"}, {"nombre": "Alejandro Quintans", "cargo": "CEO", "entidad": "Ovianta", "rol": "11:00–11:15", "ponencia": "Agentes conversacionales telefónicos para admisión de pacientes"}], "comunicaciones": []}, {"id": "jue-com6", "dia": "Jue 26/03", "hora": "09:30–11:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 6", "subtitulo": "", "modera": [{"nombre": "José Pérez Alonso", "cargo": "Director de Sistemas, Tecnología e Innovación para la Salud", "entidad": "Servicio Riojano de Salud"}], "ponentes": [], "comunicaciones": ["Fortaleciendo el talento digital en sanidad: retos alcanzados en el SAS", "Comunicación TIC en el Servicio Andaluz de Salud: cohesionar, acompañar y conectar", "Modelado predictivo para la estratificación del riesgo nutricional infantil en Angola", "Servidor de terminología del Servicio Murciano de Salud: FHIR R5 y sincronización con el Ministerio", "Liderar la transformación hacia la telemedicina en un hospital de alta complejidad: modelo integral", "Anticipando la progresión renal cuando el riñón aún no lo sabe", "Capacitación y humanización digital, claves para la salud digital del siglo XXI"]}, {"id": "jue-med-digital-debate", "dia": "Jue 26/03", "hora": "11:30–13:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate Medicina Digital", "subtitulo": "Visión de los profesionales médicos ante los nuevos desafíos tecnológicos, organizativos y profesionales", "modera": [{"nombre": "Aurea Morillo García", "cargo": "Secretaria de Investigación, Innovación y Salud Digital de Sanidad, Presidencia y Emergencias", "entidad": "Junta de Andalucía"}], "ponentes": [{"nombre": "Mercedes Álvarez Bartolomé", "cargo": "Subdirectora General Adjunta de la Subdirección General de Información Sanitaria", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Rafael Vidal Pérez", "cargo": "Representante", "entidad": "Sociedad Española de Cardiología", "rol": "Ponente"}, {"nombre": "Pedro Luis Abad Requejo", "cargo": "Representante", "entidad": "Sociedad Española de Medicina Interna", "rol": "Ponente"}, {"nombre": "Manuel Santiñá Vidal", "cargo": "Representante", "entidad": "Sociedad Española de Calidad Asistencial", "rol": "Ponente"}, {"nombre": "Jordi Acezat Oliva", "cargo": "Representante", "entidad": "Sociedad Española de Medicina Familiar y Comunitaria", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-farmacia-debate", "dia": "Jue 26/03", "hora": "11:30–13:00", "sala": "Sala 2", "tipo": "Sesión Debate", "titulo": "Sesión Debate Farmacia Digital", "subtitulo": "Genética y Ómicas en Farmacia", "modera": [{"nombre": "José Antonio Marcos Rodríguez", "cargo": "Secretario", "entidad": "Sociedad Española de Farmacia Hospitalaria"}], "ponentes": [{"nombre": "Luis Ramudo Cela", "cargo": "Farmacéutico Adjunto Unidad Farmacocinética/Farmacogenética", "entidad": "Servicio de Farmacia del Hospital Universitario A Coruña", "rol": "Ponente"}, {"nombre": "Adrián Llerena Ruiz", "cargo": "Catedrático UEX-INUBE, Jefe de Servicio en Farmacología Clínica", "entidad": "Unidad Farmacogenética y Medicina Personalizada SES", "rol": "Ponente"}, {"nombre": "María Isidoro García", "cargo": "Unidad de Farmacogenómica y Medicina de Precisión", "entidad": "SACyL", "rol": "Ponente"}, {"nombre": "Francisco Ayala de la Peña", "cargo": "Jefe de Servicio de Oncología Médica", "entidad": "Hospital General Universitario Gregorio Marañón", "rol": "Ponente"}, {"nombre": "Isabel Martínez Sáez", "cargo": "Coordinadora del Proyecto de Catálogo Común de Pruebas Genéticas y Genómicas del SNS", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Rubén Gallego Fernández", "cargo": "Director", "entidad": "ÁlamoConsulting", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-enfermeria-debate", "dia": "Jue 26/03", "hora": "11:30–13:00", "sala": "Sala 3", "tipo": "Sesión Debate", "titulo": "Sesión Debate Enfermería Digital", "subtitulo": "Cuidados medibles y visibles: lenguajes enfermeros en la Historia Clínica Digital del SNS", "modera": [{"nombre": "Paloma Calleja Toledano", "cargo": "Responsable del Plan de Acción para la Atención Primaria y Comunitaria y de la Estrategia de Cuidados", "entidad": "Ministerio de Sanidad"}], "ponentes": [{"nombre": "Mª Carmen Rebollo Pina", "cargo": "Enfermera. Responsable Funcional HCE, Salud. Dirección General de Salud Digital e Infraestructuras", "entidad": "Aragón", "rol": "Ponente"}, {"nombre": "Pedro Ruyman Brito Brito", "cargo": "Asociación Española de Nomenclatura Taxonomía y Diagnóstico de Enfermería", "entidad": "AENTDE", "rol": "Ponente"}, {"nombre": "Jorge Gayol Samutlom", "cargo": "Responsable Técnico BPSO y Normalización de Cuidados", "entidad": "Asturias", "rol": "Ponente"}, {"nombre": "Marta Pavón Garrido", "cargo": "Representante Técnico del Ministerio de Sanidad", "entidad": "SNOMED CT", "rol": "Ponente"}, {"nombre": "Manuela Domingo Pozo", "cargo": "Supervisora de Sistemas de Información", "entidad": "Hospital General Universitario de Alicante Dr. Balmis", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-med-digital", "dia": "Jue 26/03", "hora": "13:00–14:30", "sala": "Sala 1", "tipo": "Sesión Medicina Digital", "titulo": "Sesión Medicina Digital", "subtitulo": "Potencial de la IA y otras tecnologías para la toma de decisiones clínicas, en la practica médica y asistencial", "modera": [{"nombre": "Joaquín Velilla Moliner", "cargo": "Director de Salud Digital e Infraestructura", "entidad": "Departamento de Sanidad del Gobierno de Aragón"}], "ponentes": [{"nombre": "Gabriel Matheu Capo", "cargo": "Patología digital e Insularidad, Jefe de Servicio", "entidad": "Son Espases", "rol": "Ponente"}, {"nombre": "Enrique de Álava Casado", "cargo": "Coordinador del Plan Andaluz de Medicina personalizada y de precisión, Proteómica en Reumatología", "entidad": "Realidades en la asistencia", "rol": "Ponente"}, {"nombre": "Ignacio Rego Pérez", "cargo": "Biomedicina", "entidad": "Servicio Gallego de Salud", "rol": "Ponente"}, {"nombre": "Daniel Blanco Hortal", "cargo": "", "entidad": "Quironsalud", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-farmacia-digital", "dia": "Jue 26/03", "hora": "13:00–14:30", "sala": "Sala 2", "tipo": "Sesión Farmacia Digital", "titulo": "Sesión Farmacia Digital", "subtitulo": "Herramientas de comunicación de farmacia con el paciente", "modera": [{"nombre": "José Manuel Paredero Domínguez", "cargo": "Presidente", "entidad": "Sociedad Española de Farmacéuticos de Atención Primaria"}], "ponentes": [{"nombre": "José Manuel Simarro Escribano", "cargo": "Jefe División Tecnologías de la Información", "entidad": "Agencia Española de Medicamentos y Productos Sanitarios (AEMPS)", "rol": "Ponente"}, {"nombre": "Marina Barreda Gutiérrez", "cargo": "Investigador del Grupo de Economía de la Salud", "entidad": "Universidad de Cantabria IDIVALE", "rol": "Ponente"}, {"nombre": "Vicente Escudero Vilaplana", "cargo": "Adjunto Servicio de Farmacia", "entidad": "Hospital General Universitario Gregorio Marañón", "rol": "Ponente"}, {"nombre": "Javier Bécares Martínez", "cargo": "Jefe de Farmacia", "entidad": "Fundación Jiménez Díaz", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-enfermeria-digital", "dia": "Jue 26/03", "hora": "13:00–14:30", "sala": "Sala 3", "tipo": "Sesión Enfermería Digital", "titulo": "Sesión Enfermería Digital", "subtitulo": "Enfermería Conectada: Asociaciones Profesionales ante la estrategia de Salud Digital del SNS", "modera": [{"nombre": "Inmaculada Moro Casuso", "cargo": "Directora de Enfermería", "entidad": "Hospital de Santa Marina, Bizkaia"}], "ponentes": [{"nombre": "Jesús Sanz Villorejo", "cargo": "Presidente", "entidad": "Asociación Nacional de Directivos de Enfermería (ANDE)", "rol": "Ponente"}, {"nombre": "Alejandro Lendinez Mesa", "cargo": "Presidente", "entidad": "Sociedad Española de Enfermería Neurológica", "rol": "Ponente"}, {"nombre": "Adrián Vences Garrido", "cargo": "Representante", "entidad": "Federación Asociaciones de Enfermería Familiar y Comunitaria", "rol": "Ponente"}, {"nombre": "Isaac Moll Adrián", "cargo": "Representante", "entidad": "Asociación Española de Enfermería Cardiológica", "rol": "Ponente"}, {"nombre": "David Pérez Barreno", "cargo": "Presidente", "entidad": "Asociación Española de Enfermería Vascular y Heridas", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-debate6", "dia": "Jue 26/03", "hora": "16:00–17:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 6", "subtitulo": "Sostenibilidad de las inversiones digitales: ¿Cómo garantizar el futuro de la salud digital?", "modera": [{"nombre": "Natalia Lobato Mosquera", "cargo": "Secretaria General Técnica", "entidad": "Consellería de Sanidade de la Xunta de Galicia"}], "ponentes": [{"nombre": "Juan Madrona Tárraga", "cargo": "Coordinador Regional de Coordinación y Gobernanza de la Dirección General de Salud Digital", "entidad": "Agencia de Transformación Digital de Castilla - La Mancha", "rol": "Ponente"}, {"nombre": "María Fernández Rancaño", "cargo": "Directora Adjunta de Servicios Públicos Electrónicos", "entidad": "Red.es", "rol": "Ponente"}, {"nombre": "María Jesús López-Neira de la Torre", "cargo": "Secretaria General", "entidad": "Servicio Canario de la Salud", "rol": "Ponente"}, {"nombre": "Javier Martínez Gilabert", "cargo": "Director General de Transformación Digital", "entidad": "Consejería de Economía, Hacienda, Fondos Europeos y Transformación Digital", "rol": "Ponente"}, {"nombre": "Josep Vehí", "cargo": "Catedrático de Ingeniería de Control y Biomédica, Director de la Cátedra UdG-DEXCOM", "entidad": "Universidad de Girona (UdG)", "rol": "Ponente"}, {"nombre": "Enrique Alonso Teruel", "cargo": "Director Territorial", "entidad": "Salesforce", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-proyectos-innovadores", "dia": "Jue 26/03", "hora": "16:00–17:30", "sala": "Sala 2", "tipo": "Sesión Innovación", "titulo": "Sesión de Proyectos Innovadores", "subtitulo": "", "modera": [{"nombre": "Adolfo Muñoz Carrero", "cargo": "Director de la Unidad de Investigación de Telemedicina y S. D.", "entidad": "Instituto de Salud Carlos III"}], "ponentes": [], "comunicaciones": ["Iniciativa de seguimiento de pacientes EPOC y ASMA por IA Conversacional", "Manejo digital integral de la Diabetes Mellitus Tipo 1 (DM1): dispositivos, datos y personas", "El papel fundamental de las enfermeras en la implementación de la teledermatología en el Sistema Riojano de Salud", "ERIZAPKLIK: toda la enfermería de Atención Primaria en un KLIK", "Hacia repositorios clínicos OpenEHR a gran escala: resultados y lecciones aprendidas en Cataluña", "Redefiniendo la humanización: gobernanza, datos y cultura en red"]}, {"id": "jue-com7", "dia": "Jue 26/03", "hora": "16:00–17:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 7", "subtitulo": "", "modera": [{"nombre": "Yolanda López Mínguez", "cargo": "Subdirectora de Infraestructuras y Servicios Técnicos", "entidad": "Servicio de Salud del Principado de Asturias"}], "ponentes": [], "comunicaciones": ["Detección precoz del cáncer de páncreas mediante un modelo multiparamétrico basado en IA (AI-EARLY PANC)", "Desarrollo de la nueva versión de la Data Curation Tool: arquitectura web escalable basada en FHIR", "Cuantificación de la perfusión renal y mapeo T1 mediante resonancia magnética en pacientes con ERC", "PROSODIC: inteligencia predictiva para la prevención secundaria del suicidio juvenil", "Caracterización de la base de datos OMOP-CDM del Hospital 12 de Octubre mediante herramientas OHDSI", "Riesgo de hospitalización no programada: predicción con datos del mundo real estandarizados en OMOP", "Despliegue del middleware SIMPL-OPEN para el espacio de datos sanitarios federado de FEDERA SALUD", "Requisitos de seguridad de la plataforma digital IMPACT para datos biomédicos en España"]}, {"id": "jue-debate7", "dia": "Jue 26/03", "hora": "17:30–19:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 7", "subtitulo": "Hacia la Estrategia de Salud Digital 2026-2031. Liderazgo colaborativo y próximos pasos", "modera": [{"nombre": "José Ramón Parada Jorgal", "cargo": "Gerente", "entidad": "Servicio Gallego de Salud (SERGAS)"}], "ponentes": [{"nombre": "Ismael Vargas Pina", "cargo": "Director General de Sistemas de Información y Comunicaciones", "entidad": "Servicio Andaluz de Salud (SAS)", "rol": "Ponente"}, {"nombre": "Rocío Montalbán Carrasco", "cargo": "Subdirectora General de Salud Digital", "entidad": "Consejería de Salud del Gobierno de Cantabria", "rol": "Ponente"}, {"nombre": "José Manuel Alcaraz Muñoz", "cargo": "Subdirector General de Tecnologías de Información", "entidad": "Servicio Murciano de Salud", "rol": "Ponente"}, {"nombre": "Pol Pérez i Sust", "cargo": "Director del Área de Sistemas de Información del Servei Català de la Salut y Coordinador General de las TIC del Departament de Salut", "entidad": "CatSalut / Generalitat de Catalunya", "rol": "Ponente"}, {"nombre": "María Felpeto Pereiras", "cargo": "Sales Leader Healthcare Informatics", "entidad": "Philips", "rol": "Ponente"}, {"nombre": "Eduardo Zubizarreta Lorente", "cargo": "Director UNE Salud", "entidad": "Inycom", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-st7", "dia": "Jue 26/03", "hora": "17:30–19:00", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 7", "subtitulo": "", "modera": [{"nombre": "José Manuel Morales Pastora", "cargo": "Subdirector de Sistemas y Tecnologías para la Salud", "entidad": "Servicio Navarro de Salud - Osasunbidea"}], "ponentes": [{"nombre": "Javier de Torres", "cargo": "UDS Sales Executive", "entidad": "Dell Technologies", "rol": "17:30–17:45", "ponencia": "Orquestando el espacio de datos sanitarios: la propuesta de Dell para la IA clínica"}, {"nombre": "Jonay Luis", "cargo": "Senior Technical Consultant", "entidad": "Inetum", "rol": "17:45–18:00", "ponencia": "IA aplicada al Entorno de Salud"}, {"nombre": "Carolina Vegas Plaza", "cargo": "Subdirectora de enfermería", "entidad": "Hospital Universitario de Getafe", "rol": "18:00–18:15", "ponencia": "Gestionando el futuro: IA Conversacional como herramienta estratégica para transformar procesos asistenciales y mejorar el cuidado del paciente"}, {"nombre": "Suellyn Silveira", "cargo": "Responsable TriNetX España, HPM EU", "entidad": "TriNetX", "rol": "18:15–18:30", "ponencia": "Plataforma TriNetX: democratizando el acceso a datos del mundo real y generando evidencia de alto impacto"}, {"nombre": "Sergio Guerrero Haro", "cargo": "Responsable de Estrategia Tecnológica e Innovación en Salud", "entidad": "Microsoft", "rol": "18:30–18:45", "ponencia": ""}, {"nombre": "Kai Zhang", "cargo": "Responsable de Estrategia y desarrollo de negocio sanitario", "entidad": "Huawei España", "rol": "18:45–19:00", "ponencia": "De los silos de datos a la sabiduría clínica"}], "comunicaciones": []}, {"id": "jue-com8", "dia": "Jue 26/03", "hora": "17:30–19:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 8", "subtitulo": "", "modera": [{"nombre": "Manuel Pérez Vallina", "cargo": "Ex - Subdirector de Gestión de Procesos", "entidad": "Servicio Cántabro de Salud"}], "ponentes": [], "comunicaciones": ["La transformación digital de la actividad inspectora en la Comunitat Valenciana: arquitectura técnica y modelo organizativo", "Automatización cartográfica para vigilancia epidemiológica con R SHINY", "Integración dispositivos IoTM en un sistema de telemonitorización (TELEA)", "Resultados de la implementación de un marco de evaluación de activos digitales de salud en el SISCAT", "Desarrollo de herramienta web para la gestión de inteligencia en salud pública (HUGIN)", "Gestión de proyectos de la dirección técnica de sistemas de información de Atención Primaria de Madrid"]}, {"id": "jue-clausura", "dia": "Jue 26/03", "hora": "19:00", "sala": "Sala 1", "tipo": "Clausura", "titulo": "Clausura y Entrega de Premios", "subtitulo": "", "modera": [], "ponentes": [{"nombre": "Miguel López-Valverde Argüeso", "cargo": "Consejero de Digitalización", "entidad": "Comunidad de Madrid", "rol": "Preside"}, {"nombre": "Noemí Cívicos Villa", "cargo": "Directora General de Salud Digital y Sistemas de Información para el SNS", "entidad": "Ministerio de Sanidad", "rol": "Participa"}, {"nombre": "Elvira Alonso Suero", "cargo": "Coordinadora General", "entidad": "XXIX Congreso Nacional de Informática de la Salud", "rol": "Participa"}], "comunicaciones": []}];
+
+const TIPO_CSS = {
+  'Sesión Debate': 'debate',
+  'Sesión Tecnológica': 'tecnologica',
+  'Sesión Comunicaciones': 'comunicaciones',
+  'Sesión Medicina Digital': 'medicina',
+  'Sesión Farmacia Digital': 'farmacia',
+  'Sesión Enfermería Digital': 'enfermeria',
+  'Institucional': 'institucional',
+  'Clausura': 'clausura',
+  'Sesión Innovación': 'innovacion',
+  'Conferencia': 'conferencia',
+  'Presentación Posters': 'posters'
+};
+
+function tipoCss(tipo) {
+  for (const [k,v] of Object.entries(TIPO_CSS)) {
+    if (tipo && tipo.includes(k.replace('Sesión ',''))) return v;
+    if (tipo === k) return v;
+  }
+  return 'institucional';
+}
+
+function salaCss(sala) {
+  if (!sala) return '';
+  if (sala.includes('1')) return 'chip-sala-1';
+  if (sala.includes('2')) return 'chip-sala-2';
+  if (sala.includes('3')) return 'chip-sala-3';
+  return '';
+}
+
+function badgeCss(tipo) {
+  const c = tipoCss(tipo);
+  return 'tipo-badge badge-' + c;
+}
+
+function roleCss(rol) {
+  if (!rol) return 'role-ponente';
+  const r = rol.toLowerCase();
+  if (r.includes('modera')) return 'role-modera';
+  if (r.includes('presenta')) return 'role-presenta';
+  if (r.includes('imparte')) return 'role-imparte';
+  if (r.includes('preside')) return 'role-preside';
+  if (r.includes('participa')) return 'role-participa';
+  if (r.match(/\d{2}:/)) return 'role-time';
+  return 'role-ponente';
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let currentView = 'agenda';
+let filtered = [...DATA];
+
+document.getElementById('countTotal').textContent = DATA.length;
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('btnAgenda').classList.toggle('active', v==='agenda');
+  document.getElementById('btnCards').classList.toggle('active', v==='cards');
+  document.getElementById('agendaView').style.display = v==='agenda' ? '' : 'none';
+  document.getElementById('cardsView').style.display = v==='cards' ? 'grid' : 'none';
+  render();
+}
+
+function matchesSearch(s, q) {
+  if (!q) return true;
+  const terms = q.toLowerCase().split(' ').filter(Boolean);
+  const hay = [
+    s.titulo, s.subtitulo, s.tipo,
+    ...s.ponentes.map(p => p.nombre + ' ' + p.cargo + ' ' + (p.entidad||'') + ' ' + (p.ponencia||'')),
+    ...s.modera.map(p => p.nombre + ' ' + p.cargo + ' ' + (p.entidad||'')),
+    ...s.comunicaciones
+  ].join(' ').toLowerCase();
+  return terms.every(t => hay.includes(t));
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.trim();
+  const dia = document.getElementById('filterDia').value;
+  const sala = document.getElementById('filterSala').value;
+  const tipo = document.getElementById('filterTipo').value;
+  filtered = DATA.filter(s => {
+    if (dia && s.dia !== dia) return false;
+    if (sala && s.sala !== sala) return false;
+    if (tipo && !s.tipo.includes(tipo.replace('Sesión ',''))) return false;
+    if (!matchesSearch(s, q)) return false;
+    return true;
+  });
+  document.getElementById('countVisible').textContent = filtered.length;
+  render();
+}
+
+function resetFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterDia').value = '';
+  document.getElementById('filterSala').value = '';
+  document.getElementById('filterTipo').value = '';
+  applyFilters();
+}
+
+// ---- AGENDA VIEW ----
+const DAYS = ['Mar 24/03','Mie 25/03','Jue 26/03'];
+const DAY_LABELS = {
+  'Mar 24/03': 'Martes, 24 de marzo de 2026',
+  'Mie 25/03': 'Miércoles, 25 de marzo de 2026',
+  'Jue 26/03': 'Jueves, 26 de marzo de 2026'
+};
+const BREAKS = {
+  'Mie 25/03': ['11:00–11:30','14:30–16:00','17:30–18:00'],
+  'Jue 26/03': ['11:00–11:30','14:30–16:00']
+};
+const BREAK_LABELS = {
+  '11:00–11:30': '☕ Café y Visita Área de Exposiciones (11:00–11:30)',
+  '14:30–16:00': '🕐 Descanso (14:30–16:00)',
+  '17:30–18:00': '🏛 Visita Área de Exposiciones (17:30–18:00)'
+};
+
+function renderAgenda() {
+  const container = document.getElementById('agendaView');
+  const fIds = new Set(filtered.map(s => s.id));
+
+  const days = DAYS.filter(d => {
+    const dia = document.getElementById('filterDia').value;
+    return !dia || dia === d;
+  });
+
+  let html = '';
+  days.forEach(day => {
+    const daySessions = DATA.filter(s => s.dia === day);
+    if (!daySessions.length) return;
+
+    // Get unique time slots
+    const times = [...new Set(daySessions.map(s => s.hora))].sort();
+    const salas = ['Sala 1','Sala 2','Sala 3'];
+
+    html += `<div class="agenda-day">
+      <div class="day-header">
+        <span>${DAY_LABELS[day]}</span>
+      </div>
+      <div style="background:white;border-radius:0 0 8px 8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)">`;
+
+    // Special: Martes 16:00-16:30 recogida
+    if (day === 'Mar 24/03') {
+      html += `<div class="time-block">
+        <div class="time-label">16:00<br>16:30</div>
+        <div class="sessions-row">
+          <div style="flex:1;padding:10px 14px;font-size:.83rem;color:#555;font-style:italic">Recogida de Documentación</div>
+        </div>
+      </div>`;
+    }
+
+    const breakList = BREAKS[day] || [];
+    let renderedBreaks = new Set();
+
+    times.forEach(time => {
+      // Insert break before this time if needed
+      if (day === 'Mie 25/03' && time === '11:30–13:00' && !renderedBreaks.has('11:00–11:30')) {
+        html += `<div class="break-row">Café y Visita Área de Exposiciones — 11:00 a 11:30</div>`;
+        renderedBreaks.add('11:00–11:30');
+      }
+      if (day === 'Mie 25/03' && time === '16:00–17:30' && !renderedBreaks.has('14:30–16:00')) {
+        html += `<div class="break-row">Descanso — 14:30 a 16:00</div>`;
+        renderedBreaks.add('14:30–16:00');
+      }
+      if (day === 'Mie 25/03' && time === '18:00–19:30' && !renderedBreaks.has('17:30–18:00')) {
+        html += `<div class="break-row">Visita Área de Exposiciones — 17:30 a 18:00</div>`;
+        renderedBreaks.add('17:30–18:00');
+      }
+      if (day === 'Jue 26/03' && time === '11:30–13:00' && !renderedBreaks.has('11:00–11:30')) {
+        html += `<div class="break-row">Café y Visita Área de Exposiciones — 11:00 a 11:30</div>`;
+        renderedBreaks.add('11:00–11:30');
+      }
+      if (day === 'Jue 26/03' && time === '16:00–17:30' && !renderedBreaks.has('14:30–16:00')) {
+        html += `<div class="break-row">Descanso — 14:30 a 16:00</div>`;
+        renderedBreaks.add('14:30–16:00');
+      }
+
+      const timeSessions = daySessions.filter(s => s.hora === time);
+      const timeLabel = time.replace('–','<br>');
+
+      html += `<div class="time-block"><div class="time-label">${timeLabel}</div><div class="sessions-row">`;
+
+      salas.forEach(sala => {
+        const s = timeSessions.find(x => x.sala === sala);
+        if (!s) {
+          // Check if it's a full-width session
+          if (sala === 'Sala 1') {
+            const fullWidth = timeSessions.find(x => !x.sala || x.sala === '');
+            if (!fullWidth) {
+              html += `<div class="slot-empty">—</div>`;
+            }
+          }
+          return;
+        }
+        const isFiltered = fIds.has(s.id);
+        const css = tipoCss(s.tipo);
+        const opacity = isFiltered ? '1' : '0.3';
+        const modera = s.modera[0];
+        const pCount = s.ponentes.length + s.comunicaciones.length;
+        html += `<div class="session-slot tipo-${css}" style="opacity:${opacity}" onclick="openModal('${s.id}')">
+          <div class="slot-sala">${esc(s.sala)}</div>
+          <div class="slot-title">${esc(s.titulo)}</div>
+          ${s.subtitulo ? `<div class="slot-subtitle">"${esc(s.subtitulo)}"</div>` : ''}
+          ${modera ? `<div class="slot-modera">Modera: ${esc(modera.nombre)}</div>` : ''}
+          ${pCount ? `<span class="slot-count">${pCount} ${s.comunicaciones.length ? 'comunicaciones' : 'ponentes'}</span>` : ''}
+        </div>`;
+      });
+
+      // Handle single-sala sessions (Inauguración, Clausura, etc.)
+      if (timeSessions.length === 1 && (timeSessions[0].sala === 'Sala 1' || !timeSessions[0].sala)) {
+        // already handled above if sala === 'Sala 1'
+      }
+
+      html += `</div></div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html || '<div class="empty-state">No hay sesiones con los filtros aplicados.</div>';
+}
+
+// ---- CARDS VIEW ----
+function renderCards() {
+  const container = document.getElementById('cardsView');
+  if (!filtered.length) {
+    container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No hay sesiones con los filtros aplicados.</div>';
+    return;
+  }
+  container.innerHTML = filtered.map((s,i) => {
+    const css = tipoCss(s.tipo);
+    const modera = s.modera[0];
+    const pCount = s.ponentes.length;
+    const cCount = s.comunicaciones.length;
+    return `<div class="card" id="card-${i}">
+      <div class="card-header" onclick="document.getElementById('card-${i}').classList.toggle('open')">
+        <span class="${badgeCss(s.tipo)}">${esc(s.tipo)}</span>
+        <span class="card-title">${esc(s.titulo)}</span>
+        <div class="card-meta">
+          <span class="meta-chip chip-dia">${esc(s.dia)}</span>
+          <span class="meta-chip chip-hora">${esc(s.hora)}</span>
+          <span class="meta-chip ${salaCss(s.sala)}">${esc(s.sala)}</span>
+        </div>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="card-body">
+        ${s.subtitulo ? `<div class="subtitle-text">"${esc(s.subtitulo)}"</div>` : ''}
+        ${s.modera.length ? `<div class="people-section">
+          <div class="people-label">Modera</div>
+          ${s.modera.map(p => personRow(p, 'Modera')).join('')}
+        </div>` : ''}
+        ${s.ponentes.length ? `<div class="people-section">
+          <div class="people-label">${pCount} Ponente${pCount!==1?'s':''}</div>
+          ${s.ponentes.map(p => personRow(p, p.rol||'Ponente')).join('')}
+        </div>` : ''}
+        ${s.comunicaciones.length ? `<div class="people-section">
+          <div class="people-label">${cCount} Comunicación${cCount!==1?'es':''}</div>
+          <div class="comms-list">${s.comunicaciones.map(c => `<div class="comm-item">${esc(c)}</div>`).join('')}</div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function personRow(p, rol) {
+  return `<div class="person-row">
+    <span class="person-role ${roleCss(rol)}">${esc(rol)}</span>
+    <div class="person-info">
+      <div class="person-name">${esc(p.nombre)}</div>
+      ${p.cargo ? `<div class="person-cargo">${esc(p.cargo)}</div>` : ''}
+      ${p.entidad ? `<div class="person-entidad">${esc(p.entidad)}</div>` : ''}
+      ${p.ponencia ? `<div class="ponencia-text">"${esc(p.ponencia)}"</div>` : ''}
+    </div>
+  </div>`;
+}
+
+// ---- MODAL ----
+function openModal(id) {
+  const s = DATA.find(x => x.id === id);
+  if (!s) return;
+  const css = tipoCss(s.tipo);
+  const pCount = s.ponentes.length;
+  const cCount = s.comunicaciones.length;
+
+  document.getElementById('modalTitle').innerHTML = `
+    <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
+      <span class="${badgeCss(s.tipo)}">${esc(s.tipo)}</span>
+      <span class="meta-chip chip-dia">${esc(s.dia)}</span>
+      <span class="meta-chip chip-hora">${esc(s.hora)}</span>
+      <span class="meta-chip ${salaCss(s.sala)}">${esc(s.sala)}</span>
+    </div>
+    <div style="font-size:1.05rem;font-weight:700;margin-top:8px;color:#1a1a2e">${esc(s.titulo)}</div>
+  `;
+
+  document.getElementById('modalBody').innerHTML = `
+    ${s.subtitulo ? `<div class="subtitle-text">"${esc(s.subtitulo)}"</div>` : ''}
+    ${s.modera.length ? `<div class="people-section">
+      <div class="people-label">Modera</div>
+      ${s.modera.map(p => personRow(p, 'Modera')).join('')}
+    </div>` : ''}
+    ${pCount ? `<div class="people-section">
+      <div class="people-label">${pCount} Ponente${pCount!==1?'s':''}</div>
+      ${s.ponentes.map(p => personRow(p, p.rol||'Ponente')).join('')}
+    </div>` : ''}
+    ${cCount ? `<div class="people-section">
+      <div class="people-label">${cCount} Comunicación${cCount!==1?'es':''}</div>
+      <div class="comms-list">${s.comunicaciones.map(c => `<div class="comm-item">${esc(c)}</div>`).join('')}</div>
+    </div>` : ''}
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModalDirect(); });
+
+function render() {
+  if (currentView === 'agenda') renderAgenda();
+  else renderCards();
+}
+
+applyFilters();
+</script>
+</body>
+</html>
