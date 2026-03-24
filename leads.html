@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TietAI · Leads Infors@lud 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    color: white; padding: 24px 32px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+  .logo span { color: #e94560; }
+  .subtitle { font-size: 0.85rem; opacity: 0.7; margin-top: 2px; }
+  header .event-badge {
+    margin-left: auto;
+    background: rgba(233,69,96,0.2);
+    border: 1px solid rgba(233,69,96,0.5);
+    color: #e94560; padding: 6px 14px;
+    border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .controls {
+    background: white; padding: 20px 32px;
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 4px; }
+  .control-group label { font-size: 0.72rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+  input[type=text], select {
+    border: 1.5px solid #dde1e7; border-radius: 8px;
+    padding: 8px 12px; font-size: 0.88rem; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa; color: #1a1a2e;
+  }
+  input[type=text] { width: 260px; }
+  select { min-width: 150px; cursor: pointer; }
+  input[type=text]:focus, select:focus {
+    border-color: #0f3460; box-shadow: 0 0 0 3px rgba(15,52,96,0.1);
+    background: white;
+  }
+  .btn-reset {
+    padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer;
+    background: #e94560; color: white; font-size: 0.85rem; font-weight: 600;
+    transition: background 0.2s; margin-left: auto;
+  }
+  .btn-reset:hover { background: #c73652; }
+
+  .stats-bar {
+    padding: 10px 32px;
+    display: flex; align-items: center; gap: 20px;
+    font-size: 0.82rem; color: #555;
+    background: #f7f8fa; border-bottom: 1px solid #e8e8e8;
+  }
+  .stats-bar strong { color: #0f3460; font-weight: 700; }
+  .relevancia-dots { display: flex; gap: 14px; margin-left: auto; }
+  .dot { display: inline-flex; align-items: center; gap: 5px; font-weight: 500; }
+  .dot::before { content: ''; width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.alta::before { background: #22c55e; }
+  .dot.media::before { background: #f59e0b; }
+  .dot.baja::before { background: #94a3b8; }
+
+  .content { padding: 20px 32px; }
+
+  .grid { display: grid; gap: 14px; }
+
+  .card {
+    background: white; border-radius: 12px;
+    border: 1px solid #e8eaed;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden; transition: box-shadow 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-1px); }
+
+  .card-header {
+    padding: 14px 18px; display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .session-badge {
+    background: #0f3460; color: white;
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 0.75rem; font-weight: 700;
+    white-space: nowrap; letter-spacing: 0.3px;
+    min-width: 42px; text-align: center;
+  }
+  .empresa-name { font-size: 1.05rem; font-weight: 700; color: #1a1a2e; flex: 1; }
+  .relevancia-badge {
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 0.73rem; font-weight: 600; white-space: nowrap;
+  }
+  .relevancia-alta { background: #dcfce7; color: #166534; }
+  .relevancia-media { background: #fef9c3; color: #854d0e; }
+  .relevancia-baja { background: #f1f5f9; color: #64748b; }
+
+  .card-body { padding: 14px 18px; display: none; }
+  .card.open .card-body { display: block; }
+
+  .info-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px; margin-bottom: 12px;
+  }
+  .info-item { display: flex; flex-direction: column; gap: 2px; }
+  .info-label {
+    font-size: 0.68rem; font-weight: 600; color: #888;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .info-value { font-size: 0.85rem; color: #1a1a2e; line-height: 1.4; }
+
+  .perfil-block, .accion-block {
+    border-radius: 8px; padding: 10px 14px; margin-top: 10px;
+    font-size: 0.84rem; line-height: 1.55;
+  }
+  .perfil-block { background: #f8faff; border-left: 3px solid #0f3460; color: #333; }
+  .accion-block { background: #fff8f0; border-left: 3px solid #e94560; color: #333; }
+  .block-label { font-size: 0.7rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+
+  .card-summary {
+    display: flex; align-items: center; gap: 10px; flex: 1;
+    flex-wrap: wrap;
+  }
+  .ponente-info { font-size: 0.82rem; color: #555; }
+  .ponente-info strong { color: #0f3460; }
+  .horario-chip {
+    background: #f0f4ff; color: #0f3460;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 0.73rem; font-weight: 600;
+  }
+  .dia-chip {
+    background: #fdf4ff; color: #7c3aed;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 0.73rem; font-weight: 600;
+  }
+
+  .tipo-relacion-chip {
+    background: #f0fdf4; color: #15803d;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 0.73rem; font-weight: 500;
+  }
+  .categoria-chip {
+    background: #fef3c7; color: #92400e;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 0.72rem; font-weight: 500;
+  }
+
+  .expand-icon {
+    color: #aaa; font-size: 1rem; transition: transform 0.2s; margin-left: 8px;
+    user-select: none;
+  }
+  .card.open .expand-icon { transform: rotate(180deg); color: #0f3460; }
+
+  .empty-state {
+    text-align: center; padding: 60px 20px; color: #888;
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+
+  @media (max-width: 640px) {
+    header, .controls, .stats-bar, .content { padding-left: 16px; padding-right: 16px; }
+    input[type=text] { width: 100%; }
+    .controls { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Tiet<span>AI</span></div>
+    <div class="subtitle">Intelligence · Leads Tracker</div>
+  </div>
+  <div class="event-badge">Infors@lud 2026</div>
+</header>
+
+<div class="controls">
+  <div class="control-group">
+    <label>Buscar empresa o ponente</label>
+    <input type="text" id="searchInput" placeholder="Nombre de empresa, ponente..." oninput="applyFilters()">
+  </div>
+  <div class="control-group">
+    <label>Sesión</label>
+    <select id="filterSesion" onchange="applyFilters()">
+      <option value="">Todas las sesiones</option>
+      <option value="ST1">ST1 · Mie 09:00</option>
+      <option value="ST2">ST2 · Mie 11:30</option>
+      <option value="ST3">ST3 · Mie 13:00</option>
+      <option value="ST4">ST4 · Mie 16:00</option>
+      <option value="ST5">ST5 · Mie 18:00</option>
+      <option value="ST6">ST6 · Jue 09:00</option>
+      <option value="ST7">ST7 · Jue 17:30</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>Día</label>
+    <select id="filterDia" onchange="applyFilters()">
+      <option value="">Ambos días</option>
+      <option value="Mie 25/03">Miércoles 25/03</option>
+      <option value="Jue 26/03">Jueves 26/03</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>Relevancia TietAI</label>
+    <select id="filterRelevancia" onchange="applyFilters()">
+      <option value="">Todas</option>
+      <option value="Alta">Alta</option>
+      <option value="Media">Media</option>
+      <option value="Baja">Baja</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>Tipo de relación</label>
+    <select id="filterTipo" onchange="applyFilters()">
+      <option value="">Todos</option>
+    </select>
+  </div>
+  <button class="btn-reset" onclick="resetFilters()">Limpiar filtros</button>
+</div>
+
+<div class="stats-bar">
+  <span>Mostrando <strong id="countVisible">0</strong> de <strong id="countTotal">0</strong> empresas</span>
+  <div class="relevancia-dots">
+    <span class="dot alta">Alta relevancia</span>
+    <span class="dot media">Media relevancia</span>
+    <span class="dot baja">Baja relevancia</span>
+  </div>
+</div>
+
+<div class="content">
+  <div class="grid" id="cardsContainer"></div>
+  <div class="empty-state" id="emptyState" style="display:none">
+    <div class="icon">🔍</div>
+    <div>No se encontraron empresas con los filtros aplicados.</div>
+  </div>
+</div>
+
+<script>
+const DATA = [{"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "IQVIA España", "Ponente": "Oscar Gil", "Cargo": "Director Tecnología y Transformación Digital", "Título Ponencia": "Digitalización de la relación con el paciente: del análisis poblacional a una asistencia personalizada y participativa", "Categoría": "Datos & Analytics / CRO", "Perfil de Empresa": "Multinacional líder mundial en datos, analítica avanzada e investigación clínica para el sector salud. En España opera para la industria farmacéutica y cada vez más para el sector público (CCAA). Muy activa en Real World Data.", "País / Sede": "EE.UU. (filial en España)", "Tamaño": "Grande (+10.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Monitorizar su narrativa sobre datos sanitarios del SNS. Sin acción inmediata prioritaria."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Roche Diagnostics", "Ponente": "Estefania Moran", "Cargo": "Digital Solutions Product Lead", "Título Ponencia": "Del dato a la decisión clínica en el triaje del dolor torácico. Implementación del algoritmo Chest Pain Triage (CE) en urgencias", "Categoría": "Diagnóstico / MedTech", "Perfil de Empresa": "División diagnóstico de Roche, líder mundial en sistemas de diagnóstico in vitro y soluciones digitales clínicas. Trabaja con hospitales del SNS en proyectos de IA para diagnóstico.", "País / Sede": "Suiza (filial en España)", "Tamaño": "Grande (+80.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "No es canal ni cliente directo. Caso de uso interesante de IA en urgencias para conocer el estado del mercado."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Genomcore", "Ponente": "Oscar Flores", "Cargo": "CEO", "Título Ponencia": "Medicina de Precisión, IA Agéntica y Soberanía", "Categoría": "IA Clínica / Bioinformática / Datos", "Perfil de Empresa": "Startup/scale-up española especializada en plataformas de IA para medicina de precisión y soberanía del dato clínico. Trabaja con hospitales y servicios de salud autonómicos. Presente en la mesa de interoperabilidad (Debate 4). Enfoque en datos genómicos y clínicos.", "País / Sede": "España (Barcelona)", "Tamaño": "Mediana (50-200 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Co-creación", "Acción Recomendada": "Oscar Flores es ponente en ST1 Y en el Debate 4 de interoperabilidad. Doble oportunidad de contacto. TietAI + Genomcore: complementariedad en datos clínicos estructurados + agentes IA. Abordar en coffee break post-ST1."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Orion Health", "Ponente": "Nina Claveria", "Cargo": "Product Solution Director", "Título Ponencia": "DARWEN™ AI: Reduciendo la carga cognitiva en la Historia Clínica Compartida", "Categoría": "Plataforma HIS / Interoperabilidad", "Perfil de Empresa": "Empresa neozelandesa líder en plataformas de historia clínica compartida e interoperabilidad sanitaria. Muy implantada en el SNS español (varias CCAA usan su plataforma). Especialista en conectar sistemas legacy bajo estándares HL7/FHIR.", "País / Sede": "Nueva Zelanda (oficina en Madrid)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Partner Canal", "Acción Recomendada": "Orion Health tiene sistemas implantados en el SNS sobre los que TietAI puede añadir capa de agentes e ingesta EHDS. Nina Claveria es el contacto comercial directo. Contactar en el stand (nº23)."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "DocPlanner", "Ponente": "Gonzalo Belmonte Rodriguez", "Cargo": "Manager DocPlanner", "Título Ponencia": "Omnicanalidad inteligente en Salud: cómo la IA está transformando la experiencia del paciente y la eficiencia operativa", "Categoría": "Plataforma Digital Salud / SaaS", "Perfil de Empresa": "Unicornio europeo de gestión de citas médicas y experiencia del paciente. Opera en 13 países. Su foco es el canal paciente-médico, no la interoperabilidad clínica de back-end.", "País / Sede": "Polonia (oficina en España)", "Tamaño": "Grande (1.000-5.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "No es partner prioritario. Contexto interesante sobre omnicanalidad en salud."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Inycom", "Ponente": "Victor Manuel Piñeiro Torres", "Cargo": "Solutions Engineer", "Título Ponencia": "Implementa 2FA y ahorra más de 30 minutos diarios por médico o enfermer@ en Urgencias", "Categoría": "Consultoría IT / Servicios Profesionales Salud", "Perfil de Empresa": "Empresa española de servicios tecnológicos con fuerte presencia en el sector público, especialmente en Aragón y Navarra. División UNE Salud especializada en soluciones para el SNS. Eduardo Zubizarreta (Director UNE Salud) es ponente en el Debate 7.", "País / Sede": "España (Zaragoza)", "Tamaño": "Mediana (500-1.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Regional", "Acción Recomendada": "Canal prioritario para Aragón, Navarra y Rioja. Eduardo Zubizarreta es la figura clave. Victor Piñeiro puede ser punto de entrada técnico. Visitar stand (no identificado en plano) o abordar en Debate 7."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Fujitsu", "Ponente": "Jesús Doña Fernández", "Cargo": "SLBD Business Development Director", "Título Ponencia": "De la promesa tecnológica a la medicina 5P real", "Categoría": "IT Global / Consultoría / Infraestructura", "Perfil de Empresa": "Multinacional japonesa con importante división de salud digital en España. Presencia histórica en proyectos de HIS y transformación digital en CCAA. Patrocinador del congreso.", "País / Sede": "Japón (filial en España)", "Tamaño": "Grande (+100.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal / Ecosistema", "Acción Recomendada": "Fujitsu tiene contratos activos con varias CCAA. Jesús Doña es el perfil de BD: presentarle TietAI como componente de interoperabilidad para sus proyectos."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Glintt Healthcare", "Ponente": "Jerónimo Mediavilla Bragado", "Cargo": "Key Account Manager", "Título Ponencia": "Humanizar a través de la innovación, del paciente pasivo al paciente conectado", "Categoría": "HIS / Software Clínico Legacy", "Perfil de Empresa": "Empresa portuguesa líder en software hospitalario (HIS) en España y Portugal. Sus sistemas están implantados como sistemas legados en numerosos hospitales y centros de atención primaria del SNS español. Es exactamente el tipo de sistema legacy que TietAI conecta.", "País / Sede": "Portugal (oficina en España)", "Tamaño": "Mediana (500-1.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Partner Estratégico", "Acción Recomendada": "CONTACTO MUY PRIORITARIO. Glintt tiene los sistemas legacy que TietAI necesita conectar. Una alianza con Glintt permitiría a TietAI acceder a todos sus clientes del SNS de forma nativa. Abordar a Jerónimo Mediavilla."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "GMV", "Ponente": "Adrián Rodrigo Salas", "Cargo": "Business Solutions", "Título Ponencia": "uTile Suite para espacios de datos en Salud", "Categoría": "Consultoría IT / Espacio de Datos EHDS", "Perfil de Empresa": "Empresa española de ingeniería y tecnología con fuerte presencia en el SNS. Su producto uTile Suite está específicamente diseñado para espacios de datos sanitarios compatibles con EHDS. Patrocinador del congreso con larga trayectoria en administración pública.", "País / Sede": "España (Madrid)", "Tamaño": "Grande (1.000-8.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal / Competencia Monitorizar", "Acción Recomendada": "GMV puede ser competencia directa en EHDS O partner de distribución si TietAI es complementario. Evaluar el alcance de uTile Suite en la ponencia. Abordar a Adrián Rodrigo para entender si hay solapamiento o sinergia."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "NTT DATA", "Ponente": "Irene Montero Díaz", "Cargo": "Health Data Responsible Spain & IO", "Título Ponencia": "La Normalización y Estandarización de Datos Sanitarios al servicio del Paciente", "Categoría": "Consultoría IT / Datos Sanitarios", "Perfil de Empresa": "Segunda mayor consultora IT de Japón, con una de las divisiones de salud más activas de España. Presente en proyectos de interoperabilidad, HIS y transformación digital en múltiples CCAA. Patrocinador principal. Gonzalo Montesdeoca (Director) también ponente en Debate 4.", "País / Sede": "Japón (filial en España)", "Tamaño": "Grande (+300.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Estratégico", "Acción Recomendada": "Partner de canal prioritario Tier 1. Irene Montero trabaja exactamente en normalización y estandarización de datos sanitarios. Gonzalo Montesdeoca está en la mesa de interoperabilidad. Visitar stand 28/29. Proponer reunión bilateral de 30 min."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "ULMA Medical Technologies", "Ponente": "Erik Isusquiza García", "Cargo": "Responsable del Área Comercial", "Título Ponencia": "Inteligencia artificial aplicada al cribado de la Retinopatía Diabética: la experiencia del Servicio Riojano de Salud", "Categoría": "MedTech / IA Clínica", "Perfil de Empresa": "División de tecnología médica del Grupo ULMA (cooperativa de Mondragón). Desarrolla soluciones de IA para diagnóstico médico, especialmente en detección de patologías crónicas. Implantada en el Servicio Riojano de Salud.", "País / Sede": "España (País Vasco)", "Tamaño": "Mediana (100-500 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Caso de uso interesante de IA para cribado. No es partner prioritario para TietAI."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "InterSystems Iberia", "Ponente": "Alberto Fuentes", "Cargo": "Sales Engineer", "Título Ponencia": "Agentes de IA integrados en sistemas clínicos: interoperabilidad, control y confianza", "Categoría": "Plataforma Interoperabilidad / HIS", "Perfil de Empresa": "Empresa estadounidense con la plataforma de interoperabilidad más extendida en salud a nivel mundial (HealthShare). Implantada en numerosas CCAA españolas. Su plataforma conecta sistemas legacy bajo estándares HL7/FHIR/CDA. Tecnología de referencia en interoperabilidad SNS.", "País / Sede": "EE.UU. (oficina en Madrid)", "Tamaño": "Grande (2.000-5.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica", "Acción Recomendada": "CONTACTO MUY PRIORITARIO. Alberto Fuentes presenta sobre agentes IA e interoperabilidad: exactamente el espacio de TietAI. InterSystems tiene presencia en todas las CCAA. TietAI puede posicionarse como capa de agentes sobre HealthShare. Sentarse junto a él en ST2."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "Grupo Oesia", "Ponente": "María Fernanda Aguirre", "Cargo": "Manager Salud Digital", "Título Ponencia": "El lugar de la IA en la práctica clínica. Aplicaciones reales en el proceso asistencial", "Categoría": "Consultoría IT / Defensa y Salud", "Perfil de Empresa": "Grupo tecnológico español con unidad de negocio en salud digital. Trabaja con administraciones públicas en proyectos de digitalización y IA. Pertenece al ecosistema de empresas tecnológicas nacionales con presencia en CCAA.", "País / Sede": "España (Madrid)", "Tamaño": "Grande (1.000-3.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "Canal potencial para CCAA en las que Oesia tiene presencia. María Fernanda es el perfil de salud digital. Contacto secundario."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "Salesforce", "Ponente": "Julia Molina", "Cargo": "Directora de Negocio", "Título Ponencia": "Cada llamada que resuelve el canal ciudadano inteligente es un profesional que vuelve a mirar al paciente", "Categoría": "CRM / Cloud Platform / IA", "Perfil de Empresa": "Plataforma CRM y cloud líder mundial. En salud, posiciona su plataforma Health Cloud como solución de gestión de pacientes y contacto ciudadano. Algunas CCAA usan Salesforce para servicios de atención ciudadana. Su foco en este congreso es el canal ciudadano inteligente.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+70.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Partner Plataforma", "Acción Recomendada": "Salesforce puede ser plataforma sobre la que desplegar agentes de TietAI. Julia Molina es el perfil de negocio en salud. Contacto de ecosistema."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "ÁlamoConsulting", "Ponente": "César Aparicio Menéndez", "Cargo": "Socio Director", "Título Ponencia": "Modelo de Adopción y Gobierno de la IA", "Categoría": "Consultoría Especializada Salud / IA Governance", "Perfil de Empresa": "Consultora española 100% especializada en el sector sanitario. Trabaja directamente con servicios de salud autonómicos en estrategia, gobierno y adopción de tecnología. Rubén Gallego (Director) también ponente en Farmacia Digital. Patrocinador principal del congreso.", "País / Sede": "España (Madrid)", "Tamaño": "Pequeña (50-200 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Especializado", "Acción Recomendada": "Canal especializado de alto valor. ÁlamoConsulting conoce a todos los decisores de las CCAA y tiene credibilidad consolidada. Propuesta: incluir a TietAI en sus propuestas de adopción de IA e interoperabilidad. Abordar a César Aparicio o Rubén Gallego."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "Logipren", "Ponente": "Ana Butler", "Cargo": "Support and Deployment Engineer", "Título Ponencia": "Errored de prescripción en pediatría: un riesgo evitable, una solución digital", "Categoría": "Software Clínico / Prescripción", "Perfil de Empresa": "Startup/empresa pequeña española con solución de seguridad en prescripción pediátrica. Nicho muy específico en seguridad del medicamento. Escasa relevancia para el objetivo de TietAI.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción recomendada. Nicho muy específico."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "Philips Healthcare", "Ponente": "Guillermo Rodríguez Lozano", "Cargo": "Modality Sales Specialist, Enterprise Informatics", "Título Ponencia": "Del dato aislado a la decisión clínica: Estrategias de IA para un diagnóstico integrado", "Categoría": "MedTech / Enterprise Informatics", "Perfil de Empresa": "División Healthcare de Philips, con fuerza particular en Enterprise Informatics (PACS, VNA, sistemas de información radiológica). Trabaja con hospitales del SNS en gestión de imagen diagnóstica y datos clínicos. Patrocinador tecnológico del congreso.", "País / Sede": "Países Bajos (filial en España)", "Tamaño": "Grande (+70.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia / Partner Futuro", "Acción Recomendada": "Philips tiene datos de imagen diagnóstica en silos. TietAI podría ser relevante para ingesta de datos de imagen hacia EHDS. Sin prioridad inmediata. Nota en pipeline futuro."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "GSK", "Ponente": "Pablo Hervás Ballesteros", "Cargo": "Healthcare Transformation Director", "Título Ponencia": "GSK Gate2Health: innovación abierta para la transformación digital del sistema sanitario", "Categoría": "Farmacéutica / Open Innovation", "Perfil de Empresa": "Farmacéutica multinacional con programa de innovación abierta (Gate2Health) para startups de salud digital. Busca activamente startups tecnológicas que resuelvan necesidades del sistema sanitario. No es cliente del SNS, pero puede ser fuente de financiación o co-inversión.", "País / Sede": "Reino Unido (filial en España)", "Tamaño": "Grande (+90.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Financiación / Open Innovation", "Acción Recomendada": "GSK Gate2Health puede ser una vía de financiación o visibilidad para TietAI. Abordar a Pablo Hervás para entender los criterios del programa y si TietAI encaja."}, {"Sesión": "ST4", "Día": "Mie 25/03", "Horario": "16:00-17:30", "Empresa": "Siemens Healthineers", "Ponente": "Alejandro Ramos", "Cargo": "Digital Portfolio Executive", "Título Ponencia": "Reimaginando la práctica clínica en la era digital", "Categoría": "MedTech / Diagnóstico / Digital Health", "Perfil de Empresa": "División salud de Siemens. Líder mundial en equipamiento diagnóstico (imagen, laboratorio) con creciente oferta de plataformas digitales (Teamplay). Tiene presencia en todos los grandes hospitales del SNS. Patrocinador colaborador del congreso.", "País / Sede": "Alemania (filial en España)", "Tamaño": "Grande (+50.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia / Partner Futuro", "Acción Recomendada": "Siemens Healthineers genera silos de datos de imagen que deben conectarse al EHDS. TietAI podría ser relevante a largo plazo para la capa de ingesta. Sin prioridad inmediata."}, {"Sesión": "ST4", "Día": "Mie 25/03", "Horario": "16:00-17:30", "Empresa": "Leica Biosystems (Danaher)", "Ponente": "David de Mena García", "Cargo": "DP IT Content Manager", "Título Ponencia": "Aperio HALO AP Image Management Solution. Más allá del visor", "Categoría": "Patología Digital / MedTech", "Perfil de Empresa": "División de patología digital del grupo Danaher. Especialista en sistemas de gestión de imagen de anatomía patológica (escáneres de portaobjetos, IA diagnóstica). Nicho muy específico dentro de los datos clínicos.", "País / Sede": "Alemania/EE.UU. (filial en España)", "Tamaño": "Grande (+70.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Nicho muy específico. Sin acción prioritaria para TietAI."}, {"Sesión": "ST4", "Día": "Mie 25/03", "Horario": "16:00-17:30", "Empresa": "CompuGroup Medical (CGM Clinical España)", "Ponente": "Rafael Comendador", "Cargo": "Responsable de Desarrollo de Soluciones de IA", "Título Ponencia": "CGM Health Assistant. Integración de Agentes de IA en los sistemas de información asistenciales", "Categoría": "HIS / Software Clínico Legacy / IA", "Perfil de Empresa": "División española de CompuGroup Medical (CGM), uno de los mayores proveedores mundiales de software clínico. Sus sistemas de HIS y atención primaria están muy implantados como sistemas legacy en el SNS español. Están desarrollando agentes de IA sobre sus propios sistemas legacy.", "País / Sede": "Alemania (filial en España)", "Tamaño": "Grande (+6.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Partner Estratégico", "Acción Recomendada": "CGM tiene los sistemas legacy que TietAI conecta. Su ponencia sobre integración de agentes IA en sistemas asistenciales es exactamente el espacio de TietAI. Rafael Comendador es el perfil técnico de IA. Evaluar si es competencia directa o si TietAI puede ser la capa de interoperabilidad sobre sus sistemas. Contactar urgente."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Dexcom", "Ponente": "Iñigo González", "Cargo": "Director de Marketing y Comunicación", "Título Ponencia": "Innovación en monitorización continua de glucosa (CGM)", "Categoría": "MedTech / CGM / Dispositivo Médico", "Perfil de Empresa": "Empresa estadounidense líder en sistemas de monitorización continua de glucosa (CGM). Sus dispositivos generan datos continuos de pacientes diabéticos que se integran con HIS del SNS. Trabaja activamente con el sistema público español.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+8.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Los datos de CGM son un caso de uso de ingesta hacia EHDS pero no es prioridad inmediata para TietAI."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Cibernos", "Ponente": "Juan Ruiz Alzola", "Cargo": "CEO EBATINCA", "Título Ponencia": "StaRT: Conectando conocimientos y prácticas en radioterapia", "Categoría": "Consultoría IT / Software Especializado", "Perfil de Empresa": "Empresa española de consultoría tecnológica y desarrollo de software para el sector público y salud. EBATINCA es su marca para soluciones de salud digital. Trabaja en integración de sistemas y conocimiento clínico.", "País / Sede": "España (Madrid)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "Cibernos tiene proyectos en CCAA y conocimiento en integración de sistemas sanitarios. Contacto secundario para canal regional."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Digimevo", "Ponente": "Xavier Lleixa", "Cargo": "CTO y Cofundador", "Título Ponencia": "Del cribado poblacional a la intervención digital: plataforma pionera de eSalud mental de Catalunya", "Categoría": "eSalud Mental / Plataforma Digital", "Perfil de Empresa": "Startup catalana de salud mental digital. Trabaja con CatSalut en programas de salud mental basados en evidencia y tecnología digital. Pionera en el ecosistema de salud digital de Catalunya.", "País / Sede": "España (Barcelona)", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción prioritaria. Ecosistema de salud digital de Catalunya."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Veratech for Health", "Ponente": "David Moner Cano", "Cargo": "Director de Producción y Consultor", "Título Ponencia": "Rompiendo las barreras de la Interoperabilidad entre estándares", "Categoría": "Interoperabilidad / Estándares (HL7, FHIR, openEHR)", "Perfil de Empresa": "Empresa española especializada exclusivamente en interoperabilidad en salud. Experta en estándares HL7, FHIR, openEHR y CDA. Trabaja con servicios de salud autonómicos para conectar y estandarizar sistemas heterogéneos. Presencia en proyectos de EHDS en España.", "País / Sede": "España", "Tamaño": "Pequeña (20-50 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica Prioritaria", "Acción Recomendada": "CONTACTO PRIORITARIO. Veratech es la empresa más complementaria técnicamente a TietAI en todo el congreso. Trabajan en exactamente el mismo espacio (interoperabilidad de sistemas legacy bajo estándares). Propuesta: co-creación de solución conjunta para proyectos EHDS. David Moner Cano es el contacto directo."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Laberit", "Ponente": "Julián Lorenzo", "Cargo": "Director de la Alianza con Microsoft", "Título Ponencia": "Transformar la sanidad no es digitalizar: es reinventar el modelo asistencial", "Categoría": "Consultoría IT / Microsoft Partner", "Perfil de Empresa": "Empresa española de servicios tecnológicos con larga trayectoria en la Comunitat Valenciana y administración pública. Partner estratégico de Microsoft. Especialista en transformación digital del sector público sanitario.", "País / Sede": "España (Valencia)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Regional", "Acción Recomendada": "Canal prioritario para la Comunitat Valenciana y Aragón. Julián Lorenzo (Director Microsoft) conecta TietAI con el ecosistema Azure en salud. Abordar durante o después de ST5."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Vitio", "Ponente": "Rubén Anaut", "Cargo": "CEO", "Título Ponencia": "Telemonitorización: del piloto a la práctica clínica real", "Categoría": "Telemonitorización / Digital Health", "Perfil de Empresa": "Startup española de telemonitorización de pacientes crónicos. Ha pasado de pilotos a implantaciones reales en el SNS. Sus datos de monitorización remota son candidatos a ser ingestados en el espacio de datos EHDS.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Caso de uso interesante de datos de pacientes remotos. Sin prioridad inmediata."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Quibim", "Ponente": "Ángel Alberich Bayarri", "Cargo": "CEO", "Título Ponencia": "Del algoritmo a la infraestructura clínica: la integración como motor de la IA médica", "Categoría": "IA de Imagen Médica / Radiomics", "Perfil de Empresa": "Empresa española referente mundial en IA para imagen médica (radiomics, biomarcadores de imagen). Trabaja con hospitales líderes del SNS y ha realizado varias rondas de inversión. Ángel Alberich es uno de los CEOs de IA médica más visibles de España.", "País / Sede": "España (Valencia)", "Tamaño": "Pequeña-Mediana (50-200 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Quibim opera en el nicho de imagen médica. Su narrativa sobre infraestructura clínica es relevante pero no hay sinergia directa con TietAI actualmente."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Smart in Medical Iberia", "Ponente": "José Luis Solórzano Rendón", "Cargo": "Facultativo Especialista, Servicio de Anatomía Patológica", "Título Ponencia": "Del tejido al dato: Biobanco digital como infraestructura para la medicina de precisión en la estrategia digital del SNS", "Categoría": "Biobancos Digitales / Datos Clínicos / EHDS", "Perfil de Empresa": "Empresa francesa especializada en soluciones de biobanco digital y gestión de muestras para medicina de precisión. Sus datos biomédicos son candidatos a ser compatibles con EHDS. Trabaja con hospitales y biobancos del SNS.", "País / Sede": "Francia (filial en España)", "Tamaño": "Pequeña (20-100 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia EHDS", "Acción Recomendada": "Caso de uso muy relevante para EHDS: datos de tejidos y biobancos como parte del espacio de datos sanitario. TietAI puede ser la infraestructura de ingesta. Contacto en el contexto de EHDS."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Appian", "Ponente": "David Gómez García", "Cargo": "Account Executive", "Título Ponencia": "Orquestación de procesos y transformación de aplicaciones en los servicios de Salud", "Categoría": "BPM / Low-Code Platform", "Perfil de Empresa": "Plataforma estadounidense de automatización de procesos y low-code. Trabaja con administraciones públicas y sector salud para modernizar procesos y aplicaciones sin reemplazar sistemas legacy. Su propuesta de valor es complementaria a la interoperabilidad.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (2.000-5.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Partner Plataforma", "Acción Recomendada": "Appian orquesta procesos sobre sistemas legacy: TietAI puede ser la capa de datos/interoperabilidad en proyectos de Appian en el SNS. Conversación de ecosistema con David Gómez."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Uphill Health", "Ponente": "Antonio Martí Polo", "Cargo": "Lead Account Executive", "Título Ponencia": "Del PADP a la implementación real: Orquestación y coordinación regional impulsadas por IA", "Categoría": "Patient Engagement / Orquestación Clínica", "Perfil de Empresa": "Startup portuguesa de activación y seguimiento de pacientes con IA. Trabaja en la integración de su plataforma en los flujos asistenciales del SNS. Enfocada en el proceso asistencial del paciente, no en la interoperabilidad de back-end.", "País / Sede": "Portugal (oficina en España)", "Tamaño": "Pequeña (50-200 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción prioritaria. Complementariedad indirecta posible a largo plazo."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Invox Medical", "Ponente": "Pedro Vivancos Vicente", "Cargo": "Director de Estrategia e Innovación", "Título Ponencia": "Integración de IA y voz para la documentación clínica en atención primaria y hospitalaria", "Categoría": "IA de Voz / Documentación Clínica", "Perfil de Empresa": "Startup española líder en dictado médico e IA de voz para documentación clínica. Sus datos de transcripción clínica generan datos estructurados que deben integrarse con HIS. Trabaja activamente con varios servicios de salud autonómicos.", "País / Sede": "España (Madrid)", "Tamaño": "Pequeña-Mediana (50-200 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Alianza de Datos", "Acción Recomendada": "Invox genera datos clínicos desestructurados (transcripciones) que TietAI podría estructurar e ingestar para el espacio de datos EHDS. Posible sinergia. Pedro Vivancos es el contacto."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "RICOH Healthcare", "Ponente": "Juan Manuel López Fernández", "Cargo": "CTO Unidad de Healthcare", "Título Ponencia": "IA Privada en Sanidad: Soluciones On Premise para un Dato Seguro", "Categoría": "IT / On-Premise Healthcare / Impresión y Gestión Documental", "Perfil de Empresa": "División healthcare de RICOH, multinacional japonesa. Su unidad de healthcare ofrece soluciones de gestión documental, flujo de trabajo clínico e IA on-premise para hospitales que no quieren datos en la nube. Trabaja con sistemas legacy en entornos hospitalarios.", "País / Sede": "Japón (filial en España)", "Tamaño": "Grande (+80.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "RICOH Healthcare tiene presencia en hospitales con sistemas legacy. Su enfoque on-premise es relevante para CCAA con restricciones de soberanía del dato. TietAI puede ser la capa de interoperabilidad e ingesta en entornos on-premise."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Tandem Health España", "Ponente": "Jorge Pérez Hermilla", "Cargo": "Director", "Título Ponencia": "IA en consultas: presente, pasado y futuro", "Categoría": "IA Documentación Clínica / Consulta Médica", "Perfil de Empresa": "Startup de IA para asistencia en consulta médica (transcripción, resumen, sugerencias clínicas). Trabaja con médicos y centros sanitarios para reducir la carga administrativa. Entidad colaboradora del congreso.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción prioritaria. Nicho de documentación en consulta."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Telefónica Tech", "Ponente": "Juan Luis Torrejón Guadalupe", "Cargo": "AI Project Manager", "Título Ponencia": "OSAGEN: plataforma genómica de Osakidetza", "Categoría": "Telecom / Cloud / IT Sector Público", "Perfil de Empresa": "División tecnológica de Telefónica con enorme presencia en administraciones públicas españolas. Tiene contratos marco con casi todas las CCAA para infraestructura cloud y servicios digitales. OSAGEN es un proyecto real de genómica con Osakidetza.", "País / Sede": "España (Madrid)", "Tamaño": "Grande (+20.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal / Ecosistema", "Acción Recomendada": "Telefónica Tech tiene contratos marco con todas las CCAA: canal de distribución de enorme alcance si TietAI encaja en su oferta de salud digital. Contacto de ecosistema. Juan Luis Torrejón trabaja en proyectos de datos de salud."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "IndraMind Cybersecurity", "Ponente": "Rubén Morales Linares", "Cargo": "Director de Tecnología y Producto", "Título Ponencia": "Smart MDR AI-SOC Agent. El SOC más avanzado e inteligente para la Sanidad Conectada", "Categoría": "Ciberseguridad / Healthcare SOC", "Perfil de Empresa": "Empresa española especializada en ciberseguridad para el sector salud. Ofrece servicios de SOC (Security Operations Center) específicos para hospitales y servicios de salud. Trabaja en la protección de infraestructuras críticas del SNS.", "País / Sede": "España", "Tamaño": "Pequeña-Mediana (50-200 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Complementario", "Acción Recomendada": "La interoperabilidad de TietAI requiere ciberseguridad. IndraMind puede ser un partner natural para proyectos que incluyan tanto interoperabilidad como seguridad. Mencionar el EHDS y los requisitos de seguridad del reglamento."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Ovianta", "Ponente": "Alejandro Quintans", "Cargo": "CEO", "Título Ponencia": "Agentes conversacionales telefónicos para admisión de pacientes", "Categoría": "Agentes Conversacionales / IA / Salud", "Perfil de Empresa": "Startup española de agentes de IA conversacional para centros sanitarios (admisión, citas, atención telefónica). Trabaja directamente con el SNS para automatizar la atención al paciente. Entidad colaboradora del congreso.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema Agentes IA", "Acción Recomendada": "Ovianta y TietAI están en el ecosistema de agentes IA en salud aunque en capas diferentes. Contacto de ecosistema: posible narrativa compartida en el mercado sobre IA agentica en el SNS."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Dell Technologies", "Ponente": "Javier de Torres", "Cargo": "UDS Sales Executive", "Título Ponencia": "Orquestando el espacio de datos sanitarios: la propuesta de Dell para la IA clínica", "Categoría": "Infraestructura IT / Data Platform", "Perfil de Empresa": "Multinacional líder en infraestructura IT (servidores, almacenamiento, edge computing). Su propuesta para el SNS se centra en la infraestructura para IA clínica y espacio de datos sanitarios. Tiene acuerdos de suministro con CCAA.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+100.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Infraestructura", "Acción Recomendada": "Dell provee la infraestructura sobre la que corre el espacio de datos. TietAI puede ser la capa de ingesta y agentes sobre infraestructura Dell. Conversación de ecosistema."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Inetum", "Ponente": "Jonay Luis", "Cargo": "Senior Technical Consultant", "Título Ponencia": "IA aplicada al Entorno de Salud", "Categoría": "Consultoría IT / Servicios Profesionales Sector Público", "Perfil de Empresa": "Gran empresa francesa de servicios IT con fuerte implantación en el sector público español. Inetum tiene presencia en numerosas CCAA y administraciones con proyectos de digitalización. Trabaja activamente en proyectos de salud digital.", "País / Sede": "Francia (filial en España)", "Tamaño": "Grande (+25.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "Partner canal Tier 1. Inetum tiene proyectos activos en múltiples CCAA. Jonay Luis trabaja específicamente en IA para salud. Proponer incluir a TietAI en sus propuestas de salud digital. Visitar stand 1A o abordar tras ST7."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "TriNetX", "Ponente": "Suellyn Silveira", "Cargo": "Responsable TriNetX España, HPM EU", "Título Ponencia": "Plataforma TriNetX: democratizando el acceso a datos del mundo real y generando evidencia de alto impacto", "Categoría": "Real World Data / Investigación Clínica", "Perfil de Empresa": "Empresa estadounidense con plataforma de datos del mundo real (RWD) para investigación clínica. Conecta datos de hospitales y sistemas de salud para generar evidencia. Sus requerimientos de datos estructurados y federados se alinean con el EHDS.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia EHDS", "Acción Recomendada": "TriNetX necesita datos estructurados y compatibles con estándares del SNS: exactamente lo que TietAI prepara. Posible cliente de la capa de preparación de datos EHDS. Suellyn Silveira es el contacto."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Microsoft", "Ponente": "Sergio Guerrero Haro", "Cargo": "Responsable Estrategia Tecnológica e Innovación en Salud", "Título Ponencia": "Estrategia de IA e innovación en el ecosistema de salud", "Categoría": "Cloud / IA / Plataforma Global", "Perfil de Empresa": "Microsoft tiene acuerdos marco con todas las CCAA españolas para servicios cloud (Azure). Su división de salud está muy activa en proyectos de IA, datos sanitarios y EHDS. El Azure Health Data Services es la plataforma de referencia para FHIR en la nube.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+200.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Ecosistema Estratégico", "Acción Recomendada": "Microsoft tiene el alcance más amplio en el SNS. TietAI puede posicionarse como solución de interoperabilidad e ingesta sobre Azure Health Data Services. Sergio Guerrero es el contacto de salud: proponer demostración de TietAI sobre Azure FHIR API."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Huawei España", "Ponente": "Kai Zhang", "Cargo": "Responsable de Estrategia y Desarrollo de Negocio Sanitario", "Título Ponencia": "De los silos de datos a la sabiduría clínica", "Categoría": "IT / Cloud / Infraestructura / Datos", "Perfil de Empresa": "Huawei tiene una división de salud activa en España con soluciones de nube, IA y datos. Su narrativa en este congreso sobre silos de datos es directamente relevante para el problema que TietAI resuelve. Trabaja con varios hospitales y servicios de salud.", "País / Sede": "China (oficina en España)", "Tamaño": "Grande (+190.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Referencia", "Acción Recomendada": "La narrativa de Huawei (silos → sabiduría clínica) valida el problema de TietAI. Kai Zhang es el responsable de negocio sanitario en España. Conversación de ecosistema sobre interoperabilidad y datos."}];
+
+// Populate tipo relacion filter
+const tiposSet = [...new Set(DATA.map(d => d['Tipo de Relación']).filter(Boolean))].sort();
+const tipoSelect = document.getElementById('filterTipo');
+tiposSet.forEach(t => {
+  const opt = document.createElement('option');
+  opt.value = t; opt.textContent = t;
+  tipoSelect.appendChild(opt);
+});
+
+document.getElementById('countTotal').textContent = DATA.length;
+
+function getRelevanciaClass(r) {
+  if (r === 'Alta') return 'relevancia-alta';
+  if (r === 'Media') return 'relevancia-media';
+  return 'relevancia-baja';
+}
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderCards(data) {
+  const container = document.getElementById('cardsContainer');
+  const empty = document.getElementById('emptyState');
+
+  if (data.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('countVisible').textContent = 0;
+    return;
+  }
+  empty.style.display = 'none';
+  document.getElementById('countVisible').textContent = data.length;
+
+  container.innerHTML = data.map((d, i) => {
+    const relClass = getRelevanciaClass(d['Relevancia TietAI']);
+    return `
+    <div class="card" id="card-${i}" onclick="toggleCard(${i})">
+      <div class="card-header">
+        <span class="session-badge">${esc(d['Sesión'])}</span>
+        <span class="empresa-name">${esc(d['Empresa'])}</span>
+        <div class="card-summary">
+          <span class="dia-chip">${esc(d['Día'])}</span>
+          <span class="horario-chip">${esc(d['Horario'])}</span>
+          ${d['Ponente'] ? `<span class="ponente-info"><strong>${esc(d['Ponente'])}</strong> · ${esc(d['Cargo'])}</span>` : ''}
+        </div>
+        <span class="relevancia-badge ${relClass}">${esc(d['Relevancia TietAI'])}</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Categoría</span>
+            <span class="info-value"><span class="categoria-chip">${esc(d['Categoría'])}</span></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tipo de relación</span>
+            <span class="info-value"><span class="tipo-relacion-chip">${esc(d['Tipo de Relación'])}</span></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">País / Sede</span>
+            <span class="info-value">${esc(d['País / Sede'])}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tamaño</span>
+            <span class="info-value">${esc(d['Tamaño'])}</span>
+          </div>
+          ${d['Título Ponencia'] ? `
+          <div class="info-item" style="grid-column: 1/-1">
+            <span class="info-label">Título ponencia</span>
+            <span class="info-value">${esc(d['Título Ponencia'])}</span>
+          </div>` : ''}
+        </div>
+        ${d['Perfil de Empresa'] ? `
+        <div class="perfil-block">
+          <div class="block-label">Perfil de empresa</div>
+          ${esc(d['Perfil de Empresa'])}
+        </div>` : ''}
+        ${d['Acción Recomendada'] ? `
+        <div class="accion-block">
+          <div class="block-label">Acción recomendada</div>
+          ${esc(d['Acción Recomendada'])}
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(i) {
+  document.getElementById('card-' + i).classList.toggle('open');
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const sesion = document.getElementById('filterSesion').value;
+  const dia = document.getElementById('filterDia').value;
+  const relevancia = document.getElementById('filterRelevancia').value;
+  const tipo = document.getElementById('filterTipo').value;
+
+  const filtered = DATA.filter(d => {
+    if (sesion && d['Sesión'] !== sesion) return false;
+    if (dia && d['Día'] !== dia) return false;
+    if (relevancia && d['Relevancia TietAI'] !== relevancia) return false;
+    if (tipo && d['Tipo de Relación'] !== tipo) return false;
+    if (q) {
+      const haystack = [d['Empresa'], d['Ponente'], d['Cargo'], d['Categoría'], d['Perfil de Empresa']].join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  renderCards(filtered);
+}
+
+function resetFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterSesion').value = '';
+  document.getElementById('filterDia').value = '';
+  document.getElementById('filterRelevancia').value = '';
+  document.getElementById('filterTipo').value = '';
+  applyFilters();
+}
+
+// Initial render
+applyFilters();
+</script>
+</body>
+</html>
