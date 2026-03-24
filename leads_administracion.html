@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TietAI · Decisores Administración — Infors@lud 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f7;color:#1a1a2e;min-height:100vh}
+
+header{
+  background:linear-gradient(135deg,#0d1b2a 0%,#1b4332 60%,#2d6a4f 100%);
+  color:white;padding:22px 32px;display:flex;align-items:center;gap:16px;
+  box-shadow:0 4px 20px rgba(0,0,0,.35)
+}
+.logo{font-size:1.7rem;font-weight:800;letter-spacing:-.5px}
+.logo span{color:#52b788}
+.logo-sub{font-size:.78rem;opacity:.65;margin-top:2px}
+.header-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.event-tag{
+  background:rgba(82,183,136,.2);border:1px solid rgba(82,183,136,.45);
+  color:#52b788;padding:4px 12px;border-radius:16px;font-size:.75rem;font-weight:600
+}
+.scope-tag{font-size:.75rem;opacity:.6}
+
+.controls{
+  background:white;padding:16px 32px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;
+  border-bottom:1px solid #e0e4ea;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  position:sticky;top:0;z-index:100
+}
+.cg{display:flex;flex-direction:column;gap:3px}
+.cg label{font-size:.67rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px}
+input[type=text],select{
+  border:1.5px solid #dde1e7;border-radius:7px;padding:7px 11px;font-size:.85rem;
+  outline:none;transition:border-color .2s,box-shadow .2s;background:#fafafa;color:#1a1a2e
+}
+input[type=text]{width:240px}
+select{min-width:155px;cursor:pointer}
+input:focus,select:focus{border-color:#1b4332;box-shadow:0 0 0 3px rgba(27,67,50,.1);background:white}
+.btn-reset{
+  padding:7px 16px;border-radius:7px;border:none;cursor:pointer;
+  background:#e84545;color:white;font-size:.82rem;font-weight:600;
+  transition:background .2s;margin-left:auto
+}
+.btn-reset:hover{background:#c73434}
+
+.stats-bar{
+  padding:9px 32px;background:#f7f8fa;border-bottom:1px solid #e4e8ef;
+  font-size:.8rem;color:#666;display:flex;align-items:center;gap:18px;flex-wrap:wrap
+}
+.stats-bar strong{color:#1b4332;font-weight:700}
+.legend{display:flex;gap:14px;flex-wrap:wrap}
+.leg{display:inline-flex;align-items:center;gap:5px;font-weight:500;font-size:.75rem}
+.leg-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+.content{padding:20px 32px}
+.grid{display:grid;gap:14px}
+
+/* --- CARD --- */
+.card{
+  background:white;border-radius:12px;border:1px solid #e8eaed;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);overflow:hidden;
+  transition:box-shadow .2s,transform .15s
+}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-1px)}
+
+.card-header{
+  padding:14px 18px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;
+  border-bottom:1px solid #f4f5f7
+}
+
+.priority-stripe{
+  width:4px;min-width:4px;border-radius:4px;margin-right:2px;align-self:stretch
+}
+.stripe-muy-alto{background:linear-gradient(180deg,#16a34a,#22c55e)}
+.stripe-alto{background:linear-gradient(180deg,#2563eb,#60a5fa)}
+.stripe-medio{background:linear-gradient(180deg,#d97706,#fbbf24)}
+
+.avatar{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:700;color:white;flex-shrink:0;
+  background:linear-gradient(135deg,#1b4332,#2d6a4f)
+}
+
+.card-main{flex:1;min-width:0}
+.card-name{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.card-cargo{font-size:.78rem;color:#555;line-height:1.4;margin-bottom:5px}
+.card-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+
+.chip{padding:2px 9px;border-radius:12px;font-size:.69rem;font-weight:600;white-space:nowrap}
+.chip-org{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.chip-ccaa{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.chip-tipo-estrategico-nacional{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+.chip-tipo-estrategico-autonomico{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.chip-tipo-operativo-ti{background:#f0f4ff;color:#3730a3;border:1px solid #c7d2fe}
+.chip-tipo-datos-ehds{background:#f0fdf9;color:#065f46;border:1px solid #a7f3d0}
+.chip-tipo-innovacion{background:#fdf4ff;color:#7c3aed;border:1px solid #e9d5ff}
+.chip-tipo-investigacion{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+
+.interes-badge{
+  padding:3px 11px;border-radius:20px;font-size:.71rem;font-weight:700;
+  white-space:nowrap;flex-shrink:0;align-self:flex-start
+}
+.interes-muy-alto{background:#dcfce7;color:#166534}
+.interes-alto{background:#dbeafe;color:#1e40af}
+.interes-medio{background:#fef9c3;color:#854d0e}
+
+.expand-icon{color:#bbb;font-size:.85rem;transition:transform .2s;margin-left:6px;user-select:none;flex-shrink:0;margin-top:2px}
+.card.open .expand-icon{transform:rotate(180deg);color:#1b4332}
+
+/* Card body */
+.card-body{display:none;padding:16px 18px;border-top:1px solid #f4f5f7}
+.card.open .card-body{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.info-block{display:flex;flex-direction:column;gap:4px}
+.info-block.full{grid-column:1/-1}
+.ib-label{font-size:.67rem;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.ib-text{font-size:.83rem;color:#333;line-height:1.55}
+
+.presencia-block{
+  grid-column:1/-1;background:#f0fdf4;border-left:3px solid #22c55e;
+  padding:9px 13px;border-radius:0 7px 7px 0;
+}
+.estrategia-block{
+  grid-column:1/-1;background:#fff8f0;border-left:3px solid #f97316;
+  padding:9px 13px;border-radius:0 7px 7px 0;
+}
+
+.empty-state{text-align:center;padding:60px;color:#aaa;font-size:.9rem;grid-column:1/-1}
+
+@media(max-width:700px){
+  header,.controls,.stats-bar,.content{padding-left:16px;padding-right:16px}
+  input[type=text]{width:100%}
+  .card.open .card-body{grid-template-columns:1fr}
+  .presencia-block,.estrategia-block,.info-block.full{grid-column:1}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Tiet<span>AI</span></div>
+    <div class="logo-sub">Intelligence · CRM</div>
+  </div>
+  <div class="header-right">
+    <span class="event-tag">Infors@lud 2026</span>
+    <span class="scope-tag">Decisores Administración Pública &amp; SNS</span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="cg">
+    <label>Buscar nombre, cargo u organización</label>
+    <input type="text" id="searchInput" placeholder="Ej: Cataluña, EHDS, Vargas…" oninput="render()">
+  </div>
+  <div class="cg">
+    <label>Interés en integración</label>
+    <select id="fInteres" onchange="render()">
+      <option value="">Todos</option>
+      <option value="Muy Alto">Muy Alto</option>
+      <option value="Alto">Alto</option>
+      <option value="Medio">Medio</option>
+    </select>
+  </div>
+  <div class="cg">
+    <label>Tipo de decisor</label>
+    <select id="fTipo" onchange="render()">
+      <option value="">Todos los perfiles</option>
+      <option value="Estratégico Nacional">Estratégico Nacional</option>
+      <option value="Estratégico Autonómico">Estratégico Autonómico</option>
+      <option value="Operativo TI / Contratación">Operativo TI / Contratación</option>
+      <option value="Operativo Datos / EHDS">Operativo Datos / EHDS</option>
+      <option value="Innovación / Salud Digital">Innovación / Salud Digital</option>
+      <option value="Investigación / PERTE">Investigación / PERTE</option>
+    </select>
+  </div>
+  <div class="cg">
+    <label>CCAA / Ámbito</label>
+    <select id="fCcaa" onchange="render()">
+      <option value="">Todas</option>
+    </select>
+  </div>
+  <button class="btn-reset" onclick="reset()">✕ Limpiar</button>
+</div>
+
+<div class="stats-bar">
+  <span>Mostrando <strong id="count">0</strong> de <strong>27</strong> contactos</span>
+  <div class="legend">
+    <span class="leg"><span class="leg-dot" style="background:#22c55e"></span>Muy Alto</span>
+    <span class="leg"><span class="leg-dot" style="background:#3b82f6"></span>Alto</span>
+    <span class="leg"><span class="leg-dot" style="background:#f59e0b"></span>Medio</span>
+  </div>
+</div>
+
+<div class="content">
+  <div class="grid" id="container"></div>
+</div>
+
+<script>
+const DATA = [{"nombre": "Ismael Vargas Pina", "cargo": "Director General de Sistemas de Información y Comunicaciones", "organizacion": "Servicio Andaluz de Salud (SAS)", "ccaa": "Andalucía", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Muy Alto", "relevancia": "El SAS atiende a más de 8 millones de personas. Ismael Vargas es el máximo responsable TI del mayor sistema sanitario de España. Sus licitaciones son de los mayores volúmenes del SNS. Presencia en Debate 7 indica interés en la hoja de ruta digital.", "estrategia": "Abordar tras Debate 7 (Jue 19:00) o Clausura. Objetivo: entender el roadmap de interoperabilidad del SAS y si hay proyectos de EHDS en pipeline. Canal potencial: Ayesa Digital."}, {"nombre": "Carlos Telleria Orriols", "cargo": "Director de la Agencia del Dato de Aragón", "organizacion": "Gobierno de Aragón", "ccaa": "Aragón", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Director de la Agencia del Dato de Aragón, la primera agencia autonómica del dato en España. Aragón tiene una estructura de gobernanza del dato madura y es candidato ideal para un proyecto EHDS de referencia. Canal natural: Inycom (con sede en Zaragoza).", "estrategia": "Abordar tras Debate 4 (Mie 17:30). Es el perfil de dato más maduro de las CCAA en el congreso. Llevar propuesta concreta de despliegue EHDS con referencia a la Agencia del Dato."}, {"nombre": "Julia Calabuig Pérez", "cargo": "Directora General de Información Sanitaria, Calidad y Evaluación", "organizacion": "Conselleria de Sanitat de la Generalitat Valenciana", "ccaa": "C. Valenciana", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Responsable de la información sanitaria en la GVA. Su presencia en la mesa de interoperabilidad confirma que la GVA está activamente trabajando en integración de datos. GVA tiene sistemas legacy complejos (múltiples HIS) que necesitan interoperabilidad.", "estrategia": "Abordar tras Debate 4 (Mie 17:30). Coffee break post-sesión es la ventana perfecta. Framing: TietAI conecta los sistemas legacy de la GVA hacia el espacio de datos EHDS."}, {"nombre": "Jenaro Bejarano García", "cargo": "Subdirector de la Oficina de Gobierno del Dato e Inteligencia Artificial", "organizacion": "Servicio Canario de la Salud (SCS)", "ccaa": "Canarias", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Modera Sesión de Comunicaciones 1 (Miércoles 09:30–11:00, Sala 3).", "interes": "Muy Alto", "relevancia": "El SCS tiene una Oficina de Gobierno del Dato e IA: uno de los perfiles más avanzados técnicamente en datos sanitarios de una CCAA. Comprende perfectamente la propuesta de TietAI. Es el tipo de interlocutor ideal para un proyecto EHDS.", "estrategia": "Abordar en coffee 11:00–11:30 tras moderar Comunicaciones 1. Es el perfil técnico de dato más avanzado del congreso en una CCAA. Conversación de igual a igual sobre arquitectura EHDS."}, {"nombre": "Josep Manuel Pomar Reynes", "cargo": "Director Gerente", "organizacion": "Institut Català de la Salut (ICS)", "ccaa": "Cataluña", "tipo_decisor": "Estratégico Autonómico", "presencia": "Modera Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "El ICS es la mayor organización sanitaria pública de España (más de 8 millones de personas atendidas). Pomar modera la sesión de interoperabilidad: está activamente buscando soluciones en este espacio. Un proyecto piloto con el ICS sería el flagship de máximo impacto para TietAI.", "estrategia": "Presentarse ANTES del inicio del Debate 4. Es el moderador: estará accesible unos minutos antes. Pitch rápido (1 min) y solicitar una reunión posterior. Es el objetivo de mayor prioridad del congreso."}, {"nombre": "Pol Pérez i Sust", "cargo": "Director del Área de SI del Servei Català de la Salut. Coordinador General de las TIC del Departament de Salut", "organizacion": "CatSalut / Generalitat de Catalunya", "ccaa": "Cataluña", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Muy Alto", "relevancia": "Responsable TI y sistemas de información de CatSalut. Es quien contrata y aprueba los proyectos de TI en el sistema sanitario catalán. Su presencia en el Debate 7 indica que está definiendo la hoja de ruta 2026-2031.", "estrategia": "Abordar tras Debate 7 (Jue 19:00) o en la Clausura. Es el decisor de contratación TI en CatSalut. Llevar propuesta concreta de proyecto piloto EHDS."}, {"nombre": "Antoni Joan Colombas Salas", "cargo": "Subdirector de Gestión y Gobernanza del Dato", "organizacion": "Govern de les Illes Balears", "ccaa": "Illes Balears", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Responsable de la gobernanza del dato en Illes Balears. Su presencia en la mesa de interoperabilidad confirma interés directo. Illes Balears tiene proyectos avanzados de gobernanza del dato y es candidato natural para un proyecto EHDS.", "estrategia": "Abordar tras Debate 4 (Mie 17:30). Es el perfil más técnico y específico del congreso en gobernanza del dato en una CCAA. TietAI encaja directamente en su roadmap."}, {"nombre": "María Dolores Tomé Cotarelo", "cargo": "Vocal Asesora del Gabinete Técnico, Secretaría General Salud Digital SNS", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Asesora técnica directa del Secretario General en materia de datos e interoperabilidad. Presente en la mesa más relevante del congreso para TietAI. Conoce los estándares y requisitos EHDS.", "estrategia": "Abordar INMEDIATAMENTE tras el Debate 4 (17:30 Mie). Es el contacto más técnico del Ministerio. Llevar one-pager sobre la propuesta EHDS de TietAI."}, {"nombre": "Noemí Cívicos Villa", "cargo": "Directora General de Salud Digital y Sistemas de Información del SNS", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Modera Sesión de Apertura (Martes) y Sesión de Clausura (Jueves 19:00).", "interes": "Muy Alto", "relevancia": "Directora responsable de los sistemas de información del SNS. Supervisa la interoperabilidad, el EHDS y la estrategia de datos del sistema público. Es la persona que valida proyectos de integración a nivel nacional.", "estrategia": "Muy accesible en la apertura y clausura. Abordar en el coffee del jueves tras el Debate 7. Mencionar EHDS y la estrategia 2026-2031 como contexto."}, {"nombre": "Ruth del Campo Becares", "cargo": "Directora General del Dato", "organizacion": "Ministerio para la Transformación Digital y de la Función Pública", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Presente en Inauguración Oficial (Martes 16:30).", "interes": "Muy Alto", "relevancia": "Máxima responsable de la política de datos en España, incluyendo los datos sanitarios en el contexto del EHDS. El EHDS es una regulación que afecta directamente a su ámbito competencial. TietAI está en el corazón de la infraestructura de datos que ella regula.", "estrategia": "Acceso difícil. Aprovechar la inauguración o la visita a exposiciones. Framing: TietAI como infraestructura de cumplimiento del EHDS para el SNS."}, {"nombre": "Ines Gallego Camiña", "cargo": "Directora General de Transformación, Planificación y Digitalización en Salud", "organizacion": "Departamento de Salud del Gobierno Vasco", "ccaa": "País Vasco", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Muy Alto", "relevancia": "DG de digitalización en salud del País Vasco. Responsable de la estrategia de datos e interoperabilidad en Osakidetza. El sistema vasco tiene múltiples sistemas legacy (Osabide, OsaWeb, laboratorios) que son candidatos directos.", "estrategia": "Abordar tras Debate 2 (Mie 13:00). Es la decisora técnica-estratégica en el sistema vasco. Canal potencial: Inycom (fuerte presencia en Navarra y zona norte)."}, {"nombre": "María José Tarazón Muñoz", "cargo": "Subdirectora General de TIC para la Salud", "organizacion": "Conselleria de Sanitat de la Generalitat Valenciana", "ccaa": "C. Valenciana", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Alto", "relevancia": "Subdirectora de TI del sistema sanitario valenciano. Es la responsable técnica de las licitaciones de TI en la GVA. La GVA tiene múltiples sistemas legacy (Abucasis, Orion Health, etc.) que son candidatos directos a la interoperabilidad de TietAI.", "estrategia": "Abordar en coffee 11:00–11:30 tras Debate 1. Es la puerta técnica de entrada al mercado de la GVA."}, {"nombre": "Rocío Montalbán Carrasco", "cargo": "Subdirectora General de Salud Digital", "organizacion": "Consejería de Salud del Gobierno de Cantabria", "ccaa": "Cantabria", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Alto", "relevancia": "Subdirectora de Salud Digital en Cantabria. Su presencia en el Debate de la estrategia 2026-2031 indica que está definiendo el roadmap digital del sistema cántabro. Cantabria tiene proyectos de innovación digital destacados.", "estrategia": "Abordar tras Debate 7 (Jue 19:00). Framing: TietAI como componente de la estrategia digital 2026-2031 de Cantabria en materia de EHDS."}, {"nombre": "Juan Madrona Tárraga", "cargo": "Coordinador Regional de Coordinación y Gobernanza de la DG de Salud Digital", "organizacion": "Junta de Castilla-La Mancha", "ccaa": "Castilla-La Mancha", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 6 — Sostenibilidad inversiones (Jueves 16:00–17:30).", "interes": "Alto", "relevancia": "Perfil de gobernanza del dato y salud digital de Castilla-La Mancha. La JCCM tiene la Agencia de Transformación Digital como ente propio para la digitalización sanitaria. Responsable de coordinar los proyectos digitales en salud.", "estrategia": "Abordar tras Debate 6 (Jue 17:30). Interés en proyectos de transformación digital con financiación europea. Mencionar la alineación de TietAI con el EHDS y los fondos Next Generation."}, {"nombre": "Carlos Gallego Pérez", "cargo": "Director de Salud Digital", "organizacion": "Sistema de Salud de Catalunya (CatSalut)", "ccaa": "Cataluña", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 5 — IA en la asistencia (Miércoles 18:00–19:30).", "interes": "Alto", "relevancia": "Director de salud digital de CatSalut, la aseguradora pública catalana. Responsable de la estrategia de datos e IA. Catalunya es pionera en espacios de datos sanitarios en España y un referente para el EHDS.", "estrategia": "Abordar tras Debate 5 o en la visita a exposiciones 17:30. Framing: TietAI como infraestructura de ingesta hacia el espacio de datos de CatSalut compatible con EHDS."}, {"nombre": "Benigno Rosón Calvo", "cargo": "Subdirector General de Sistemas y Tecnologías de la Información", "organizacion": "Servicio Gallego de Salud (SERGAS)", "ccaa": "Galicia", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Alto", "relevancia": "Responsable TI del SERGAS. El sistema gallego tiene sistemas legacy propios (IANUS, Galeno) que necesitan interoperabilidad. SERGAS es conocido por su capacidad de contratación propia y proyectos de innovación.", "estrategia": "Abordar tras Debate 2 (Mie 13:00). Framing: TietAI como capa de interoperabilidad sobre los sistemas propios de SERGAS hacia el EHDS."}, {"nombre": "Amador Ruiz Torrejón", "cargo": "Coordinador de Sistemas de Información Asistencial", "organizacion": "Servicio de Salud de las Islas Baleares", "ccaa": "Illes Balears", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Alto", "relevancia": "Coordinador de sistemas asistenciales: responsable técnico de los HIS y sistemas legacy del sistema balear. Perfil operativo con conocimiento directo de los sistemas a integrar.", "estrategia": "Abordar tras Debate 2 (Mie 13:00). Perfil técnico: puede ser champion interno para un proyecto TietAI en Illes Balears."}, {"nombre": "José Manuel Alcaraz Muñoz", "cargo": "Subdirector de Tecnologías de Información", "organizacion": "Servicio Murciano de Salud (SMS)", "ccaa": "Murcia", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Alto", "relevancia": "Responsable TI del sistema sanitario murciano. El SMS está en proceso activo de modernización de sus sistemas. Su presencia en el Debate 7 indica interés en definir proyectos para la nueva estrategia.", "estrategia": "Abordar tras Debate 7 (Jue 19:00). El SMS tiene presupuesto propio de TI y proyectos de digitalización en curso. Contacto directo para proyecto piloto."}, {"nombre": "Adolfo Muñoz Carrero", "cargo": "Director de la Unidad de Investigación de Telemedicina y Salud Digital", "organizacion": "Instituto de Salud Carlos III (ISCIII)", "ccaa": "Nacional", "tipo_decisor": "Investigación / PERTE", "presencia": "Modera Sesión de Proyectos Innovadores (Jueves 16:00–17:30, Sala 2).", "interes": "Alto", "relevancia": "El ISCIII es el principal organismo de investigación sanitaria de España. Adolfo Muñoz modera la sesión de proyectos innovadores. El ISCIII participa en proyectos EHDS europeos (TEHDAS, etc.).", "estrategia": "Abordar durante o tras la Sesión de Proyectos Innovadores (Jue 16:00–17:30). Framing: TietAI como infraestructura de datos para proyectos de investigación del ISCIII compatibles con EHDS."}, {"nombre": "Juan Fernando Muñoz Montalvo", "cargo": "Secretario General de Salud Digital, Información e Innovación del SNS", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Conferencia de Apertura (Martes 17:30). Inaugura el congreso.", "interes": "Alto", "relevancia": "Máximo responsable de la Estrategia de Salud Digital 2026-2031. Cualquier proyecto de interoperabilidad a nivel SNS pasa por su dirección. Define los ejes de inversión donde encaja TietAI.", "estrategia": "Acceso difícil directo. Trabajar a través de Noemí Cívicos o contactos de CCAA que tengan relación con su equipo. Si hay oportunidad en coffee break, presentación corporativa de 2 min."}, {"nombre": "María Fe Lapeña Gutiérrez", "cargo": "Subdirectora General de Servicios Digitales de Salud", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Ponente en Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Alto", "relevancia": "Responsable de los servicios digitales del SNS (HCE compartida, receta electrónica, carpeta ciudadana de salud). Sus plataformas son objetivo de integración con el EHDS.", "estrategia": "Abordar tras Debate 1 o en el coffee 11:00–11:30. Su subdirección es cliente potencial directo de TietAI para proyectos nacionales."}, {"nombre": "María Fernández Rancaño", "cargo": "Directora Adjunta de Servicios Públicos Electrónicos", "organizacion": "Red.es", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Ponente en Sesión Debate 6 — Sostenibilidad inversiones (Jueves 16:00–17:30).", "interes": "Alto", "relevancia": "Red.es gestiona la financiación europea (fondos Next Generation, PERTE) para proyectos de digitalización del SNS. Es la puerta de entrada a la financiación pública para proyectos de TietAI.", "estrategia": "Abordar tras Debate 6 (Jue 17:30). Objetivo: entender las convocatorias abiertas o previstas de Red.es para proyectos de interoperabilidad y EHDS donde TietAI pueda participar."}, {"nombre": "Raquel Yotti Álvarez", "cargo": "Comisionada del PERTE para la Salud de Vanguardia", "organizacion": "Ministerio de Ciencia, Innovación y Universidades", "ccaa": "Nacional", "tipo_decisor": "Investigación / PERTE", "presencia": "Modera Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Alto", "relevancia": "El PERTE de Salud de Vanguardia financia proyectos de digitalización sanitaria avanzada. Los proyectos de interoperabilidad y EHDS encajan directamente en sus líneas. Es la puerta de entrada a financiación PERTE para TietAI.", "estrategia": "Abordar tras Debate 1 o en el coffee 11:00. Objetivo: entender si hay convocatorias PERTE abiertas o previstas donde TietAI pueda presentar un proyecto junto a una CCAA."}, {"nombre": "Javier Martínez Gilabert", "cargo": "Director General de Transformación Digital", "organizacion": "Consejería de Economía, Hacienda, Fondos Europeos y Transformación Digital del Gobierno de Navarra", "ccaa": "Navarra", "tipo_decisor": "Estratégico Autonómico", "presencia": "Ponente en Sesión Debate 6 — Sostenibilidad inversiones (Jueves 16:00–17:30).", "interes": "Alto", "relevancia": "Director General de Transformación Digital de Navarra y responsable de la gestión de Fondos Europeos para digitalización. Presencia en el Debate de sostenibilidad indica que gestiona la financiación europea para proyectos TIC en el sistema sanitario navarro.", "estrategia": "Abordar tras Debate 6 (Jue 17:30). Objetivo: identificar convocatorias de fondos europeos en Navarra donde TietAI pueda participar. Canal potencial: Inycom (sede en Zaragoza, fuerte en Navarra)."}, {"nombre": "Gonzalo Tamayo Medel", "cargo": "Viceconsejero de Salud y Transformación Digital", "organizacion": "Departamento de Salud del Gobierno Vasco", "ccaa": "País Vasco", "tipo_decisor": "Estratégico Autonómico", "presencia": "Modera Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Alto", "relevancia": "Viceconsejero de salud con competencias en transformación digital. Osakidetza es uno de los sistemas sanitarios más digitalizados de España. Decisor político de alto nivel.", "estrategia": "Abordar tras Debate 2 (13:00) o en el descanso 13:00–14:30. Framing político: TietAI como herramienta para cumplir el EHDS y posicionar a Osakidetza como referente europeo."}, {"nombre": "Lidia Clara Rodríguez García", "cargo": "Directora General de Planificación, Gestión del Conocimiento y Transformación Digital Sanitaria", "organizacion": "Consejería de Salud del Principado de Asturias", "ccaa": "Asturias", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Medio", "relevancia": "DG de transformación digital sanitaria en Asturias. Su cargo combina planificación y transformación digital: tiene visión estratégica sobre los proyectos digitales del sistema asturiano.", "estrategia": "Abordar en coffee 11:00–11:30 tras Debate 1. Framing: TietAI como componente de la hoja de ruta de transformación digital de Asturias."}, {"nombre": "Nuria Ruiz Hombrebueno", "cargo": "Directora General de Salud Digital", "organizacion": "Consejería de Digitalización de la Comunidad de Madrid", "ccaa": "Madrid", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 3 (Miércoles 13:00–14:30).", "interes": "Medio", "relevancia": "DG de Salud Digital en la Comunidad de Madrid. Madrid tiene el mayor sistema sanitario por complejidad de España (SERMAS). Los proyectos de interoperabilidad en SERMAS son los de mayor volumen económico del SNS.", "estrategia": "Abordar en descanso 14:30–16:00 tras Debate 3. Madrid es mercado de alto valor pero también muy competido. Framing: TietAI como solución para la estrategia EHDS del SERMAS."}];
+
+// Populate CCAA filter
+const ccaas = [...new Set(DATA.map(d=>d.ccaa))].sort((a,b)=>{
+  if(a==='Nacional') return -1; if(b==='Nacional') return 1; return a.localeCompare(b,'es');
+});
+const sel = document.getElementById('fCcaa');
+ccaas.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+
+function tipoCss(t) {
+  if(!t) return '';
+  if(t.includes('Estratégico Nacional')) return 'chip-tipo-estrategico-nacional';
+  if(t.includes('Estratégico Autonómico')) return 'chip-tipo-estrategico-autonomico';
+  if(t.includes('Operativo TI')) return 'chip-tipo-operativo-ti';
+  if(t.includes('Datos')) return 'chip-tipo-datos-ehds';
+  if(t.includes('Innovación')) return 'chip-tipo-innovacion';
+  if(t.includes('Investigación')) return 'chip-tipo-investigacion';
+  return '';
+}
+
+function interesCss(i) {
+  if(i==='Muy Alto') return 'interes-muy-alto';
+  if(i==='Alto') return 'interes-alto';
+  return 'interes-medio';
+}
+
+function stripeCss(i) {
+  if(i==='Muy Alto') return 'stripe-muy-alto';
+  if(i==='Alto') return 'stripe-alto';
+  return 'stripe-medio';
+}
+
+function initials(n) {
+  return n.split(' ').filter((_,i,a)=>i===0||i===a.length-1).map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const fi = document.getElementById('fInteres').value;
+  const ft = document.getElementById('fTipo').value;
+  const fc = document.getElementById('fCcaa').value;
+
+  const filtered = DATA.filter(d => {
+    if(fi && d.interes!==fi) return false;
+    if(ft && d.tipo_decisor!==ft) return false;
+    if(fc && d.ccaa!==fc) return false;
+    if(q) {
+      const hay = [d.nombre,d.cargo,d.organizacion,d.ccaa,d.tipo_decisor,d.presencia,d.relevancia,d.estrategia].join(' ').toLowerCase();
+      if(!q.split(' ').filter(Boolean).every(t=>hay.includes(t))) return false;
+    }
+    return true;
+  });
+
+  document.getElementById('count').textContent = filtered.length;
+
+  const c = document.getElementById('container');
+  if(!filtered.length) {
+    c.innerHTML = '<div class="empty-state">No se encontraron contactos con los filtros aplicados.</div>';
+    return;
+  }
+
+  c.innerHTML = filtered.map((d,i) => `
+    <div class="card" id="c${i}">
+      <div class="card-header" onclick="document.getElementById('c${i}').classList.toggle('open')">
+        <div class="priority-stripe ${stripeCss(d.interes)}"></div>
+        <div class="avatar">${esc(initials(d.nombre))}</div>
+        <div class="card-main">
+          <div class="card-name">${esc(d.nombre)}</div>
+          <div class="card-cargo">${esc(d.cargo)}</div>
+          <div class="card-chips">
+            <span class="chip chip-org">${esc(d.organizacion)}</span>
+            <span class="chip chip-ccaa">${esc(d.ccaa)}</span>
+            <span class="chip ${tipoCss(d.tipo_decisor)}">${esc(d.tipo_decisor)}</span>
+          </div>
+        </div>
+        <span class="interes-badge ${interesCss(d.interes)}">${esc(d.interes)}</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="presencia-block">
+          <div class="ib-label">Presencia en el congreso</div>
+          <div class="ib-text">${esc(d.presencia)}</div>
+        </div>
+        <div class="info-block full">
+          <div class="ib-label">Por qué es relevante para TietAI</div>
+          <div class="ib-text">${esc(d.relevancia)}</div>
+        </div>
+        <div class="estrategia-block">
+          <div class="ib-label">Estrategia de acercamiento</div>
+          <div class="ib-text">${esc(d.estrategia)}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function reset() {
+  document.getElementById('searchInput').value='';
+  document.getElementById('fInteres').value='';
+  document.getElementById('fTipo').value='';
+  document.getElementById('fCcaa').value='';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
