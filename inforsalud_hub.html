@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TietAI · Infors@lud 2026 Hub</title>
+<style>
+/* ===== RESET & BASE ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+
+/* ===== SHARED HEADER ===== */
+.hub-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  color: white; padding: 20px 32px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  position: sticky; top: 0; z-index: 200;
+}
+.hub-logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+.hub-logo span { color: #e94560; }
+.hub-subtitle { font-size: 0.82rem; opacity: 0.7; margin-top: 2px; }
+.hub-badge {
+  margin-left: auto;
+  background: rgba(233,69,96,0.2);
+  border: 1px solid rgba(233,69,96,0.5);
+  color: #e94560; padding: 6px 14px;
+  border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+  background: white;
+  display: flex; gap: 0;
+  border-bottom: 2px solid #e0e4ea;
+  position: sticky; top: 68px; z-index: 190;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.tab-btn {
+  padding: 14px 28px;
+  border: none; background: none; cursor: pointer;
+  font-size: 0.88rem; font-weight: 600; color: #666;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: #0f3460; background: #f8f9ff; }
+.tab-btn.active { color: #0f3460; border-bottom-color: #0f3460; background: #f4f6ff; }
+@media (max-width: 640px) {
+  .hub-header { padding: 14px 16px; }
+  .hub-logo { font-size: 1.4rem; }
+  .tab-btn { padding: 12px 16px; font-size: 0.8rem; }
+}
+
+/* ===== TAB PANELS ===== */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===================================
+   EMPRESA TAB CSS
+   =================================== */
+.emp-controls {
+  background: white; padding: 20px 32px;
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.emp-control-group { display: flex; flex-direction: column; gap: 4px; }
+.emp-control-group label { font-size: 0.72rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+.emp-controls input[type=text], .emp-controls select {
+  border: 1.5px solid #dde1e7; border-radius: 8px;
+  padding: 8px 12px; font-size: 0.88rem; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fafafa; color: #1a1a2e;
+}
+.emp-controls input[type=text] { width: 260px; }
+.emp-controls select { min-width: 150px; cursor: pointer; }
+.emp-controls input[type=text]:focus, .emp-controls select:focus {
+  border-color: #0f3460; box-shadow: 0 0 0 3px rgba(15,52,96,0.1);
+  background: white;
+}
+.emp-btn-reset {
+  padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer;
+  background: #e94560; color: white; font-size: 0.85rem; font-weight: 600;
+  transition: background 0.2s; margin-left: auto;
+}
+.emp-btn-reset:hover { background: #c73652; }
+.emp-stats-bar {
+  padding: 10px 32px;
+  display: flex; align-items: center; gap: 20px;
+  font-size: 0.82rem; color: #555;
+  background: #f7f8fa; border-bottom: 1px solid #e8e8e8;
+}
+.emp-stats-bar strong { color: #0f3460; font-weight: 700; }
+.emp-relevancia-dots { display: flex; gap: 14px; margin-left: auto; }
+.emp-dot { display: inline-flex; align-items: center; gap: 5px; font-weight: 500; }
+.emp-dot::before { content: ''; width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.emp-dot.alta::before { background: #22c55e; }
+.emp-dot.media::before { background: #f59e0b; }
+.emp-dot.baja::before { background: #94a3b8; }
+.emp-content { padding: 20px 32px; }
+.emp-grid { display: grid; gap: 14px; }
+.emp-card {
+  background: white; border-radius: 12px;
+  border: 1px solid #e8eaed;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden; transition: box-shadow 0.2s, transform 0.15s;
+  cursor: pointer;
+}
+.emp-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-1px); }
+.emp-card-header {
+  padding: 14px 18px; display: flex; align-items: center; gap: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.emp-session-badge {
+  background: #0f3460; color: white;
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 700;
+  white-space: nowrap; letter-spacing: 0.3px;
+  min-width: 42px; text-align: center;
+}
+.emp-empresa-name { font-size: 1.05rem; font-weight: 700; color: #1a1a2e; flex: 1; }
+.emp-relevancia-badge {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 0.73rem; font-weight: 600; white-space: nowrap;
+}
+.emp-relevancia-alta { background: #dcfce7; color: #166534; }
+.emp-relevancia-media { background: #fef9c3; color: #854d0e; }
+.emp-relevancia-baja { background: #f1f5f9; color: #64748b; }
+.emp-card-body { padding: 14px 18px; display: none; }
+.emp-card.open .emp-card-body { display: block; }
+.emp-info-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px; margin-bottom: 12px;
+}
+.emp-info-item { display: flex; flex-direction: column; gap: 2px; }
+.emp-info-label { font-size: 0.68rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+.emp-info-value { font-size: 0.85rem; color: #1a1a2e; line-height: 1.4; }
+.emp-perfil-block, .emp-accion-block {
+  border-radius: 8px; padding: 10px 14px; margin-top: 10px;
+  font-size: 0.84rem; line-height: 1.55;
+}
+.emp-perfil-block { background: #f8faff; border-left: 3px solid #0f3460; color: #333; }
+.emp-accion-block { background: #fff8f0; border-left: 3px solid #e94560; color: #333; }
+.emp-block-label { font-size: 0.7rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+.emp-card-summary { display: flex; align-items: center; gap: 10px; flex: 1; flex-wrap: wrap; }
+.emp-ponente-info { font-size: 0.82rem; color: #555; }
+.emp-ponente-info strong { color: #0f3460; }
+.emp-horario-chip { background: #f0f4ff; color: #0f3460; padding: 2px 8px; border-radius: 4px; font-size: 0.73rem; font-weight: 600; }
+.emp-dia-chip { background: #fdf4ff; color: #7c3aed; padding: 2px 8px; border-radius: 4px; font-size: 0.73rem; font-weight: 600; }
+.emp-tipo-relacion-chip { background: #f0fdf4; color: #15803d; padding: 2px 8px; border-radius: 4px; font-size: 0.73rem; font-weight: 500; }
+.emp-categoria-chip { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 500; }
+.emp-expand-icon { color: #aaa; font-size: 1rem; transition: transform 0.2s; margin-left: 8px; user-select: none; }
+.emp-card.open .emp-expand-icon { transform: rotate(180deg); color: #0f3460; }
+.emp-empty-state { text-align: center; padding: 60px 20px; color: #888; }
+.emp-empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+@media (max-width: 640px) {
+  .emp-controls, .emp-stats-bar, .emp-content { padding-left: 16px; padding-right: 16px; }
+  .emp-controls input[type=text] { width: 100%; }
+  .emp-controls { gap: 10px; }
+}
+
+/* ===================================
+   PROGRAMA TAB CSS
+   =================================== */
+.prog-controls {
+  background: white; padding: 16px 32px;
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.prog-ctrl-group { display: flex; flex-direction: column; gap: 3px; }
+.prog-ctrl-group label { font-size: .68rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+.prog-controls input[type=text], .prog-controls select {
+  border: 1.5px solid #dde1e7; border-radius: 7px; padding: 7px 11px; font-size: .85rem;
+  outline: none; transition: border-color .2s, box-shadow .2s; background: #fafafa; color: #1a1a2e;
+}
+.prog-controls input[type=text] { width: 240px; }
+.prog-controls select { min-width: 140px; cursor: pointer; }
+.prog-controls input:focus, .prog-controls select:focus { border-color: #0f3460; box-shadow: 0 0 0 3px rgba(15,52,96,.1); background: white; }
+.prog-btn-reset {
+  padding: 7px 18px; border-radius: 7px; border: none; cursor: pointer;
+  background: #e84545; color: white; font-size: .83rem; font-weight: 600;
+  transition: background .2s; margin-left: auto;
+}
+.prog-btn-reset:hover { background: #c73434; }
+.prog-view-toggle { display: flex; gap: 6px; margin-left: 4px; }
+.prog-view-btn {
+  padding: 7px 14px; border-radius: 7px; border: 1.5px solid #dde1e7; cursor: pointer;
+  background: #fafafa; font-size: .8rem; font-weight: 600; color: #666; transition: all .15s;
+}
+.prog-view-btn.active { background: #0f3460; color: white; border-color: #0f3460; }
+.prog-stats {
+  padding: 8px 32px; background: #f0f3f7; border-bottom: 1px solid #e4e8ef;
+  font-size: .8rem; color: #666; display: flex; align-items: center; gap: 18px;
+}
+.prog-stats strong { color: #0f3460; }
+/* AGENDA VIEW */
+.prog-agenda-day { margin-bottom: 28px; }
+.prog-day-header {
+  background: linear-gradient(90deg, #0f3460, #1a5276); color: white;
+  padding: 10px 24px; border-radius: 10px 10px 0 0; font-weight: 700; font-size: .95rem;
+  display: flex; align-items: center; gap: 12px;
+}
+.prog-timeline-row { display: grid; gap: 0; border-left: 3px solid #0f3460; margin-left: 20px; }
+.prog-time-block {
+  display: flex; gap: 0; border-bottom: 1px solid #e8eaed; background: white;
+}
+.prog-time-block:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
+.prog-time-label {
+  width: 90px; min-width: 90px; padding: 12px 10px; text-align: right;
+  font-size: .75rem; font-weight: 700; color: #0f3460; border-right: 1px solid #e8eaed;
+  line-height: 1.3; display: flex; align-items: flex-start; justify-content: flex-end;
+}
+.prog-sessions-row { display: flex; flex: 1; gap: 0; }
+.prog-session-slot {
+  flex: 1; padding: 10px 14px; border-right: 1px solid #f0f0f0; cursor: pointer;
+  transition: background .15s; position: relative;
+}
+.prog-session-slot:last-child { border-right: none; }
+.prog-session-slot:hover { background: #f0f4ff; }
+.prog-session-slot.tipo-debate { border-top: 3px solid #e84545; }
+.prog-session-slot.tipo-tecnologica { border-top: 3px solid #0e9aa7; }
+.prog-session-slot.tipo-comunicaciones { border-top: 3px solid #7c3aed; }
+.prog-session-slot.tipo-medicina { border-top: 3px solid #16a34a; }
+.prog-session-slot.tipo-farmacia { border-top: 3px solid #d97706; }
+.prog-session-slot.tipo-enfermeria { border-top: 3px solid #db2777; }
+.prog-session-slot.tipo-institucional { border-top: 3px solid #6366f1; }
+.prog-session-slot.tipo-clausura { border-top: 3px solid #f59e0b; }
+.prog-session-slot.tipo-innovacion { border-top: 3px solid #059669; }
+.prog-session-slot.tipo-conferencia { border-top: 3px solid #8b5cf6; }
+.prog-slot-sala { font-size: .65rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 2px; }
+.prog-slot-title { font-size: .82rem; font-weight: 700; color: #1a1a2e; line-height: 1.3; margin-bottom: 3px; }
+.prog-slot-subtitle { font-size: .73rem; color: #555; line-height: 1.35; margin-bottom: 5px; }
+.prog-slot-modera { font-size: .7rem; color: #0f3460; font-style: italic; }
+.prog-slot-count {
+  display: inline-block; margin-top: 4px; background: #f0f4ff; color: #0f3460;
+  padding: 2px 7px; border-radius: 10px; font-size: .68rem; font-weight: 600;
+}
+.prog-slot-empty { color: #ccc; font-size: .78rem; font-style: italic; padding: 12px 14px; }
+.prog-break-row {
+  background: #fef9ec; padding: 8px 24px 8px 112px;
+  font-size: .78rem; color: #92400e; font-weight: 600;
+  border-bottom: 1px solid #fde68a; display: flex; align-items: center; gap: 8px;
+}
+.prog-break-row::before { content: '☕'; font-size: .9rem; }
+/* CARDS VIEW */
+.prog-cards-grid { display: grid; gap: 14px; padding: 20px 32px; }
+.prog-card {
+  background: white; border-radius: 12px; border: 1px solid #e8eaed;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05); overflow: hidden;
+  transition: box-shadow .2s, transform .15s; cursor: pointer;
+}
+.prog-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.1); transform: translateY(-1px); }
+.prog-card-header {
+  padding: 13px 18px; display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid #f4f4f4;
+}
+.prog-tipo-badge {
+  padding: 3px 9px; border-radius: 5px; font-size: .68rem; font-weight: 700;
+  white-space: nowrap; text-transform: uppercase; letter-spacing: .3px;
+}
+.prog-badge-debate { background: #fde8e8; color: #b91c1c; }
+.prog-badge-tecnologica { background: #e0f7f9; color: #0e7490; }
+.prog-badge-comunicaciones { background: #ede9fe; color: #6d28d9; }
+.prog-badge-medicina { background: #dcfce7; color: #166534; }
+.prog-badge-farmacia { background: #fef3c7; color: #92400e; }
+.prog-badge-enfermeria { background: #fce7f3; color: #9d174d; }
+.prog-badge-institucional { background: #e0e7ff; color: #3730a3; }
+.prog-badge-clausura { background: #fffbeb; color: #92400e; }
+.prog-badge-innovacion { background: #d1fae5; color: #065f46; }
+.prog-badge-conferencia { background: #f5f3ff; color: #6d28d9; }
+.prog-badge-posters { background: #f1f5f9; color: #475569; }
+.prog-card-title { font-size: .95rem; font-weight: 700; color: #1a1a2e; flex: 1; }
+.prog-card-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.prog-meta-chip { padding: 2px 8px; border-radius: 4px; font-size: .7rem; font-weight: 600; }
+.prog-chip-dia { background: #f0e6ff; color: #7c3aed; }
+.prog-chip-hora { background: #e0f0ff; color: #0f3460; }
+.prog-chip-sala-1 { background: #fff0f0; color: #b91c1c; }
+.prog-chip-sala-2 { background: #e0f7f9; color: #0e7490; }
+.prog-chip-sala-3 { background: #f3e8ff; color: #7c3aed; }
+.prog-expand-icon { color: #aaa; font-size: .9rem; transition: transform .2s; margin-left: 6px; user-select: none; }
+.prog-card.open .prog-expand-icon { transform: rotate(180deg); color: #0f3460; }
+.prog-card-body { display: none; padding: 14px 18px; }
+.prog-card.open .prog-card-body { display: block; }
+.prog-subtitle-text {
+  font-size: .85rem; color: #333; font-style: italic; margin-bottom: 12px; line-height: 1.5;
+  padding: 8px 12px; background: #fafafa; border-radius: 6px; border-left: 3px solid #0f3460;
+}
+.prog-people-section { margin-bottom: 10px; }
+.prog-people-label { font-size: .68rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.prog-person-row {
+  display: flex; align-items: flex-start; gap: 10px; padding: 7px 10px;
+  border-radius: 7px; margin-bottom: 4px; background: #f8f9fa;
+}
+.prog-person-role {
+  font-size: .68rem; font-weight: 700; padding: 2px 7px; border-radius: 10px;
+  white-space: nowrap; margin-top: 1px;
+}
+.prog-role-modera { background: #dbeafe; color: #1e40af; }
+.prog-role-ponente { background: #dcfce7; color: #166534; }
+.prog-role-presenta { background: #f3e8ff; color: #7c3aed; }
+.prog-role-imparte { background: #fce7f3; color: #9d174d; }
+.prog-role-preside { background: #fef3c7; color: #92400e; }
+.prog-role-participa { background: #f0fdf4; color: #15803d; }
+.prog-role-time { background: #f0f4ff; color: #3730a3; }
+.prog-person-info { flex: 1; }
+.prog-person-name { font-size: .85rem; font-weight: 700; color: #1a1a2e; }
+.prog-person-cargo { font-size: .75rem; color: #555; line-height: 1.4; }
+.prog-person-entidad { font-size: .73rem; color: #0f3460; font-weight: 500; }
+.prog-ponencia-text { font-size: .78rem; color: #333; font-style: italic; margin-top: 3px; }
+.prog-comms-list { margin-top: 4px; }
+.prog-comm-item {
+  font-size: .78rem; color: #333; padding: 5px 10px; border-radius: 5px;
+  background: #f8f9fa; margin-bottom: 4px; line-height: 1.4;
+}
+.prog-comm-item::before { content: '▸ '; color: #0f3460; font-size: .7rem; }
+.prog-content { padding: 20px 32px; }
+.prog-empty-state { text-align: center; padding: 60px; color: #aaa; font-size: .9rem; }
+/* MODAL */
+.prog-modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 300;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.prog-modal-overlay.open { display: flex; }
+.prog-modal {
+  background: white; border-radius: 16px; max-width: 680px; width: 100%;
+  max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+.prog-modal-header {
+  padding: 20px 24px; border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  position: sticky; top: 0; background: white; z-index: 1;
+}
+.prog-modal-close {
+  font-size: 1.4rem; cursor: pointer; color: #aaa; border: none; background: none;
+  padding: 0 4px; line-height: 1; flex-shrink: 0;
+}
+.prog-modal-close:hover { color: #333; }
+.prog-modal-body { padding: 20px 24px; }
+@media (max-width: 640px) {
+  .prog-controls, .prog-stats, .prog-content, .prog-cards-grid { padding-left: 16px; padding-right: 16px; }
+  .prog-controls input[type=text] { width: 100%; }
+  .prog-time-label { width: 60px; min-width: 60px; font-size: .65rem; padding: 8px 6px; }
+  .prog-sessions-row { flex-direction: column; }
+  .prog-session-slot { border-right: none; border-bottom: 1px solid #f0f0f0; }
+}
+
+/* ===================================
+   ADMIN TAB CSS
+   =================================== */
+.admin-controls {
+  background: white; padding: 16px 32px;
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+  border-bottom: 1px solid #e0e4ea;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.admin-cg { display: flex; flex-direction: column; gap: 3px; }
+.admin-cg label { font-size: .67rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+.admin-controls input[type=text], .admin-controls select {
+  border: 1.5px solid #dde1e7; border-radius: 7px; padding: 7px 11px; font-size: .85rem;
+  outline: none; transition: border-color .2s, box-shadow .2s; background: #fafafa; color: #1a1a2e;
+}
+.admin-controls input[type=text] { width: 240px; }
+.admin-controls select { min-width: 155px; cursor: pointer; }
+.admin-controls input:focus, .admin-controls select:focus { border-color: #1b4332; box-shadow: 0 0 0 3px rgba(27,67,50,.1); background: white; }
+.admin-btn-reset {
+  padding: 7px 16px; border-radius: 7px; border: none; cursor: pointer;
+  background: #e84545; color: white; font-size: .82rem; font-weight: 600;
+  transition: background .2s; margin-left: auto;
+}
+.admin-btn-reset:hover { background: #c73434; }
+.admin-stats-bar {
+  padding: 9px 32px; background: #f7f8fa; border-bottom: 1px solid #e4e8ef;
+  font-size: .8rem; color: #666; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+}
+.admin-stats-bar strong { color: #1b4332; font-weight: 700; }
+.admin-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.admin-leg { display: inline-flex; align-items: center; gap: 5px; font-weight: 500; font-size: .75rem; }
+.admin-leg-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.admin-content { padding: 20px 32px; }
+.admin-grid { display: grid; gap: 14px; }
+.admin-card {
+  background: white; border-radius: 12px; border: 1px solid #e8eaed;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05); overflow: hidden;
+  transition: box-shadow .2s, transform .15s;
+}
+.admin-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.1); transform: translateY(-1px); }
+.admin-card-header {
+  padding: 14px 18px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer;
+  border-bottom: 1px solid #f4f5f7;
+}
+.admin-priority-stripe { width: 4px; min-width: 4px; border-radius: 4px; margin-right: 2px; align-self: stretch; }
+.admin-stripe-muy-alto { background: linear-gradient(180deg, #16a34a, #22c55e); }
+.admin-stripe-alto { background: linear-gradient(180deg, #2563eb, #60a5fa); }
+.admin-stripe-medio { background: linear-gradient(180deg, #d97706, #fbbf24); }
+.admin-avatar {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 700; color: white; flex-shrink: 0;
+  background: linear-gradient(135deg, #1b4332, #2d6a4f);
+}
+.admin-card-main { flex: 1; min-width: 0; }
+.admin-card-name { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 2px; }
+.admin-card-cargo { font-size: .78rem; color: #555; line-height: 1.4; margin-bottom: 5px; }
+.admin-card-chips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.admin-chip { padding: 2px 9px; border-radius: 12px; font-size: .69rem; font-weight: 600; white-space: nowrap; }
+.admin-chip-org { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.admin-chip-ccaa { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.admin-chip-tipo-estrategico-nacional { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.admin-chip-tipo-estrategico-autonomico { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.admin-chip-tipo-operativo-ti { background: #f0f4ff; color: #3730a3; border: 1px solid #c7d2fe; }
+.admin-chip-tipo-datos-ehds { background: #f0fdf9; color: #065f46; border: 1px solid #a7f3d0; }
+.admin-chip-tipo-innovacion { background: #fdf4ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+.admin-chip-tipo-investigacion { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.admin-interes-badge {
+  padding: 3px 11px; border-radius: 20px; font-size: .71rem; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0; align-self: flex-start;
+}
+.admin-interes-muy-alto { background: #dcfce7; color: #166534; }
+.admin-interes-alto { background: #dbeafe; color: #1e40af; }
+.admin-interes-medio { background: #fef9c3; color: #854d0e; }
+.admin-expand-icon { color: #bbb; font-size: .85rem; transition: transform .2s; margin-left: 6px; user-select: none; flex-shrink: 0; margin-top: 2px; }
+.admin-card.open .admin-expand-icon { transform: rotate(180deg); color: #1b4332; }
+.admin-card-body { display: none; padding: 16px 18px; border-top: 1px solid #f4f5f7; }
+.admin-card.open .admin-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.admin-info-block { display: flex; flex-direction: column; gap: 4px; }
+.admin-info-block.full { grid-column: 1/-1; }
+.admin-ib-label { font-size: .67rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+.admin-ib-text { font-size: .83rem; color: #333; line-height: 1.55; }
+.admin-presencia-block {
+  grid-column: 1/-1; background: #f0fdf4; border-left: 3px solid #22c55e;
+  padding: 9px 13px; border-radius: 0 7px 7px 0;
+}
+.admin-estrategia-block {
+  grid-column: 1/-1; background: #fff8f0; border-left: 3px solid #f97316;
+  padding: 9px 13px; border-radius: 0 7px 7px 0;
+}
+.admin-empty-state { text-align: center; padding: 60px; color: #aaa; font-size: .9rem; grid-column: 1/-1; }
+@media (max-width: 700px) {
+  .admin-controls, .admin-stats-bar, .admin-content { padding-left: 16px; padding-right: 16px; }
+  .admin-controls input[type=text] { width: 100%; }
+  .admin-card.open .admin-card-body { grid-template-columns: 1fr; }
+  .admin-presencia-block, .admin-estrategia-block, .admin-info-block.full { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SHARED HEADER ===== -->
+<header class="hub-header">
+  <div>
+    <div class="hub-logo">Tiet<span>AI</span></div>
+    <div class="hub-subtitle">Intelligence · Infors@lud Hub</div>
+  </div>
+  <div class="hub-badge">Infors@lud 2026</div>
+</header>
+
+<!-- ===== TAB BAR ===== -->
+<nav class="tab-bar">
+  <button class="tab-btn active" id="tab-empresas" onclick="switchTab('empresas')">🏢 Empresas</button>
+  <button class="tab-btn" id="tab-programa" onclick="switchTab('programa')">📅 Programa</button>
+  <button class="tab-btn" id="tab-administracion" onclick="switchTab('administracion')">🏛 Administración</button>
+</nav>
+
+<!-- ===== EMPRESAS TAB ===== -->
+<div class="tab-panel active" id="panel-empresas">
+  <div class="emp-controls">
+    <div class="emp-control-group">
+      <label>Buscar empresa o ponente</label>
+      <input type="text" id="empSearchInput" placeholder="Nombre de empresa, ponente..." oninput="empresaApplyFilters()">
+    </div>
+    <div class="emp-control-group">
+      <label>Sesión</label>
+      <select id="empFilterSesion" onchange="empresaApplyFilters()">
+        <option value="">Todas las sesiones</option>
+        <option value="ST1">ST1 · Mie 09:00</option>
+        <option value="ST2">ST2 · Mie 11:30</option>
+        <option value="ST3">ST3 · Mie 13:00</option>
+        <option value="ST4">ST4 · Mie 16:00</option>
+        <option value="ST5">ST5 · Mie 18:00</option>
+        <option value="ST6">ST6 · Jue 09:00</option>
+        <option value="ST7">ST7 · Jue 17:30</option>
+      </select>
+    </div>
+    <div class="emp-control-group">
+      <label>Día</label>
+      <select id="empFilterDia" onchange="empresaApplyFilters()">
+        <option value="">Ambos días</option>
+        <option value="Mie 25/03">Miércoles 25/03</option>
+        <option value="Jue 26/03">Jueves 26/03</option>
+      </select>
+    </div>
+    <div class="emp-control-group">
+      <label>Relevancia TietAI</label>
+      <select id="empFilterRelevancia" onchange="empresaApplyFilters()">
+        <option value="">Todas</option>
+        <option value="Alta">Alta</option>
+        <option value="Media">Media</option>
+        <option value="Baja">Baja</option>
+      </select>
+    </div>
+    <div class="emp-control-group">
+      <label>Tipo de relación</label>
+      <select id="empFilterTipo" onchange="empresaApplyFilters()">
+        <option value="">Todos</option>
+      </select>
+    </div>
+    <button class="emp-btn-reset" onclick="empresaResetFilters()">Limpiar filtros</button>
+  </div>
+  <div class="emp-stats-bar">
+    <span>Mostrando <strong id="empCountVisible">0</strong> de <strong id="empCountTotal">0</strong> empresas</span>
+    <div class="emp-relevancia-dots">
+      <span class="emp-dot alta">Alta relevancia</span>
+      <span class="emp-dot media">Media relevancia</span>
+      <span class="emp-dot baja">Baja relevancia</span>
+    </div>
+  </div>
+  <div class="emp-content">
+    <div class="emp-grid" id="empCardsContainer"></div>
+    <div class="emp-empty-state" id="empEmptyState" style="display:none">
+      <div class="icon">🔍</div>
+      <div>No se encontraron empresas con los filtros aplicados.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROGRAMA TAB ===== -->
+<div class="tab-panel" id="panel-programa">
+  <div class="prog-controls">
+    <div class="prog-ctrl-group">
+      <label>Buscar ponente, empresa o tema</label>
+      <input type="text" id="progSearchInput" placeholder="Ej: IA, Genomcore, Raquel…" oninput="programaApplyFilters()">
+    </div>
+    <div class="prog-ctrl-group">
+      <label>Día</label>
+      <select id="progFilterDia" onchange="programaApplyFilters()">
+        <option value="">Todos los días</option>
+        <option value="Mar 24/03">Martes 24/03</option>
+        <option value="Mie 25/03">Miércoles 25/03</option>
+        <option value="Jue 26/03">Jueves 26/03</option>
+      </select>
+    </div>
+    <div class="prog-ctrl-group">
+      <label>Sala</label>
+      <select id="progFilterSala" onchange="programaApplyFilters()">
+        <option value="">Todas las salas</option>
+        <option value="Sala 1">Sala 1</option>
+        <option value="Sala 2">Sala 2</option>
+        <option value="Sala 3">Sala 3</option>
+      </select>
+    </div>
+    <div class="prog-ctrl-group">
+      <label>Tipo de sesión</label>
+      <select id="progFilterTipo" onchange="programaApplyFilters()">
+        <option value="">Todos los tipos</option>
+        <option value="Sesión Debate">Sesiones Debate</option>
+        <option value="Sesión Tecnológica">Sesiones Tecnológicas</option>
+        <option value="Sesión Comunicaciones">Comunicaciones</option>
+        <option value="Sesión Medicina Digital">Medicina Digital</option>
+        <option value="Sesión Farmacia Digital">Farmacia Digital</option>
+        <option value="Sesión Enfermería Digital">Enfermería Digital</option>
+        <option value="Sesión Innovación">Proyectos Innovadores</option>
+        <option value="Institucional">Institucional</option>
+      </select>
+    </div>
+    <div class="prog-view-toggle">
+      <button class="prog-view-btn active" id="progBtnAgenda" onclick="programaSetView('agenda')">📅 Agenda</button>
+      <button class="prog-view-btn" id="progBtnCards" onclick="programaSetView('cards')">🗂 Tarjetas</button>
+    </div>
+    <button class="prog-btn-reset" onclick="programaResetFilters()">✕ Limpiar</button>
+  </div>
+  <div class="prog-stats">
+    <span>Mostrando <strong id="progCountVisible">0</strong> de <strong id="progCountTotal">0</strong> sesiones</span>
+    <span>·</span>
+    <span style="display:flex;gap:10px;flex-wrap:wrap">
+      <span style="color:#b91c1c">■ Debate</span>
+      <span style="color:#0e9aa7">■ Tecnológica</span>
+      <span style="color:#7c3aed">■ Comunicaciones</span>
+      <span style="color:#16a34a">■ Medicina</span>
+      <span style="color:#d97706">■ Farmacia</span>
+      <span style="color:#db2777">■ Enfermería</span>
+    </span>
+  </div>
+  <div id="progAgendaView" class="prog-content"></div>
+  <div id="progCardsView" class="prog-cards-grid" style="display:none"></div>
+  <!-- MODAL -->
+  <div class="prog-modal-overlay" id="progModalOverlay" onclick="progCloseModal(event)">
+    <div class="prog-modal" id="progModalContent">
+      <div class="prog-modal-header">
+        <div id="progModalTitle" style="flex:1"></div>
+        <button class="prog-modal-close" onclick="progCloseModalDirect()">✕</button>
+      </div>
+      <div class="prog-modal-body" id="progModalBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMINISTRACIÓN TAB ===== -->
+<div class="tab-panel" id="panel-administracion">
+  <div class="admin-controls">
+    <div class="admin-cg">
+      <label>Buscar nombre, cargo u organización</label>
+      <input type="text" id="adminSearchInput" placeholder="Ej: Cataluña, EHDS, Vargas…" oninput="adminRender()">
+    </div>
+    <div class="admin-cg">
+      <label>Interés en integración</label>
+      <select id="adminFInteres" onchange="adminRender()">
+        <option value="">Todos</option>
+        <option value="Muy Alto">Muy Alto</option>
+        <option value="Alto">Alto</option>
+        <option value="Medio">Medio</option>
+      </select>
+    </div>
+    <div class="admin-cg">
+      <label>Tipo de decisor</label>
+      <select id="adminFTipo" onchange="adminRender()">
+        <option value="">Todos los perfiles</option>
+        <option value="Estratégico Nacional">Estratégico Nacional</option>
+        <option value="Estratégico Autonómico">Estratégico Autonómico</option>
+        <option value="Operativo TI / Contratación">Operativo TI / Contratación</option>
+        <option value="Operativo Datos / EHDS">Operativo Datos / EHDS</option>
+        <option value="Innovación / Salud Digital">Innovación / Salud Digital</option>
+        <option value="Investigación / PERTE">Investigación / PERTE</option>
+      </select>
+    </div>
+    <div class="admin-cg">
+      <label>CCAA / Ámbito</label>
+      <select id="adminFCcaa" onchange="adminRender()">
+        <option value="">Todas</option>
+      </select>
+    </div>
+    <button class="admin-btn-reset" onclick="adminReset()">✕ Limpiar</button>
+  </div>
+  <div class="admin-stats-bar">
+    <span>Mostrando <strong id="adminCount">0</strong> de <strong>27</strong> contactos</span>
+    <div class="admin-legend">
+      <span class="admin-leg"><span class="admin-leg-dot" style="background:#22c55e"></span>Muy Alto</span>
+      <span class="admin-leg"><span class="admin-leg-dot" style="background:#3b82f6"></span>Alto</span>
+      <span class="admin-leg"><span class="admin-leg-dot" style="background:#f59e0b"></span>Medio</span>
+    </div>
+  </div>
+  <div class="admin-content">
+    <div class="admin-grid" id="adminContainer"></div>
+  </div>
+</div>
+
+<script>
+// ===================================================
+// TAB SWITCHING
+// ===================================================
+function switchTab(tabName) {
+  // Hide all panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  // Show selected panel
+  document.getElementById('panel-' + tabName).classList.add('active');
+  document.getElementById('tab-' + tabName).classList.add('active');
+}
+
+// ===================================================
+// SHARED ESCAPE HELPER
+// ===================================================
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ===================================================
+// EMPRESAS TAB LOGIC
+// ===================================================
+const empresaData = [{"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "IQVIA España", "Ponente": "Oscar Gil", "Cargo": "Director Tecnología y Transformación Digital", "Título Ponencia": "Digitalización de la relación con el paciente: del análisis poblacional a una asistencia personalizada y participativa", "Categoría": "Datos & Analytics / CRO", "Perfil de Empresa": "Multinacional líder mundial en datos, analítica avanzada e investigación clínica para el sector salud. En España opera para la industria farmacéutica y cada vez más para el sector público (CCAA). Muy activa en Real World Data.", "País / Sede": "EE.UU. (filial en España)", "Tamaño": "Grande (+10.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Monitorizar su narrativa sobre datos sanitarios del SNS. Sin acción inmediata prioritaria."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Roche Diagnostics", "Ponente": "Estefania Moran", "Cargo": "Digital Solutions Product Lead", "Título Ponencia": "Del dato a la decisión clínica en el triaje del dolor torácico. Implementación del algoritmo Chest Pain Triage (CE) en urgencias", "Categoría": "Diagnóstico / MedTech", "Perfil de Empresa": "División diagnóstico de Roche, líder mundial en sistemas de diagnóstico in vitro y soluciones digitales clínicas. Trabaja con hospitales del SNS en proyectos de IA para diagnóstico.", "País / Sede": "Suiza (filial en España)", "Tamaño": "Grande (+80.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "No es canal ni cliente directo. Caso de uso interesante de IA en urgencias para conocer el estado del mercado."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Genomcore", "Ponente": "Oscar Flores", "Cargo": "CEO", "Título Ponencia": "Medicina de Precisión, IA Agéntica y Soberanía", "Categoría": "IA Clínica / Bioinformática / Datos", "Perfil de Empresa": "Startup/scale-up española especializada en plataformas de IA para medicina de precisión y soberanía del dato clínico. Trabaja con hospitales y servicios de salud autonómicos. Presente en la mesa de interoperabilidad (Debate 4). Enfoque en datos genómicos y clínicos.", "País / Sede": "España (Barcelona)", "Tamaño": "Mediana (50-200 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Co-creación", "Acción Recomendada": "Oscar Flores es ponente en ST1 Y en el Debate 4 de interoperabilidad. Doble oportunidad de contacto. TietAI + Genomcore: complementariedad en datos clínicos estructurados + agentes IA. Abordar en coffee break post-ST1."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Orion Health", "Ponente": "Nina Claveria", "Cargo": "Product Solution Director", "Título Ponencia": "DARWEN™ AI: Reduciendo la carga cognitiva en la Historia Clínica Compartida", "Categoría": "Plataforma HIS / Interoperabilidad", "Perfil de Empresa": "Empresa neozelandesa líder en plataformas de historia clínica compartida e interoperabilidad sanitaria. Muy implantada en el SNS español (varias CCAA usan su plataforma). Especialista en conectar sistemas legacy bajo estándares HL7/FHIR.", "País / Sede": "Nueva Zelanda (oficina en Madrid)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Partner Canal", "Acción Recomendada": "Orion Health tiene sistemas implantados en el SNS sobre los que TietAI puede añadir capa de agentes e ingesta EHDS. Nina Claveria es el contacto comercial directo. Contactar en el stand (nº23)."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "DocPlanner", "Ponente": "Gonzalo Belmonte Rodriguez", "Cargo": "Manager DocPlanner", "Título Ponencia": "Omnicanalidad inteligente en Salud: cómo la IA está transformando la experiencia del paciente y la eficiencia operativa", "Categoría": "Plataforma Digital Salud / SaaS", "Perfil de Empresa": "Unicornio europeo de gestión de citas médicas y experiencia del paciente. Opera en 13 países. Su foco es el canal paciente-médico, no la interoperabilidad clínica de back-end.", "País / Sede": "Polonia (oficina en España)", "Tamaño": "Grande (1.000-5.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "No es partner prioritario. Contexto interesante sobre omnicanalidad en salud."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Inycom", "Ponente": "Victor Manuel Piñeiro Torres", "Cargo": "Solutions Engineer", "Título Ponencia": "Implementa 2FA y ahorra más de 30 minutos diarios por médico o enfermer@ en Urgencias", "Categoría": "Consultoría IT / Servicios Profesionales Salud", "Perfil de Empresa": "Empresa española de servicios tecnológicos con fuerte presencia en el sector público, especialmente en Aragón y Navarra. División UNE Salud especializada en soluciones para el SNS. Eduardo Zubizarreta (Director UNE Salud) es ponente en el Debate 7.", "País / Sede": "España (Zaragoza)", "Tamaño": "Mediana (500-1.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Regional", "Acción Recomendada": "Canal prioritario para Aragón, Navarra y Rioja. Eduardo Zubizarreta es la figura clave. Victor Piñeiro puede ser punto de entrada técnico. Visitar stand (no identificado en plano) o abordar en Debate 7."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Fujitsu", "Ponente": "Jesús Doña Fernández", "Cargo": "SLBD Business Development Director", "Título Ponencia": "De la promesa tecnológica a la medicina 5P real", "Categoría": "IT Global / Consultoría / Infraestructura", "Perfil de Empresa": "Multinacional japonesa con importante división de salud digital en España. Presencia histórica en proyectos de HIS y transformación digital en CCAA. Patrocinador del congreso.", "País / Sede": "Japón (filial en España)", "Tamaño": "Grande (+100.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal / Ecosistema", "Acción Recomendada": "Fujitsu tiene contratos activos con varias CCAA. Jesús Doña es el perfil de BD: presentarle TietAI como componente de interoperabilidad para sus proyectos."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "Glintt Healthcare", "Ponente": "Jerónimo Mediavilla Bragado", "Cargo": "Key Account Manager", "Título Ponencia": "Humanizar a través de la innovación, del paciente pasivo al paciente conectado", "Categoría": "HIS / Software Clínico Legacy", "Perfil de Empresa": "Empresa portuguesa líder en software hospitalario (HIS) en España y Portugal. Sus sistemas están implantados como sistemas legados en numerosos hospitales y centros de atención primaria del SNS español. Es exactamente el tipo de sistema legacy que TietAI conecta.", "País / Sede": "Portugal (oficina en España)", "Tamaño": "Mediana (500-1.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Partner Estratégico", "Acción Recomendada": "CONTACTO MUY PRIORITARIO. Glintt tiene los sistemas legacy que TietAI necesita conectar. Una alianza con Glintt permitiría a TietAI acceder a todos sus clientes del SNS de forma nativa. Abordar a Jerónimo Mediavilla."}, {"Sesión": "ST1", "Día": "Mie 25/03", "Horario": "09:00-11:15", "Empresa": "GMV", "Ponente": "Adrián Rodrigo Salas", "Cargo": "Business Solutions", "Título Ponencia": "uTile Suite para espacios de datos en Salud", "Categoría": "Consultoría IT / Espacio de Datos EHDS", "Perfil de Empresa": "Empresa española de ingeniería y tecnología con fuerte presencia en el SNS. Su producto uTile Suite está específicamente diseñado para espacios de datos sanitarios compatibles con EHDS. Patrocinador del congreso con larga trayectoria en administración pública.", "País / Sede": "España (Madrid)", "Tamaño": "Grande (1.000-8.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal / Competencia Monitorizar", "Acción Recomendada": "GMV puede ser competencia directa en EHDS O partner de distribución si TietAI es complementario. Evaluar el alcance de uTile Suite en la ponencia. Abordar a Adrián Rodrigo para entender si hay solapamiento o sinergia."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "NTT DATA", "Ponente": "Irene Montero Díaz", "Cargo": "Health Data Responsible Spain & IO", "Título Ponencia": "La Normalización y Estandarización de Datos Sanitarios al servicio del Paciente", "Categoría": "Consultoría IT / Datos Sanitarios", "Perfil de Empresa": "Segunda mayor consultora IT de Japón, con una de las divisiones de salud más activas de España. Presente en proyectos de interoperabilidad, HIS y transformación digital en múltiples CCAA. Patrocinador principal. Gonzalo Montesdeoca (Director) también ponente en Debate 4.", "País / Sede": "Japón (filial en España)", "Tamaño": "Grande (+300.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Estratégico", "Acción Recomendada": "Partner de canal prioritario Tier 1. Irene Montero trabaja exactamente en normalización y estandarización de datos sanitarios. Gonzalo Montesdeoca está en la mesa de interoperabilidad. Visitar stand 28/29. Proponer reunión bilateral de 30 min."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "ULMA Medical Technologies", "Ponente": "Erik Isusquiza García", "Cargo": "Responsable del Área Comercial", "Título Ponencia": "Inteligencia artificial aplicada al cribado de la Retinopatía Diabética: la experiencia del Servicio Riojano de Salud", "Categoría": "MedTech / IA Clínica", "Perfil de Empresa": "División de tecnología médica del Grupo ULMA (cooperativa de Mondragón). Desarrolla soluciones de IA para diagnóstico médico, especialmente en detección de patologías crónicas. Implantada en el Servicio Riojano de Salud.", "País / Sede": "España (País Vasco)", "Tamaño": "Mediana (100-500 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Caso de uso interesante de IA para cribado. No es partner prioritario para TietAI."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "InterSystems Iberia", "Ponente": "Alberto Fuentes", "Cargo": "Sales Engineer", "Título Ponencia": "Agentes de IA integrados en sistemas clínicos: interoperabilidad, control y confianza", "Categoría": "Plataforma Interoperabilidad / HIS", "Perfil de Empresa": "Empresa estadounidense con la plataforma de interoperabilidad más extendida en salud a nivel mundial (HealthShare). Implantada en numerosas CCAA españolas. Su plataforma conecta sistemas legacy bajo estándares HL7/FHIR/CDA. Tecnología de referencia en interoperabilidad SNS.", "País / Sede": "EE.UU. (oficina en Madrid)", "Tamaño": "Grande (2.000-5.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica", "Acción Recomendada": "CONTACTO MUY PRIORITARIO. Alberto Fuentes presenta sobre agentes IA e interoperabilidad: exactamente el espacio de TietAI. InterSystems tiene presencia en todas las CCAA. TietAI puede posicionarse como capa de agentes sobre HealthShare. Sentarse junto a él en ST2."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "Grupo Oesia", "Ponente": "María Fernanda Aguirre", "Cargo": "Manager Salud Digital", "Título Ponencia": "El lugar de la IA en la práctica clínica. Aplicaciones reales en el proceso asistencial", "Categoría": "Consultoría IT / Defensa y Salud", "Perfil de Empresa": "Grupo tecnológico español con unidad de negocio en salud digital. Trabaja con administraciones públicas en proyectos de digitalización y IA. Pertenece al ecosistema de empresas tecnológicas nacionales con presencia en CCAA.", "País / Sede": "España (Madrid)", "Tamaño": "Grande (1.000-3.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "Canal potencial para CCAA en las que Oesia tiene presencia. María Fernanda es el perfil de salud digital. Contacto secundario."}, {"Sesión": "ST2", "Día": "Mie 25/03", "Horario": "11:30-13:00", "Empresa": "Salesforce", "Ponente": "Julia Molina", "Cargo": "Directora de Negocio", "Título Ponencia": "Cada llamada que resuelve el canal ciudadano inteligente es un profesional que vuelve a mirar al paciente", "Categoría": "CRM / Cloud Platform / IA", "Perfil de Empresa": "Plataforma CRM y cloud líder mundial. En salud, posiciona su plataforma Health Cloud como solución de gestión de pacientes y contacto ciudadano. Algunas CCAA usan Salesforce para servicios de atención ciudadana. Su foco en este congreso es el canal ciudadano inteligente.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+70.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Partner Plataforma", "Acción Recomendada": "Salesforce puede ser plataforma sobre la que desplegar agentes de TietAI. Julia Molina es el perfil de negocio en salud. Contacto de ecosistema."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "ÁlamoConsulting", "Ponente": "César Aparicio Menéndez", "Cargo": "Socio Director", "Título Ponencia": "Modelo de Adopción y Gobierno de la IA", "Categoría": "Consultoría Especializada Salud / IA Governance", "Perfil de Empresa": "Consultora española 100% especializada en el sector sanitario. Trabaja directamente con servicios de salud autonómicos en estrategia, gobierno y adopción de tecnología. Rubén Gallego (Director) también ponente en Farmacia Digital. Patrocinador principal del congreso.", "País / Sede": "España (Madrid)", "Tamaño": "Pequeña (50-200 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Especializado", "Acción Recomendada": "Canal especializado de alto valor. ÁlamoConsulting conoce a todos los decisores de las CCAA y tiene credibilidad consolidada. Propuesta: incluir a TietAI en sus propuestas de adopción de IA e interoperabilidad. Abordar a César Aparicio o Rubén Gallego."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "Logipren", "Ponente": "Ana Butler", "Cargo": "Support and Deployment Engineer", "Título Ponencia": "Errored de prescripción en pediatría: un riesgo evitable, una solución digital", "Categoría": "Software Clínico / Prescripción", "Perfil de Empresa": "Startup/empresa pequeña española con solución de seguridad en prescripción pediátrica. Nicho muy específico en seguridad del medicamento. Escasa relevancia para el objetivo de TietAI.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción recomendada. Nicho muy específico."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "Philips Healthcare", "Ponente": "Guillermo Rodríguez Lozano", "Cargo": "Modality Sales Specialist, Enterprise Informatics", "Título Ponencia": "Del dato aislado a la decisión clínica: Estrategias de IA para un diagnóstico integrado", "Categoría": "MedTech / Enterprise Informatics", "Perfil de Empresa": "División Healthcare de Philips, con fuerza particular en Enterprise Informatics (PACS, VNA, sistemas de información radiológica). Trabaja con hospitales del SNS en gestión de imagen diagnóstica y datos clínicos. Patrocinador tecnológico del congreso.", "País / Sede": "Países Bajos (filial en España)", "Tamaño": "Grande (+70.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia / Partner Futuro", "Acción Recomendada": "Philips tiene datos de imagen diagnóstica en silos. TietAI podría ser relevante para ingesta de datos de imagen hacia EHDS. Sin prioridad inmediata. Nota en pipeline futuro."}, {"Sesión": "ST3", "Día": "Mie 25/03", "Horario": "13:00-14:30", "Empresa": "GSK", "Ponente": "Pablo Hervás Ballesteros", "Cargo": "Healthcare Transformation Director", "Título Ponencia": "GSK Gate2Health: innovación abierta para la transformación digital del sistema sanitario", "Categoría": "Farmacéutica / Open Innovation", "Perfil de Empresa": "Farmacéutica multinacional con programa de innovación abierta (Gate2Health) para startups de salud digital. Busca activamente startups tecnológicas que resuelvan necesidades del sistema sanitario. No es cliente del SNS, pero puede ser fuente de financiación o co-inversión.", "País / Sede": "Reino Unido (filial en España)", "Tamaño": "Grande (+90.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Financiación / Open Innovation", "Acción Recomendada": "GSK Gate2Health puede ser una vía de financiación o visibilidad para TietAI. Abordar a Pablo Hervás para entender los criterios del programa y si TietAI encaja."}, {"Sesión": "ST4", "Día": "Mie 25/03", "Horario": "16:00-17:30", "Empresa": "Siemens Healthineers", "Ponente": "Alejandro Ramos", "Cargo": "Digital Portfolio Executive", "Título Ponencia": "Reimaginando la práctica clínica en la era digital", "Categoría": "MedTech / Diagnóstico / Digital Health", "Perfil de Empresa": "División salud de Siemens. Líder mundial en equipamiento diagnóstico (imagen, laboratorio) con creciente oferta de plataformas digitales (Teamplay). Tiene presencia en todos los grandes hospitales del SNS. Patrocinador colaborador del congreso.", "País / Sede": "Alemania (filial en España)", "Tamaño": "Grande (+50.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia / Partner Futuro", "Acción Recomendada": "Siemens Healthineers genera silos de datos de imagen que deben conectarse al EHDS. TietAI podría ser relevante a largo plazo para la capa de ingesta. Sin prioridad inmediata."}, {"Sesión": "ST4", "Día": "Mie 25/03", "Horario": "16:00-17:30", "Empresa": "Leica Biosystems (Danaher)", "Ponente": "David de Mena García", "Cargo": "DP IT Content Manager", "Título Ponencia": "Aperio HALO AP Image Management Solution. Más allá del visor", "Categoría": "Patología Digital / MedTech", "Perfil de Empresa": "División de patología digital del grupo Danaher. Especialista en sistemas de gestión de imagen de anatomía patológica (escáneres de portaobjetos, IA diagnóstica). Nicho muy específico dentro de los datos clínicos.", "País / Sede": "Alemania/EE.UU. (filial en España)", "Tamaño": "Grande (+70.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Nicho muy específico. Sin acción prioritaria para TietAI."}, {"Sesión": "ST4", "Día": "Mie 25/03", "Horario": "16:00-17:30", "Empresa": "CompuGroup Medical (CGM Clinical España)", "Ponente": "Rafael Comendador", "Cargo": "Responsable de Desarrollo de Soluciones de IA", "Título Ponencia": "CGM Health Assistant. Integración de Agentes de IA en los sistemas de información asistenciales", "Categoría": "HIS / Software Clínico Legacy / IA", "Perfil de Empresa": "División española de CompuGroup Medical (CGM), uno de los mayores proveedores mundiales de software clínico. Sus sistemas de HIS y atención primaria están muy implantados como sistemas legacy en el SNS español. Están desarrollando agentes de IA sobre sus propios sistemas legacy.", "País / Sede": "Alemania (filial en España)", "Tamaño": "Grande (+6.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica / Partner Estratégico", "Acción Recomendada": "CGM tiene los sistemas legacy que TietAI conecta. Su ponencia sobre integración de agentes IA en sistemas asistenciales es exactamente el espacio de TietAI. Rafael Comendador es el perfil técnico de IA. Evaluar si es competencia directa o si TietAI puede ser la capa de interoperabilidad sobre sus sistemas. Contactar urgente."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Dexcom", "Ponente": "Iñigo González", "Cargo": "Director de Marketing y Comunicación", "Título Ponencia": "Innovación en monitorización continua de glucosa (CGM)", "Categoría": "MedTech / CGM / Dispositivo Médico", "Perfil de Empresa": "Empresa estadounidense líder en sistemas de monitorización continua de glucosa (CGM). Sus dispositivos generan datos continuos de pacientes diabéticos que se integran con HIS del SNS. Trabaja activamente con el sistema público español.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+8.000 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Los datos de CGM son un caso de uso de ingesta hacia EHDS pero no es prioridad inmediata para TietAI."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Cibernos", "Ponente": "Juan Ruiz Alzola", "Cargo": "CEO EBATINCA", "Título Ponencia": "StaRT: Conectando conocimientos y prácticas en radioterapia", "Categoría": "Consultoría IT / Software Especializado", "Perfil de Empresa": "Empresa española de consultoría tecnológica y desarrollo de software para el sector público y salud. EBATINCA es su marca para soluciones de salud digital. Trabaja en integración de sistemas y conocimiento clínico.", "País / Sede": "España (Madrid)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "Cibernos tiene proyectos en CCAA y conocimiento en integración de sistemas sanitarios. Contacto secundario para canal regional."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Digimevo", "Ponente": "Xavier Lleixa", "Cargo": "CTO y Cofundador", "Título Ponencia": "Del cribado poblacional a la intervención digital: plataforma pionera de eSalud mental de Catalunya", "Categoría": "eSalud Mental / Plataforma Digital", "Perfil de Empresa": "Startup catalana de salud mental digital. Trabaja con CatSalut en programas de salud mental basados en evidencia y tecnología digital. Pionera en el ecosistema de salud digital de Catalunya.", "País / Sede": "España (Barcelona)", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción prioritaria. Ecosistema de salud digital de Catalunya."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Veratech for Health", "Ponente": "David Moner Cano", "Cargo": "Director de Producción y Consultor", "Título Ponencia": "Rompiendo las barreras de la Interoperabilidad entre estándares", "Categoría": "Interoperabilidad / Estándares (HL7, FHIR, openEHR)", "Perfil de Empresa": "Empresa española especializada exclusivamente en interoperabilidad en salud. Experta en estándares HL7, FHIR, openEHR y CDA. Trabaja con servicios de salud autonómicos para conectar y estandarizar sistemas heterogéneos. Presencia en proyectos de EHDS en España.", "País / Sede": "España", "Tamaño": "Pequeña (20-50 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Alianza Técnica Prioritaria", "Acción Recomendada": "CONTACTO PRIORITARIO. Veratech es la empresa más complementaria técnicamente a TietAI en todo el congreso. Trabajan en exactamente el mismo espacio (interoperabilidad de sistemas legacy bajo estándares). Propuesta: co-creación de solución conjunta para proyectos EHDS. David Moner Cano es el contacto directo."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Laberit", "Ponente": "Julián Lorenzo", "Cargo": "Director de la Alianza con Microsoft", "Título Ponencia": "Transformar la sanidad no es digitalizar: es reinventar el modelo asistencial", "Categoría": "Consultoría IT / Microsoft Partner", "Perfil de Empresa": "Empresa española de servicios tecnológicos con larga trayectoria en la Comunitat Valenciana y administración pública. Partner estratégico de Microsoft. Especialista en transformación digital del sector público sanitario.", "País / Sede": "España (Valencia)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal Regional", "Acción Recomendada": "Canal prioritario para la Comunitat Valenciana y Aragón. Julián Lorenzo (Director Microsoft) conecta TietAI con el ecosistema Azure en salud. Abordar durante o después de ST5."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Vitio", "Ponente": "Rubén Anaut", "Cargo": "CEO", "Título Ponencia": "Telemonitorización: del piloto a la práctica clínica real", "Categoría": "Telemonitorización / Digital Health", "Perfil de Empresa": "Startup española de telemonitorización de pacientes crónicos. Ha pasado de pilotos a implantaciones reales en el SNS. Sus datos de monitorización remota son candidatos a ser ingestados en el espacio de datos EHDS.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Caso de uso interesante de datos de pacientes remotos. Sin prioridad inmediata."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Quibim", "Ponente": "Ángel Alberich Bayarri", "Cargo": "CEO", "Título Ponencia": "Del algoritmo a la infraestructura clínica: la integración como motor de la IA médica", "Categoría": "IA de Imagen Médica / Radiomics", "Perfil de Empresa": "Empresa española referente mundial en IA para imagen médica (radiomics, biomarcadores de imagen). Trabaja con hospitales líderes del SNS y ha realizado varias rondas de inversión. Ángel Alberich es uno de los CEOs de IA médica más visibles de España.", "País / Sede": "España (Valencia)", "Tamaño": "Pequeña-Mediana (50-200 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Quibim opera en el nicho de imagen médica. Su narrativa sobre infraestructura clínica es relevante pero no hay sinergia directa con TietAI actualmente."}, {"Sesión": "ST5", "Día": "Mie 25/03", "Horario": "18:00-20:00", "Empresa": "Smart in Medical Iberia", "Ponente": "José Luis Solórzano Rendón", "Cargo": "Facultativo Especialista, Servicio de Anatomía Patológica", "Título Ponencia": "Del tejido al dato: Biobanco digital como infraestructura para la medicina de precisión en la estrategia digital del SNS", "Categoría": "Biobancos Digitales / Datos Clínicos / EHDS", "Perfil de Empresa": "Empresa francesa especializada en soluciones de biobanco digital y gestión de muestras para medicina de precisión. Sus datos biomédicos son candidatos a ser compatibles con EHDS. Trabaja con hospitales y biobancos del SNS.", "País / Sede": "Francia (filial en España)", "Tamaño": "Pequeña (20-100 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia EHDS", "Acción Recomendada": "Caso de uso muy relevante para EHDS: datos de tejidos y biobancos como parte del espacio de datos sanitario. TietAI puede ser la infraestructura de ingesta. Contacto en el contexto de EHDS."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Appian", "Ponente": "David Gómez García", "Cargo": "Account Executive", "Título Ponencia": "Orquestación de procesos y transformación de aplicaciones en los servicios de Salud", "Categoría": "BPM / Low-Code Platform", "Perfil de Empresa": "Plataforma estadounidense de automatización de procesos y low-code. Trabaja con administraciones públicas y sector salud para modernizar procesos y aplicaciones sin reemplazar sistemas legacy. Su propuesta de valor es complementaria a la interoperabilidad.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (2.000-5.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Partner Plataforma", "Acción Recomendada": "Appian orquesta procesos sobre sistemas legacy: TietAI puede ser la capa de datos/interoperabilidad en proyectos de Appian en el SNS. Conversación de ecosistema con David Gómez."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Uphill Health", "Ponente": "Antonio Martí Polo", "Cargo": "Lead Account Executive", "Título Ponencia": "Del PADP a la implementación real: Orquestación y coordinación regional impulsadas por IA", "Categoría": "Patient Engagement / Orquestación Clínica", "Perfil de Empresa": "Startup portuguesa de activación y seguimiento de pacientes con IA. Trabaja en la integración de su plataforma en los flujos asistenciales del SNS. Enfocada en el proceso asistencial del paciente, no en la interoperabilidad de back-end.", "País / Sede": "Portugal (oficina en España)", "Tamaño": "Pequeña (50-200 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción prioritaria. Complementariedad indirecta posible a largo plazo."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Invox Medical", "Ponente": "Pedro Vivancos Vicente", "Cargo": "Director de Estrategia e Innovación", "Título Ponencia": "Integración de IA y voz para la documentación clínica en atención primaria y hospitalaria", "Categoría": "IA de Voz / Documentación Clínica", "Perfil de Empresa": "Startup española líder en dictado médico e IA de voz para documentación clínica. Sus datos de transcripción clínica generan datos estructurados que deben integrarse con HIS. Trabaja activamente con varios servicios de salud autonómicos.", "País / Sede": "España (Madrid)", "Tamaño": "Pequeña-Mediana (50-200 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Alianza de Datos", "Acción Recomendada": "Invox genera datos clínicos desestructurados (transcripciones) que TietAI podría estructurar e ingestar para el espacio de datos EHDS. Posible sinergia. Pedro Vivancos es el contacto."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "RICOH Healthcare", "Ponente": "Juan Manuel López Fernández", "Cargo": "CTO Unidad de Healthcare", "Título Ponencia": "IA Privada en Sanidad: Soluciones On Premise para un Dato Seguro", "Categoría": "IT / On-Premise Healthcare / Impresión y Gestión Documental", "Perfil de Empresa": "División healthcare de RICOH, multinacional japonesa. Su unidad de healthcare ofrece soluciones de gestión documental, flujo de trabajo clínico e IA on-premise para hospitales que no quieren datos en la nube. Trabaja con sistemas legacy en entornos hospitalarios.", "País / Sede": "Japón (filial en España)", "Tamaño": "Grande (+80.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "RICOH Healthcare tiene presencia en hospitales con sistemas legacy. Su enfoque on-premise es relevante para CCAA con restricciones de soberanía del dato. TietAI puede ser la capa de interoperabilidad e ingesta en entornos on-premise."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Tandem Health España", "Ponente": "Jorge Pérez Hermilla", "Cargo": "Director", "Título Ponencia": "IA en consultas: presente, pasado y futuro", "Categoría": "IA Documentación Clínica / Consulta Médica", "Perfil de Empresa": "Startup de IA para asistencia en consulta médica (transcripción, resumen, sugerencias clínicas). Trabaja con médicos y centros sanitarios para reducir la carga administrativa. Entidad colaboradora del congreso.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Baja", "Tipo de Relación": "Referencia de Mercado", "Acción Recomendada": "Sin acción prioritaria. Nicho de documentación en consulta."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Telefónica Tech", "Ponente": "Juan Luis Torrejón Guadalupe", "Cargo": "AI Project Manager", "Título Ponencia": "OSAGEN: plataforma genómica de Osakidetza", "Categoría": "Telecom / Cloud / IT Sector Público", "Perfil de Empresa": "División tecnológica de Telefónica con enorme presencia en administraciones públicas españolas. Tiene contratos marco con casi todas las CCAA para infraestructura cloud y servicios digitales. OSAGEN es un proyecto real de genómica con Osakidetza.", "País / Sede": "España (Madrid)", "Tamaño": "Grande (+20.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Canal / Ecosistema", "Acción Recomendada": "Telefónica Tech tiene contratos marco con todas las CCAA: canal de distribución de enorme alcance si TietAI encaja en su oferta de salud digital. Contacto de ecosistema. Juan Luis Torrejón trabaja en proyectos de datos de salud."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "IndraMind Cybersecurity", "Ponente": "Rubén Morales Linares", "Cargo": "Director de Tecnología y Producto", "Título Ponencia": "Smart MDR AI-SOC Agent. El SOC más avanzado e inteligente para la Sanidad Conectada", "Categoría": "Ciberseguridad / Healthcare SOC", "Perfil de Empresa": "Empresa española especializada en ciberseguridad para el sector salud. Ofrece servicios de SOC (Security Operations Center) específicos para hospitales y servicios de salud. Trabaja en la protección de infraestructuras críticas del SNS.", "País / Sede": "España", "Tamaño": "Pequeña-Mediana (50-200 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Partner Complementario", "Acción Recomendada": "La interoperabilidad de TietAI requiere ciberseguridad. IndraMind puede ser un partner natural para proyectos que incluyan tanto interoperabilidad como seguridad. Mencionar el EHDS y los requisitos de seguridad del reglamento."}, {"Sesión": "ST6", "Día": "Jue 26/03", "Horario": "09:00-11:15", "Empresa": "Ovianta", "Ponente": "Alejandro Quintans", "Cargo": "CEO", "Título Ponencia": "Agentes conversacionales telefónicos para admisión de pacientes", "Categoría": "Agentes Conversacionales / IA / Salud", "Perfil de Empresa": "Startup española de agentes de IA conversacional para centros sanitarios (admisión, citas, atención telefónica). Trabaja directamente con el SNS para automatizar la atención al paciente. Entidad colaboradora del congreso.", "País / Sede": "España", "Tamaño": "Pequeña (<50 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema Agentes IA", "Acción Recomendada": "Ovianta y TietAI están en el ecosistema de agentes IA en salud aunque en capas diferentes. Contacto de ecosistema: posible narrativa compartida en el mercado sobre IA agentica en el SNS."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Dell Technologies", "Ponente": "Javier de Torres", "Cargo": "UDS Sales Executive", "Título Ponencia": "Orquestando el espacio de datos sanitarios: la propuesta de Dell para la IA clínica", "Categoría": "Infraestructura IT / Data Platform", "Perfil de Empresa": "Multinacional líder en infraestructura IT (servidores, almacenamiento, edge computing). Su propuesta para el SNS se centra en la infraestructura para IA clínica y espacio de datos sanitarios. Tiene acuerdos de suministro con CCAA.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+100.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Infraestructura", "Acción Recomendada": "Dell provee la infraestructura sobre la que corre el espacio de datos. TietAI puede ser la capa de ingesta y agentes sobre infraestructura Dell. Conversación de ecosistema."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Inetum", "Ponente": "Jonay Luis", "Cargo": "Senior Technical Consultant", "Título Ponencia": "IA aplicada al Entorno de Salud", "Categoría": "Consultoría IT / Servicios Profesionales Sector Público", "Perfil de Empresa": "Gran empresa francesa de servicios IT con fuerte implantación en el sector público español. Inetum tiene presencia en numerosas CCAA y administraciones con proyectos de digitalización. Trabaja activamente en proyectos de salud digital.", "País / Sede": "Francia (filial en España)", "Tamaño": "Grande (+25.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Canal", "Acción Recomendada": "Partner canal Tier 1. Inetum tiene proyectos activos en múltiples CCAA. Jonay Luis trabaja específicamente en IA para salud. Proponer incluir a TietAI en sus propuestas de salud digital. Visitar stand 1A o abordar tras ST7."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "TriNetX", "Ponente": "Suellyn Silveira", "Cargo": "Responsable TriNetX España, HPM EU", "Título Ponencia": "Plataforma TriNetX: democratizando el acceso a datos del mundo real y generando evidencia de alto impacto", "Categoría": "Real World Data / Investigación Clínica", "Perfil de Empresa": "Empresa estadounidense con plataforma de datos del mundo real (RWD) para investigación clínica. Conecta datos de hospitales y sistemas de salud para generar evidencia. Sus requerimientos de datos estructurados y federados se alinean con el EHDS.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Mediana (200-500 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Referencia EHDS", "Acción Recomendada": "TriNetX necesita datos estructurados y compatibles con estándares del SNS: exactamente lo que TietAI prepara. Posible cliente de la capa de preparación de datos EHDS. Suellyn Silveira es el contacto."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Microsoft", "Ponente": "Sergio Guerrero Haro", "Cargo": "Responsable Estrategia Tecnológica e Innovación en Salud", "Título Ponencia": "Estrategia de IA e innovación en el ecosistema de salud", "Categoría": "Cloud / IA / Plataforma Global", "Perfil de Empresa": "Microsoft tiene acuerdos marco con todas las CCAA españolas para servicios cloud (Azure). Su división de salud está muy activa en proyectos de IA, datos sanitarios y EHDS. El Azure Health Data Services es la plataforma de referencia para FHIR en la nube.", "País / Sede": "EE.UU. (oficina en España)", "Tamaño": "Grande (+200.000 emp.)", "Relevancia TietAI": "Alta", "Tipo de Relación": "Partner Ecosistema Estratégico", "Acción Recomendada": "Microsoft tiene el alcance más amplio en el SNS. TietAI puede posicionarse como solución de interoperabilidad e ingesta sobre Azure Health Data Services. Sergio Guerrero es el contacto de salud: proponer demostración de TietAI sobre Azure FHIR API."}, {"Sesión": "ST7", "Día": "Jue 26/03", "Horario": "17:30-19:00", "Empresa": "Huawei España", "Ponente": "Kai Zhang", "Cargo": "Responsable de Estrategia y Desarrollo de Negocio Sanitario", "Título Ponencia": "De los silos de datos a la sabiduría clínica", "Categoría": "IT / Cloud / Infraestructura / Datos", "Perfil de Empresa": "Huawei tiene una división de salud activa en España con soluciones de nube, IA y datos. Su narrativa en este congreso sobre silos de datos es directamente relevante para el problema que TietAI resuelve. Trabaja con varios hospitales y servicios de salud.", "País / Sede": "China (oficina en España)", "Tamaño": "Grande (+190.000 emp.)", "Relevancia TietAI": "Media", "Tipo de Relación": "Ecosistema / Referencia", "Acción Recomendada": "La narrativa de Huawei (silos → sabiduría clínica) valida el problema de TietAI. Kai Zhang es el responsable de negocio sanitario en España. Conversación de ecosistema sobre interoperabilidad y datos."}];
+
+(function() {
+  const tiposSet = [...new Set(empresaData.map(d => d['Tipo de Relación']).filter(Boolean))].sort();
+  const tipoSelect = document.getElementById('empFilterTipo');
+  tiposSet.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t; opt.textContent = t;
+    tipoSelect.appendChild(opt);
+  });
+  document.getElementById('empCountTotal').textContent = empresaData.length;
+})();
+
+function empresaGetRelevanciaClass(r) {
+  if (r === 'Alta') return 'emp-relevancia-alta';
+  if (r === 'Media') return 'emp-relevancia-media';
+  return 'emp-relevancia-baja';
+}
+
+function empresaRenderCards(data) {
+  const container = document.getElementById('empCardsContainer');
+  const empty = document.getElementById('empEmptyState');
+  if (data.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('empCountVisible').textContent = 0;
+    return;
+  }
+  empty.style.display = 'none';
+  document.getElementById('empCountVisible').textContent = data.length;
+  container.innerHTML = data.map((d, i) => {
+    const relClass = empresaGetRelevanciaClass(d['Relevancia TietAI']);
+    return `
+    <div class="emp-card" id="emp-card-${i}" onclick="empresaToggleCard(${i})">
+      <div class="emp-card-header">
+        <span class="emp-session-badge">${escHtml(d['Sesión'])}</span>
+        <span class="emp-empresa-name">${escHtml(d['Empresa'])}</span>
+        <div class="emp-card-summary">
+          <span class="emp-dia-chip">${escHtml(d['Día'])}</span>
+          <span class="emp-horario-chip">${escHtml(d['Horario'])}</span>
+          ${d['Ponente'] ? `<span class="emp-ponente-info"><strong>${escHtml(d['Ponente'])}</strong> · ${escHtml(d['Cargo'])}</span>` : ''}
+        </div>
+        <span class="emp-relevancia-badge ${relClass}">${escHtml(d['Relevancia TietAI'])}</span>
+        <span class="emp-expand-icon">▾</span>
+      </div>
+      <div class="emp-card-body">
+        <div class="emp-info-grid">
+          <div class="emp-info-item">
+            <span class="emp-info-label">Categoría</span>
+            <span class="emp-info-value"><span class="emp-categoria-chip">${escHtml(d['Categoría'])}</span></span>
+          </div>
+          <div class="emp-info-item">
+            <span class="emp-info-label">Tipo de relación</span>
+            <span class="emp-info-value"><span class="emp-tipo-relacion-chip">${escHtml(d['Tipo de Relación'])}</span></span>
+          </div>
+          <div class="emp-info-item">
+            <span class="emp-info-label">País / Sede</span>
+            <span class="emp-info-value">${escHtml(d['País / Sede'])}</span>
+          </div>
+          <div class="emp-info-item">
+            <span class="emp-info-label">Tamaño</span>
+            <span class="emp-info-value">${escHtml(d['Tamaño'])}</span>
+          </div>
+          ${d['Título Ponencia'] ? `
+          <div class="emp-info-item" style="grid-column: 1/-1">
+            <span class="emp-info-label">Título ponencia</span>
+            <span class="emp-info-value">${escHtml(d['Título Ponencia'])}</span>
+          </div>` : ''}
+        </div>
+        ${d['Perfil de Empresa'] ? `
+        <div class="emp-perfil-block">
+          <div class="emp-block-label">Perfil de empresa</div>
+          ${escHtml(d['Perfil de Empresa'])}
+        </div>` : ''}
+        ${d['Acción Recomendada'] ? `
+        <div class="emp-accion-block">
+          <div class="emp-block-label">Acción recomendada</div>
+          ${escHtml(d['Acción Recomendada'])}
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function empresaToggleCard(i) {
+  document.getElementById('emp-card-' + i).classList.toggle('open');
+}
+
+function empresaApplyFilters() {
+  const q = document.getElementById('empSearchInput').value.toLowerCase().trim();
+  const sesion = document.getElementById('empFilterSesion').value;
+  const dia = document.getElementById('empFilterDia').value;
+  const relevancia = document.getElementById('empFilterRelevancia').value;
+  const tipo = document.getElementById('empFilterTipo').value;
+  const filtered = empresaData.filter(d => {
+    if (sesion && d['Sesión'] !== sesion) return false;
+    if (dia && d['Día'] !== dia) return false;
+    if (relevancia && d['Relevancia TietAI'] !== relevancia) return false;
+    if (tipo && d['Tipo de Relación'] !== tipo) return false;
+    if (q) {
+      const haystack = [d['Empresa'], d['Ponente'], d['Cargo'], d['Categoría'], d['Perfil de Empresa']].join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+  empresaRenderCards(filtered);
+}
+
+function empresaResetFilters() {
+  document.getElementById('empSearchInput').value = '';
+  document.getElementById('empFilterSesion').value = '';
+  document.getElementById('empFilterDia').value = '';
+  document.getElementById('empFilterRelevancia').value = '';
+  document.getElementById('empFilterTipo').value = '';
+  empresaApplyFilters();
+}
+
+// Initial render
+empresaApplyFilters();
+
+// ===================================================
+// PROGRAMA TAB LOGIC
+// ===================================================
+const programaData = [{"id": "mar-inauguracion", "dia": "Mar 24/03", "hora": "16:30–17:00", "sala": "Sala 1", "tipo": "Institucional", "titulo": "Inauguración Oficial", "subtitulo": "", "modera": [], "ponentes": [{"nombre": "Juan Fernando Muñoz Montalvo", "cargo": "Secretario General de Salud Digital, Información e Innovación del SNS", "entidad": "Ministerio de Sanidad", "rol": "Preside"}, {"nombre": "Ruth del Campo Becares", "cargo": "Directora General del Dato", "entidad": "Ministerio para la Transformación Digital y de la Función Pública", "rol": "Interviene"}, {"nombre": "Luciano Sáez Ayerra", "cargo": "Presidente", "entidad": "Sociedad Española de Informática de la Salud", "rol": "Interviene"}], "comunicaciones": []}, {"id": "mar-conferencia-apertura", "dia": "Mar 24/03", "hora": "17:30–18:00", "sala": "Sala 1", "tipo": "Conferencia", "titulo": "Conferencia de Apertura", "subtitulo": "Retos estratégicos de la Salud Digital y la innovación en el SNS: Una tarea compartida", "modera": [], "ponentes": [{"nombre": "Daniel Aparicio", "cargo": "Director Editorial Área de Salud", "entidad": "Unidad Editorial", "rol": "Presenta"}, {"nombre": "Juan Fernando Muñoz Montalvo", "cargo": "Secretario General de Salud Digital, Información e Innovación del SNS", "entidad": "Ministerio de Sanidad", "rol": "Imparte"}], "comunicaciones": []}, {"id": "mar-debate-apertura", "dia": "Mar 24/03", "hora": "18:00–19:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate", "subtitulo": "La Estrategia de Salud Digital: Clave para la Renovación del SNS", "modera": [{"nombre": "Noemí Cívicos Villa", "cargo": "Directora General de Salud Digital y Sistemas de Información para el SNS", "entidad": "Ministerio de Sanidad"}], "ponentes": [{"nombre": "Alberto Jara Sánchez", "cargo": "Director-Gerente del Servicio de Salud de Castilla - La Mancha", "entidad": "SESCAM", "rol": "Ponente"}, {"nombre": "Bernardo Valdivieso Martínez", "cargo": "Secretario Autonómico de Planificación, Información y Transformación", "entidad": "Conselleria de Sanitat de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "Luis Carretero Alcántara", "cargo": "Gerente del Servicio Cántabro de Salud", "entidad": "Servicio Cántabro de Salud", "rol": "Ponente"}, {"nombre": "Adasat Goya González", "cargo": "Director del Servicio Canario de la Salud", "entidad": "Servicio Canario de la Salud", "rol": "Ponente"}, {"nombre": "Jon Guajardo Remacha", "cargo": "Director Gerente", "entidad": "Servicio Navarro de Salud", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mar-posters-s2", "dia": "Mar 24/03", "hora": "19:00–20:30", "sala": "Sala 2", "tipo": "Presentación Posters", "titulo": "Presentación de Posters", "subtitulo": "", "modera": [], "ponentes": [], "comunicaciones": ["Securización de identidades mediante la federación del aplicativo de farmacia con Active Directory", "Receta electrónica del SCS: decisiones seguras en la prescripción de triptanes", "Aplicación de IA en la predicción del absentismo", "Proyecto piloto para la mejora de la accesibilidad a las consultas de oftalmología de la Región Sanitaria de Lleida", "Gobierno de terminología clínica en el Servicio Cántabro de Salud", "HUBSERVE: Plataforma digital para la gestión integrada de estudios e investigación clínica en entornos hospitalarios", "Automatización del proceso clínico-epidemiológico de las EDO en el Servicio Cántabro de Salud", "Integración de geolocalización en tiempo real en el área quirúrgica", "Transformación digital del ámbito quirúrgico y crítico: Integración de ICCA con HCIS", "Registro automatizado mediante tecnología NFC de adherencia y resultados reportados por el paciente", "SECURESEND – Plataforma segura para la transferencia cifrada de archivos clínicos con trazabilidad y doble factor de autenticación"]}, {"id": "mar-posters-s3", "dia": "Mar 24/03", "hora": "19:00–20:30", "sala": "Sala 3", "tipo": "Presentación Posters", "titulo": "Presentación de Posters", "subtitulo": "", "modera": [], "ponentes": [], "comunicaciones": ["Algoritmo de distribución equitativa de cargas de trabajo en urgencias según triaje y ubicación", "Sistema SADME ALERTAS: Plataforma para la supervisión de dispensadores, neveras y comunicaciones críticas en el entorno hospitalario", "Registro centralizado de vacunación", "Implantación de herramienta de descubrimiento y control de dispositivos IY, IoT e IoMT", "Real World Evidence sobre tratamientos biológicos en psoriasis: patrones de usos y persistencia en un hospital andaluz", "Gestión integrada de la incapacidad temporal en el SESPA: el módulo ITAPAH en la plataforma SAGITARIO", "Análisis de requisitos para la licitación de un LIS centralizado en una red interhospitalaria de Anatomía Patológica", "Implantación de un sistema de direccionamiento de pacientes en Atención Primaria", "Reutilización de software sanitario entre CCAA: una experiencia sostenible de cribados poblacionales", "Integración de equipos de electrocardiografía en la red asistencial del SESPA", "Salud digital para la migraña: integración de nuevas tecnologías bajo el paradigma 3P"]}, {"id": "mie-debate1", "dia": "Mie 25/03", "hora": "09:30–11:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 1", "subtitulo": "Balance 2021–2026 – Principales logros de la transformación digital en salud", "modera": [{"nombre": "Raquel Yotti Álvarez", "cargo": "Comisionada PERTE para la Salud de Vanguardia", "entidad": "Ministerio de Ciencia, Innovación y Universidades"}], "ponentes": [{"nombre": "María Fe Lapeña Gutiérrez", "cargo": "Subdirectora General de Servicios Digitales de Salud", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Óscar Fernández Torre", "cargo": "Director General de Planificación, Ordenación, Gestión del Conocimiento y Salud Digital", "entidad": "Consejería de Salud del Gobierno de Cantabria", "rol": "Ponente"}, {"nombre": "María José Tarazón Muñoz", "cargo": "Subdirectora General de TIC para la Salud", "entidad": "Conselleria de Sanitat de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "Lidia Clara Rodríguez García", "cargo": "Directora General de Planificación, Gestión del Conocimiento y Transformación Digital Sanitaria", "entidad": "Consejería de Salud del Principado de Asturias", "rol": "Ponente"}, {"nombre": "Eva Aurín Pardo", "cargo": "Desarrollo de Negocio Sanidad", "entidad": "Telefónica España", "rol": "Ponente"}, {"nombre": "Laura Born Navarro", "cargo": "Responsable de Estrategia Tecnológica e Innovación en Salud", "entidad": "Microsoft", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st1", "dia": "Mie 25/03", "hora": "09:00–11:15", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 1", "subtitulo": "", "modera": [{"nombre": "Roberto Pizarro Santos", "cargo": "Subdirector de Sistemas de Información", "entidad": "Servicio Extremeño de Salud"}], "ponentes": [{"nombre": "Oscar Gil", "cargo": "Director Tecnología y Transformación Digital", "entidad": "IQVIA España", "rol": "09:00–09:15", "ponencia": "Digitalización de la relación con el paciente: del análisis poblacional a una asistencia personalizada y participativa"}, {"nombre": "Estefania Moran", "cargo": "Digital Solutions Product Lead", "entidad": "Roche Diagnostics", "rol": "09:15–09:30", "ponencia": "Del dato a la decisión clínica en el triaje del dolor torácico. Implementación del algoritmo Chest Pain Triage (CE) en urgencias"}, {"nombre": "Oscar Flores", "cargo": "CEO", "entidad": "Genomcore", "rol": "09:30–09:45", "ponencia": "Medicina de Precisión, IA Agéntica y Soberanía"}, {"nombre": "Nina Claveria", "cargo": "Product Solution Director", "entidad": "Orion Health", "rol": "09:45–10:00", "ponencia": "DARWEN™ AI: Reduciendo la carga cognitiva en la Historia Clínica Compartida"}, {"nombre": "Gonzalo Belmonte Rodríguez", "cargo": "Manager", "entidad": "Doc Planner", "rol": "10:00–10:15", "ponencia": "Omnicanalidad inteligente en Salud: cómo la IA está transformando la experiencia del paciente y la eficiencia operativa"}, {"nombre": "Victor Manuel Piñeiro Torres", "cargo": "Solutions Engineer", "entidad": "Inycom", "rol": "10:15–10:30", "ponencia": "Implementa 2FA y ahorra más de 30 minutos diarios por médico o enfermer@ en Urgencias"}, {"nombre": "Jesús Doña Fernández", "cargo": "SLBD Business Development Director", "entidad": "Fujitsu", "rol": "10:30–10:45", "ponencia": "De la promesa tecnológica a la medicina 5P real"}, {"nombre": "Jerónimo Mediavilla Bragado", "cargo": "Key Account Manager", "entidad": "Glintt Healthcare", "rol": "10:45–11:00", "ponencia": "Humanizar a través de la innovación, del paciente pasivo al paciente conectado"}, {"nombre": "Adrián Rodrigo Salas", "cargo": "Business Solutions", "entidad": "GMV", "rol": "11:00–11:15", "ponencia": "uTile Suite para espacios de datos en Salud"}], "comunicaciones": []}, {"id": "mie-com1", "dia": "Mie 25/03", "hora": "09:30–11:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 1", "subtitulo": "", "modera": [{"nombre": "Jenaro Bejarano García", "cargo": "Subdirector Oficina de Gobierno del Dato e Inteligencia Artificial", "entidad": "Servicio Canario de la Salud"}], "ponentes": [], "comunicaciones": ["Visión multidimensional de los diagnósticos en la estación clínica de Atención Primaria de Cataluña", "Nuevo seguimiento clínico de la AP de Cataluña, unificado la Historia del Paciente", "Implantación de un sistema digital de gestión de turnos en Atención Primaria: experiencia organizativa", "Reorganización y humanización en AP mediante autogestión de turnos", "AP CUIDA2: Continuidad de cuidados apoyada en soluciones digitales", "Impacto de la pandemia de COVID-19 en las visitas por depresión en AP en Catalunya", "Actualización farmacoterapéutica con gamificación en Atención Primaria"]}, {"id": "mie-debate2", "dia": "Mie 25/03", "hora": "11:30–13:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 2", "subtitulo": "Innovación asistencial y TIC: telesalud, terapias digitales, nuevos modelos de atención", "modera": [{"nombre": "Gonzalo Tamayo Medel", "cargo": "Viceconsejero de Salud y Transformación Digital", "entidad": "Departamento Vasco de Salud"}], "ponentes": [{"nombre": "Benigno Rosón Calvo", "cargo": "Subdirector General de Sistemas y Tecnologías de la Información", "entidad": "Servicio Gallego de Salud", "rol": "Ponente"}, {"nombre": "José María Jover", "cargo": "Secretario General de la Federación de Asociaciones Científico Médicas Españolas", "entidad": "FACME", "rol": "Ponente"}, {"nombre": "Ines Gallego Camiña", "cargo": "Directora General de Transformación, Planificación y Digitalización en Salud", "entidad": "Departamento Vasco de Salud", "rol": "Ponente"}, {"nombre": "Amador Ruiz Torrejón", "cargo": "Coordinador de Sistemas de Información Asistencial", "entidad": "Servicio de Salud de las Islas Baleares", "rol": "Ponente"}, {"nombre": "Marisa Felipe Gil", "cargo": "Directora General", "entidad": "Dedalus Iberia", "rol": "Ponente"}, {"nombre": "Jesús Castellano Alarcón", "cargo": "Healthcare Business Consultor", "entidad": "Fujitsu", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st2", "dia": "Mie 25/03", "hora": "11:30–13:00", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 2", "subtitulo": "", "modera": [{"nombre": "Pilar Viñado Villuendas", "cargo": "Vocal Asesora en la Secretaría General de Salud Digital, Información e Innovación", "entidad": "Ministerio de Sanidad"}], "ponentes": [{"nombre": "Sara Muñoz González", "cargo": "Enfermera", "entidad": "Hospital Sureste", "rol": "11:30–11:45", "ponencia": "Un caso real de implantación de inteligencia clínica con beneficio para el paciente"}, {"nombre": "Irene Montero Díaz", "cargo": "Health Data Responsible Spain & IO", "entidad": "NTT DATA", "rol": "11:45–12:00", "ponencia": "La Normalización y Estandarización de Datos Sanitarios al servicio del Paciente"}, {"nombre": "Erik Isusquiza García", "cargo": "Responsable del Área Comercial", "entidad": "Ulma Medical Technologies", "rol": "12:00–12:15", "ponencia": "Inteligencia artificial aplicada al cribado de la Retinopatía Diabética"}, {"nombre": "Alberto Fuentes", "cargo": "Sales Engineer", "entidad": "InterSystems Iberia SL", "rol": "12:15–12:30", "ponencia": "Agentes de IA integrados en sistemas clínicos: interoperabilidad, control y confianza"}, {"nombre": "María Fernanda Aguirre", "cargo": "Manager Salud Digital", "entidad": "Grupo Oesia", "rol": "12:30–12:45", "ponencia": "El lugar de la IA en la práctica clínica. Aplicaciones reales en el proceso asistencial"}, {"nombre": "Julia Molina", "cargo": "Directora de Negocio", "entidad": "Salesforce", "rol": "12:45–13:00", "ponencia": "Cada llamada que resuelve el canal ciudadano inteligente es un profesional que vuelve a mirar al paciente"}], "comunicaciones": []}, {"id": "mie-com2", "dia": "Mie 25/03", "hora": "11:30–13:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 2", "subtitulo": "", "modera": [{"nombre": "Juan Carlos Oliva Pérez", "cargo": "Director-Gerente", "entidad": "Fundación Rioja Salud"}], "ponentes": [], "comunicaciones": ["Implantación de un sistema de teledermatología asistido por IA para el diagnóstico y seguimiento de lesiones cutáneas en AP", "Hacia una arquitectura de salud conectada en genómica clínica: OMOP, Phenopackets y Beacon", "EPISTEMAI: Plataforma integral de IA para investigación biomédica", "Clasificación automática de diagnósticos de urgencias mediante BERT", "Transformación digital en el contexto del programa BPSO® en el Servicio Canario de la Salud", "DARWIN EU: experiencia del Hospital 12 de Octubre en evidencia del mundo real", "Interoperabilidad HIS-RFID: eficiencia y trazabilidad de material de alto valor en el CHUIMI"]}, {"id": "mie-debate3", "dia": "Mie 25/03", "hora": "13:00–14:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 3", "subtitulo": "Accesibilidad digital y participación del paciente: Hacia un sistema sanitario más cercano", "modera": [{"nombre": "José Francisco Soto Bonel", "cargo": "Presidente", "entidad": "Sociedad Española de Directivos de la Salud"}], "ponentes": [{"nombre": "Carina Escobar Manero", "cargo": "Presidenta", "entidad": "Plataforma de Organización de Pacientes", "rol": "Ponente"}, {"nombre": "Nuria Ruiz Hombrebueno", "cargo": "Directora General de Salud Digital", "entidad": "Consejería de Digitalización de la Comunidad de Madrid", "rol": "Ponente"}, {"nombre": "Benjamín Juez Fernández", "cargo": "Subdirector de Informática y Sistemas de Información", "entidad": "OSAKIDETZA - Servicio Vasco de Salud", "rol": "Ponente"}, {"nombre": "Gabriel Rojo Rodríguez", "cargo": "Subdirector de Humanización, Atención al Usuario y Formación", "entidad": "Servicio de Salud de las Illes Baleares", "rol": "Ponente"}, {"nombre": "Ángel Hortal Reina", "cargo": "Director de Desarrollo de Negocio Global Sanidad", "entidad": "Indra Group", "rol": "Ponente"}, {"nombre": "Pablo Camba", "cargo": "Healthcare Account Executive", "entidad": "T-Systems", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st3", "dia": "Mie 25/03", "hora": "13:00–14:30", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 3", "subtitulo": "", "modera": [{"nombre": "Josean Vizcay Urrutia", "cargo": "Director General de Telecomunicaciones y Digitalización", "entidad": "Departamento de Universidad, Innovación y Transformación Digital del Gobierno de Navarra"}], "ponentes": [{"nombre": "Carlos Arpón Zufiaur", "cargo": "Técnico Responsable de Área Corporativa", "entidad": "OSAKIDETZA", "rol": "13:00–13:15", "ponencia": "Migración en el Sistema Vasco de Salud de un almacenamiento de imagen radiológica distribuido a una centralización optimizada"}, {"nombre": "César Aparicio Menéndez", "cargo": "Socio Director", "entidad": "ÁlamoConsulting", "rol": "13:15–13:30", "ponencia": "Modelo de Adopción y Gobierno de la IA"}, {"nombre": "Laura Madrenas Pérez-Maldonado", "cargo": "Ingeniera biomédica, Unidad de Ingeniería Biomédica", "entidad": "Hospital Germans Trias i Pujol", "rol": "13:30–13:45", "ponencia": "Synapse 3D. Mejoras en Cirugía con IA e imagen 3D. Experiencia Práctica"}, {"nombre": "Ana Butler", "cargo": "Support and Deployment Engineer", "entidad": "Logipren", "rol": "13:45–14:00", "ponencia": "Errored de prescripción en pediatría: un riesgo evitable, una solución digital"}, {"nombre": "Guillermo Rodríguez Lozano", "cargo": "Modality Sales Specialist in Enterprise Informatics", "entidad": "Philips", "rol": "14:00–14:15", "ponencia": "Del dato aislado a la decisión clínica: Estrategias de IA para un diagnóstico integrado"}, {"nombre": "Pablo Hervás Ballesteros", "cargo": "Healthcare Transformation Director", "entidad": "GSK", "rol": "14:15–14:30", "ponencia": "GSK Gate2Health: innovación abierta para la transformación digital del sistema sanitario"}], "comunicaciones": []}, {"id": "mie-com3", "dia": "Mie 25/03", "hora": "13:00–14:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 3", "subtitulo": "", "modera": [{"nombre": "Javier Quiles del Río", "cargo": "Subdirector de Sistemas de Información del Área Sanitaria de Santiago de Compostela y Barbanza", "entidad": "SERGAS"}], "ponentes": [], "comunicaciones": ["Interoperabilidad de las TIC y la comunicación: circuito del medicamento", "Arquitectura para la gestión de proyectos informáticos en salud pública", "Modelo de integración de receta electrónica para la dispensación a residencias desde el hospital", "IRUDIGILTZA: La llave para la compartición de estudios de imágenes médicas", "Análisis de vulnerabilidades de diseño en aplicaciones para la salud pública", "PROMs integrados en cuadro de mando clínico: mejora del programa de telemedicina en apnea del sueño", "Automatización trazable de la evaluación farmacoeconómica mediante IA en el SNS", "Mejora de la seguridad en la prescripción mediante flujos automatizados en la historia de primaria"]}, {"id": "mie-debate4", "dia": "Mie 25/03", "hora": "16:00–17:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 4", "subtitulo": "Interoperabilidad y datos en red: Construyendo un SNS conectado y basado en el dato", "modera": [{"nombre": "Josep Manuel Pomar Reynes", "cargo": "Director Gerente", "entidad": "Institut Català de la Salut"}], "ponentes": [{"nombre": "Julia Calabuig Pérez", "cargo": "Directora General de Información Sanitaria Calidad y Evaluación", "entidad": "Conselleria de Sanitat de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "Antoni Joan Colombas Salas", "cargo": "Subdirector de Gestión y Gobernanza del Dato", "entidad": "Govern de les Illes Balears", "rol": "Ponente"}, {"nombre": "María Dolores Tomé Cotarelo", "cargo": "Vocal Asesora del Gabinete Técnico, Secretaría General de Salud Digital, Información e Innovación del SNS", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Carlos Telleria Orriols", "cargo": "Director de la Agencia del Dato de Aragón", "entidad": "Gobierno de Aragón", "rol": "Ponente"}, {"nombre": "David G. Pisano", "cargo": "Clinical Bioinformatic Director", "entidad": "Genomcore", "rol": "Ponente"}, {"nombre": "Gonzalo Montesdeoca Zamora", "cargo": "Director", "entidad": "NTT DATA", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st4", "dia": "Mie 25/03", "hora": "16:00–17:30", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 4", "subtitulo": "", "modera": [{"nombre": "Noelia Sánchez Pérez", "cargo": "Subdirectora de Desarrollo e Inteligencia de Negocio", "entidad": "Departamento de Sanidad del Gobierno de Aragón"}], "ponentes": [{"nombre": "Enrique Borja Rodríguez", "cargo": "Jefe de Servicio – Laboratorio de Bioquímica Clínica y Patología Molecular", "entidad": "Hospital Clínico Universitario de Valencia", "rol": "16:00–16:15", "ponencia": "Claves de éxito para la selección de un SIL de laboratorio"}, {"nombre": "Raúl Martínez Santiago", "cargo": "Subdirector de Gestión y Servicios Generales", "entidad": "Servicio de Salud Cántabro", "rol": "16:15–16:30", "ponencia": ""}, {"nombre": "Manuel Pérez Vallina", "cargo": "Ex Subdirector de Gestión de Procesos", "entidad": "Servicio Cántabro de Salud", "rol": "16:30–16:45", "ponencia": "Cómo Cantabria impulsa la atención digital avanzada: orquestación de procesos asistenciales"}, {"nombre": "Alejandro Ramos", "cargo": "Digital Portfolio Executive", "entidad": "Siemens Healthineers", "rol": "16:45–17:15", "ponencia": "Reimaginando la práctica clínica en la era digital"}, {"nombre": "David de Mena García", "cargo": "DP IT Content Manager", "entidad": "Leica Biosystems", "rol": "17:15–17:30", "ponencia": "Aperio HALO AP Image Management Solution. Más allá del visor"}, {"nombre": "Rafael Comendador", "cargo": "Responsable de Desarrollo de Soluciones de IA", "entidad": "CGM Clinical España", "rol": "17:30–17:45", "ponencia": "CGM Health Assistant. Integración de Agentes de IA en los sistemas de información asistenciales"}], "comunicaciones": []}, {"id": "mie-com4", "dia": "Mie 25/03", "hora": "16:00–17:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 4", "subtitulo": "", "modera": [{"nombre": "Álvaro Alonso Zorita", "cargo": "Vocal Asesor del Gabinete Técnico", "entidad": "Ministerio de Sanidad"}], "ponentes": [], "comunicaciones": ["Codificación automática de CMAS con redes neuronales y embeddings en el Servicio Balear de Salud", "Diseño e implementación de un cribado de retinopatía diabética con IA en La Rioja", "Análisis automatizado de datos de investigación con REDCap y R: piloto en una cohorte hospitalaria", "Transición de cuentas genéricas a entornos kioskos conforme al esquema nacional de seguridad", "Plataforma de integración de datos en oncología de precisión para comités moleculares de tumores", "Transformación digital SCS: gestión integral de RRHH. El salto a GIROWEB", "Implantación de un proceso digital para la captación y detección en estadios preclínicos de DT1", "ONTOGUIDE: Sistema interoperable de soporte clínico basado en ontologías"]}, {"id": "mie-debate5", "dia": "Mie 25/03", "hora": "18:00–19:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 5", "subtitulo": "Inteligencia artificial en la asistencia sanitaria", "modera": [{"nombre": "Juan Ángel Morejudo Flores", "cargo": "Director Gerente de la Agencia de Transformación Digital", "entidad": "Junta de Castilla La Mancha"}], "ponentes": [{"nombre": "Emilio Vivancos Rubio", "cargo": "Responsable de la Oficina Autonómica de IA", "entidad": "Consejería de Sanidad de la Generalitat Valenciana", "rol": "Ponente"}, {"nombre": "José Carmelo Albillos", "cargo": "Presidente", "entidad": "Sociedad Española de Radiología Médica", "rol": "Ponente"}, {"nombre": "Carlos Gallego Pérez", "cargo": "Director de Salud Digital", "entidad": "Sistema de Salud de Catalunya (CatSalut)", "rol": "Ponente"}, {"nombre": "Francisco Javier Pérez Fernández", "cargo": "Medical IT Sales Manager", "entidad": "Fujifilm Healthcare España SL", "rol": "Ponente"}, {"nombre": "Luis Ruiz de la Prada", "cargo": "WMR Regional Business Leader", "entidad": "Solventum", "rol": "Ponente"}], "comunicaciones": []}, {"id": "mie-st5", "dia": "Mie 25/03", "hora": "18:00–20:00", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 5", "subtitulo": "", "modera": [{"nombre": "Javier Manzano Martín", "cargo": "Responsable de Área de Desarrollo de Sistemas de Información de la Dirección General de Salud Digital", "entidad": "Servicio de Salud de Castilla La Mancha"}], "ponentes": [{"nombre": "Iñigo González", "cargo": "Director de Marketing y Comunicación", "entidad": "Dexcom", "rol": "18:00–18:15", "ponencia": ""}, {"nombre": "Juan Ruiz Alzola", "cargo": "CEO EBATINCA", "entidad": "Cibernos Salud. Técnicas Competitivas", "rol": "18:15–18:30", "ponencia": "StaRT: Conectando conocimientos y prácticas en radioterapia"}, {"nombre": "Xavier Lleixa", "cargo": "CTO y cofundador", "entidad": "Digimevo", "rol": "18:30–18:45", "ponencia": "Del cribado poblacional a la intervención digital: la plataforma pionera de eSalud mental de Catalunya"}, {"nombre": "David Moner Cano", "cargo": "Director de Producción y Consultor", "entidad": "Veratech for Health SL", "rol": "18:45–19:00", "ponencia": "Rompiendo las barreras de la Interoperabilidad entre estándares"}, {"nombre": "Julián Lorenzo", "cargo": "Director de la Alianza con Microsoft", "entidad": "Laberit", "rol": "19:00–19:15", "ponencia": "Transformar la sanidad no es digitalizar: es reinventar el modelo asistencial"}, {"nombre": "Rubén Anaut", "cargo": "CEO", "entidad": "Vitio", "rol": "19:15–19:30", "ponencia": "Telemonitorización: del piloto a la práctica clínica real"}, {"nombre": "Ángel Alberich Bayarri", "cargo": "CEO", "entidad": "Quibim", "rol": "19:30–19:45", "ponencia": "Del algoritmo a la infraestructura clínica: la integración como motor de la IA médica"}, {"nombre": "José Luis Solórzano Rendón", "cargo": "Facultativo Especialista - Servicio de Anatomía Patológica", "entidad": "Smart in Medical Iberia", "rol": "19:45–20:00", "ponencia": "Del tejido al dato: Biobanco digital como infraestructura para la medicina de precisión en la estrategia digital del SNS"}], "comunicaciones": []}, {"id": "mie-com5", "dia": "Mie 25/03", "hora": "18:00–19:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 5", "subtitulo": "", "modera": [{"nombre": "Antonio Moragues Jaume", "cargo": "Subdirector de Innovación, Tecnología y Proyectos", "entidad": "Hospital Universitario Son Llátzer"}], "ponentes": [], "comunicaciones": ["Asegurando la gobernanza del software sanitario a través de la automatización del CICD", "Command Center Clínico-operativo para la toma de decisiones en tiempo real de un hospital de tercer nivel", "Garantizar el acceso a la especialidad de Dermatología en un contexto de alta demanda utilizando TIC", "Plan de Acogida", "Diseño e implementación de un algoritmo para la automatización del registro de éxitus en TRASCAN", "Minería de procesos aplicado a procesos asistenciales"]}, {"id": "jue-ciberseguridad", "dia": "Jue 26/03", "hora": "09:30–11:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate de Ciberseguridad", "subtitulo": "Ciberseguridad: Clave en la Estrategia de Salud Digital del SNS", "modera": [{"nombre": "Alejandro Las Heras Vázquez", "cargo": "Consejero Delegado de la Agencia de Ciberseguridad", "entidad": "Comunidad de Madrid"}], "ponentes": [{"nombre": "Miguel Ángel Benito Tovar", "cargo": "Subdirector de Transformación, Innovación y Salud Digital", "entidad": "Servicio de Salud de las Islas Baleares", "rol": "Ponente"}, {"nombre": "Enrique Jesús Quintanilla Cabañero", "cargo": "Subdirector General de Infraestructura Tecnológica Sanitaria", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Javier Candau", "cargo": "Subdirector General del Centro Criptológico Nacional", "entidad": "CCN", "rol": "Ponente"}, {"nombre": "Juan Díez González", "cargo": "Responsable de Ciberseguridad para Sectores Estratégicos Sanitario, Alimentario y de Investigación", "entidad": "Head of Cybersecurity for Strategic Healthcare, Food and Research Sectors", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-st6", "dia": "Jue 26/03", "hora": "09:00–11:15", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 6", "subtitulo": "", "modera": [{"nombre": "Raúl Martínez Santiago", "cargo": "Subdirector Tecnologías y Sistemas de Información", "entidad": "Hospital Universitario Marqués de Valdecilla"}], "ponentes": [{"nombre": "David Gómez García", "cargo": "Account Executive", "entidad": "Appian", "rol": "09:00–09:15", "ponencia": "Orquestación de procesos y transformación de aplicaciones en los servicios de Salud"}, {"nombre": "Antonio Martí Polo", "cargo": "Lead Account Executive", "entidad": "Uphill Health", "rol": "09:15–09:30", "ponencia": "Del PADP a la implementación real: Orquestación y coordinación regional impulsadas por IA"}, {"nombre": "Pedro Vivancos Vicente", "cargo": "Director de Estrategia en Innovación", "entidad": "Invox Medical", "rol": "09:30–09:45", "ponencia": "Integración de IA y voz para la documentación clínica en atención primaria y hospitalaria"}, {"nombre": "Juan Manuel López Fernández", "cargo": "CTO – Unidad de Healthcare", "entidad": "RICOH", "rol": "09:45–10:00", "ponencia": "IA Privada en Sanidad: Soluciones On Premise para un Dato Seguro"}, {"nombre": "Jorge Pérez Hermilla", "cargo": "Director", "entidad": "Tandem Health España", "rol": "10:00–10:15", "ponencia": "IA en consultas: presente, pasado y futuro"}, {"nombre": "Juan Luis Torrejón Guadalupe", "cargo": "AI Project Manager", "entidad": "Telefónica Tech", "rol": "10:15–10:30", "ponencia": "OSAGEN: plataforma genómica de Osakidetza"}, {"nombre": "Rubén Morales Linares", "cargo": "Director de Tecnología y Producto", "entidad": "IndraMind Cybersecurity", "rol": "10:30–10:45", "ponencia": "Smart MDR AI-SOC Agent. El SOC más avanzado e inteligente para la Sanidad Conectada"}, {"nombre": "Laura Muñoz Fernández", "cargo": "Servicio de Salud", "entidad": "Principado de Asturias", "rol": "10:45–11:00", "ponencia": "Plataforma de TELEMONITORIZACIÓN de Pacientes del Sistema de Salud del Principado de Asturias"}, {"nombre": "Alejandro Quintans", "cargo": "CEO", "entidad": "Ovianta", "rol": "11:00–11:15", "ponencia": "Agentes conversacionales telefónicos para admisión de pacientes"}], "comunicaciones": []}, {"id": "jue-com6", "dia": "Jue 26/03", "hora": "09:30–11:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 6", "subtitulo": "", "modera": [{"nombre": "José Pérez Alonso", "cargo": "Director de Sistemas, Tecnología e Innovación para la Salud", "entidad": "Servicio Riojano de Salud"}], "ponentes": [], "comunicaciones": ["Fortaleciendo el talento digital en sanidad: retos alcanzados en el SAS", "Comunicación TIC en el Servicio Andaluz de Salud: cohesionar, acompañar y conectar", "Modelado predictivo para la estratificación del riesgo nutricional infantil en Angola", "Servidor de terminología del Servicio Murciano de Salud: FHIR R5 y sincronización con el Ministerio", "Liderar la transformación hacia la telemedicina en un hospital de alta complejidad: modelo integral", "Anticipando la progresión renal cuando el riñón aún no lo sabe", "Capacitación y humanización digital, claves para la salud digital del siglo XXI"]}, {"id": "jue-med-digital-debate", "dia": "Jue 26/03", "hora": "11:30–13:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate Medicina Digital", "subtitulo": "Visión de los profesionales médicos ante los nuevos desafíos tecnológicos, organizativos y profesionales", "modera": [{"nombre": "Aurea Morillo García", "cargo": "Secretaria de Investigación, Innovación y Salud Digital de Sanidad, Presidencia y Emergencias", "entidad": "Junta de Andalucía"}], "ponentes": [{"nombre": "Mercedes Álvarez Bartolomé", "cargo": "Subdirectora General Adjunta de la Subdirección General de Información Sanitaria", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Rafael Vidal Pérez", "cargo": "Representante", "entidad": "Sociedad Española de Cardiología", "rol": "Ponente"}, {"nombre": "Pedro Luis Abad Requejo", "cargo": "Representante", "entidad": "Sociedad Española de Medicina Interna", "rol": "Ponente"}, {"nombre": "Manuel Santiñá Vidal", "cargo": "Representante", "entidad": "Sociedad Española de Calidad Asistencial", "rol": "Ponente"}, {"nombre": "Jordi Acezat Oliva", "cargo": "Representante", "entidad": "Sociedad Española de Medicina Familiar y Comunitaria", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-farmacia-debate", "dia": "Jue 26/03", "hora": "11:30–13:00", "sala": "Sala 2", "tipo": "Sesión Debate", "titulo": "Sesión Debate Farmacia Digital", "subtitulo": "Genética y Ómicas en Farmacia", "modera": [{"nombre": "José Antonio Marcos Rodríguez", "cargo": "Secretario", "entidad": "Sociedad Española de Farmacia Hospitalaria"}], "ponentes": [{"nombre": "Luis Ramudo Cela", "cargo": "Farmacéutico Adjunto Unidad Farmacocinética/Farmacogenética", "entidad": "Servicio de Farmacia del Hospital Universitario A Coruña", "rol": "Ponente"}, {"nombre": "Adrián Llerena Ruiz", "cargo": "Catedrático UEX-INUBE, Jefe de Servicio en Farmacología Clínica", "entidad": "Unidad Farmacogenética y Medicina Personalizada SES", "rol": "Ponente"}, {"nombre": "María Isidoro García", "cargo": "Unidad de Farmacogenómica y Medicina de Precisión", "entidad": "SACyL", "rol": "Ponente"}, {"nombre": "Francisco Ayala de la Peña", "cargo": "Jefe de Servicio de Oncología Médica", "entidad": "Hospital General Universitario Gregorio Marañón", "rol": "Ponente"}, {"nombre": "Isabel Martínez Sáez", "cargo": "Coordinadora del Proyecto de Catálogo Común de Pruebas Genéticas y Genómicas del SNS", "entidad": "Ministerio de Sanidad", "rol": "Ponente"}, {"nombre": "Rubén Gallego Fernández", "cargo": "Director", "entidad": "ÁlamoConsulting", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-enfermeria-debate", "dia": "Jue 26/03", "hora": "11:30–13:00", "sala": "Sala 3", "tipo": "Sesión Debate", "titulo": "Sesión Debate Enfermería Digital", "subtitulo": "Cuidados medibles y visibles: lenguajes enfermeros en la Historia Clínica Digital del SNS", "modera": [{"nombre": "Paloma Calleja Toledano", "cargo": "Responsable del Plan de Acción para la Atención Primaria y Comunitaria y de la Estrategia de Cuidados", "entidad": "Ministerio de Sanidad"}], "ponentes": [{"nombre": "Mª Carmen Rebollo Pina", "cargo": "Enfermera. Responsable Funcional HCE, Salud. Dirección General de Salud Digital e Infraestructuras", "entidad": "Aragón", "rol": "Ponente"}, {"nombre": "Pedro Ruyman Brito Brito", "cargo": "Asociación Española de Nomenclatura Taxonomía y Diagnóstico de Enfermería", "entidad": "AENTDE", "rol": "Ponente"}, {"nombre": "Jorge Gayol Samutlom", "cargo": "Responsable Técnico BPSO y Normalización de Cuidados", "entidad": "Asturias", "rol": "Ponente"}, {"nombre": "Marta Pavón Garrido", "cargo": "Representante Técnico del Ministerio de Sanidad", "entidad": "SNOMED CT", "rol": "Ponente"}, {"nombre": "Manuela Domingo Pozo", "cargo": "Supervisora de Sistemas de Información", "entidad": "Hospital General Universitario de Alicante Dr. Balmis", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-med-digital", "dia": "Jue 26/03", "hora": "13:00–14:30", "sala": "Sala 1", "tipo": "Sesión Medicina Digital", "titulo": "Sesión Medicina Digital", "subtitulo": "Potencial de la IA y otras tecnologías para la toma de decisiones clínicas, en la practica médica y asistencial", "modera": [{"nombre": "Joaquín Velilla Moliner", "cargo": "Director de Salud Digital e Infraestructura", "entidad": "Departamento de Sanidad del Gobierno de Aragón"}], "ponentes": [{"nombre": "Gabriel Matheu Capo", "cargo": "Patología digital e Insularidad, Jefe de Servicio", "entidad": "Son Espases", "rol": "Ponente"}, {"nombre": "Enrique de Álava Casado", "cargo": "Coordinador del Plan Andaluz de Medicina personalizada y de precisión, Proteómica en Reumatología", "entidad": "Realidades en la asistencia", "rol": "Ponente"}, {"nombre": "Ignacio Rego Pérez", "cargo": "Biomedicina", "entidad": "Servicio Gallego de Salud", "rol": "Ponente"}, {"nombre": "Daniel Blanco Hortal", "cargo": "", "entidad": "Quironsalud", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-farmacia-digital", "dia": "Jue 26/03", "hora": "13:00–14:30", "sala": "Sala 2", "tipo": "Sesión Farmacia Digital", "titulo": "Sesión Farmacia Digital", "subtitulo": "Herramientas de comunicación de farmacia con el paciente", "modera": [{"nombre": "José Manuel Paredero Domínguez", "cargo": "Presidente", "entidad": "Sociedad Española de Farmacéuticos de Atención Primaria"}], "ponentes": [{"nombre": "José Manuel Simarro Escribano", "cargo": "Jefe División Tecnologías de la Información", "entidad": "Agencia Española de Medicamentos y Productos Sanitarios (AEMPS)", "rol": "Ponente"}, {"nombre": "Marina Barreda Gutiérrez", "cargo": "Investigador del Grupo de Economía de la Salud", "entidad": "Universidad de Cantabria IDIVALE", "rol": "Ponente"}, {"nombre": "Vicente Escudero Vilaplana", "cargo": "Adjunto Servicio de Farmacia", "entidad": "Hospital General Universitario Gregorio Marañón", "rol": "Ponente"}, {"nombre": "Javier Bécares Martínez", "cargo": "Jefe de Farmacia", "entidad": "Fundación Jiménez Díaz", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-enfermeria-digital", "dia": "Jue 26/03", "hora": "13:00–14:30", "sala": "Sala 3", "tipo": "Sesión Enfermería Digital", "titulo": "Sesión Enfermería Digital", "subtitulo": "Enfermería Conectada: Asociaciones Profesionales ante la estrategia de Salud Digital del SNS", "modera": [{"nombre": "Inmaculada Moro Casuso", "cargo": "Directora de Enfermería", "entidad": "Hospital de Santa Marina, Bizkaia"}], "ponentes": [{"nombre": "Jesús Sanz Villorejo", "cargo": "Presidente", "entidad": "Asociación Nacional de Directivos de Enfermería (ANDE)", "rol": "Ponente"}, {"nombre": "Alejandro Lendinez Mesa", "cargo": "Presidente", "entidad": "Sociedad Española de Enfermería Neurológica", "rol": "Ponente"}, {"nombre": "Adrián Vences Garrido", "cargo": "Representante", "entidad": "Federación Asociaciones de Enfermería Familiar y Comunitaria", "rol": "Ponente"}, {"nombre": "Isaac Moll Adrián", "cargo": "Representante", "entidad": "Asociación Española de Enfermería Cardiológica", "rol": "Ponente"}, {"nombre": "David Pérez Barreno", "cargo": "Presidente", "entidad": "Asociación Española de Enfermería Vascular y Heridas", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-debate6", "dia": "Jue 26/03", "hora": "16:00–17:30", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 6", "subtitulo": "Sostenibilidad de las inversiones digitales: ¿Cómo garantizar el futuro de la salud digital?", "modera": [{"nombre": "Natalia Lobato Mosquera", "cargo": "Secretaria General Técnica", "entidad": "Consellería de Sanidade de la Xunta de Galicia"}], "ponentes": [{"nombre": "Juan Madrona Tárraga", "cargo": "Coordinador Regional de Coordinación y Gobernanza de la Dirección General de Salud Digital", "entidad": "Agencia de Transformación Digital de Castilla - La Mancha", "rol": "Ponente"}, {"nombre": "María Fernández Rancaño", "cargo": "Directora Adjunta de Servicios Públicos Electrónicos", "entidad": "Red.es", "rol": "Ponente"}, {"nombre": "María Jesús López-Neira de la Torre", "cargo": "Secretaria General", "entidad": "Servicio Canario de la Salud", "rol": "Ponente"}, {"nombre": "Javier Martínez Gilabert", "cargo": "Director General de Transformación Digital", "entidad": "Consejería de Economía, Hacienda, Fondos Europeos y Transformación Digital", "rol": "Ponente"}, {"nombre": "Josep Vehí", "cargo": "Catedrático de Ingeniería de Control y Biomédica, Director de la Cátedra UdG-DEXCOM", "entidad": "Universidad de Girona (UdG)", "rol": "Ponente"}, {"nombre": "Enrique Alonso Teruel", "cargo": "Director Territorial", "entidad": "Salesforce", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-proyectos-innovadores", "dia": "Jue 26/03", "hora": "16:00–17:30", "sala": "Sala 2", "tipo": "Sesión Innovación", "titulo": "Sesión de Proyectos Innovadores", "subtitulo": "", "modera": [{"nombre": "Adolfo Muñoz Carrero", "cargo": "Director de la Unidad de Investigación de Telemedicina y S. D.", "entidad": "Instituto de Salud Carlos III"}], "ponentes": [], "comunicaciones": ["Iniciativa de seguimiento de pacientes EPOC y ASMA por IA Conversacional", "Manejo digital integral de la Diabetes Mellitus Tipo 1 (DM1): dispositivos, datos y personas", "El papel fundamental de las enfermeras en la implementación de la teledermatología en el Sistema Riojano de Salud", "ERIZAPKLIK: toda la enfermería de Atención Primaria en un KLIK", "Hacia repositorios clínicos OpenEHR a gran escala: resultados y lecciones aprendidas en Cataluña", "Redefiniendo la humanización: gobernanza, datos y cultura en red"]}, {"id": "jue-com7", "dia": "Jue 26/03", "hora": "16:00–17:30", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 7", "subtitulo": "", "modera": [{"nombre": "Yolanda López Mínguez", "cargo": "Subdirectora de Infraestructuras y Servicios Técnicos", "entidad": "Servicio de Salud del Principado de Asturias"}], "ponentes": [], "comunicaciones": ["Detección precoz del cáncer de páncreas mediante un modelo multiparamétrico basado en IA (AI-EARLY PANC)", "Desarrollo de la nueva versión de la Data Curation Tool: arquitectura web escalable basada en FHIR", "Cuantificación de la perfusión renal y mapeo T1 mediante resonancia magnética en pacientes con ERC", "PROSODIC: inteligencia predictiva para la prevención secundaria del suicidio juvenil", "Caracterización de la base de datos OMOP-CDM del Hospital 12 de Octubre mediante herramientas OHDSI", "Riesgo de hospitalización no programada: predicción con datos del mundo real estandarizados en OMOP", "Despliegue del middleware SIMPL-OPEN para el espacio de datos sanitarios federado de FEDERA SALUD", "Requisitos de seguridad de la plataforma digital IMPACT para datos biomédicos en España"]}, {"id": "jue-debate7", "dia": "Jue 26/03", "hora": "17:30–19:00", "sala": "Sala 1", "tipo": "Sesión Debate", "titulo": "Sesión Debate 7", "subtitulo": "Hacia la Estrategia de Salud Digital 2026-2031. Liderazgo colaborativo y próximos pasos", "modera": [{"nombre": "José Ramón Parada Jorgal", "cargo": "Gerente", "entidad": "Servicio Gallego de Salud (SERGAS)"}], "ponentes": [{"nombre": "Ismael Vargas Pina", "cargo": "Director General de Sistemas de Información y Comunicaciones", "entidad": "Servicio Andaluz de Salud (SAS)", "rol": "Ponente"}, {"nombre": "Rocío Montalbán Carrasco", "cargo": "Subdirectora General de Salud Digital", "entidad": "Consejería de Salud del Gobierno de Cantabria", "rol": "Ponente"}, {"nombre": "José Manuel Alcaraz Muñoz", "cargo": "Subdirector General de Tecnologías de Información", "entidad": "Servicio Murciano de Salud", "rol": "Ponente"}, {"nombre": "Pol Pérez i Sust", "cargo": "Director del Área de Sistemas de Información del Servei Català de la Salut y Coordinador General de las TIC del Departament de Salut", "entidad": "CatSalut / Generalitat de Catalunya", "rol": "Ponente"}, {"nombre": "María Felpeto Pereiras", "cargo": "Sales Leader Healthcare Informatics", "entidad": "Philips", "rol": "Ponente"}, {"nombre": "Eduardo Zubizarreta Lorente", "cargo": "Director UNE Salud", "entidad": "Inycom", "rol": "Ponente"}], "comunicaciones": []}, {"id": "jue-st7", "dia": "Jue 26/03", "hora": "17:30–19:00", "sala": "Sala 2", "tipo": "Sesión Tecnológica", "titulo": "Sesión Tecnológica 7", "subtitulo": "", "modera": [{"nombre": "José Manuel Morales Pastora", "cargo": "Subdirector de Sistemas y Tecnologías para la Salud", "entidad": "Servicio Navarro de Salud - Osasunbidea"}], "ponentes": [{"nombre": "Javier de Torres", "cargo": "UDS Sales Executive", "entidad": "Dell Technologies", "rol": "17:30–17:45", "ponencia": "Orquestando el espacio de datos sanitarios: la propuesta de Dell para la IA clínica"}, {"nombre": "Jonay Luis", "cargo": "Senior Technical Consultant", "entidad": "Inetum", "rol": "17:45–18:00", "ponencia": "IA aplicada al Entorno de Salud"}, {"nombre": "Carolina Vegas Plaza", "cargo": "Subdirectora de enfermería", "entidad": "Hospital Universitario de Getafe", "rol": "18:00–18:15", "ponencia": "Gestionando el futuro: IA Conversacional como herramienta estratégica para transformar procesos asistenciales y mejorar el cuidado del paciente"}, {"nombre": "Suellyn Silveira", "cargo": "Responsable TriNetX España, HPM EU", "entidad": "TriNetX", "rol": "18:15–18:30", "ponencia": "Plataforma TriNetX: democratizando el acceso a datos del mundo real y generando evidencia de alto impacto"}, {"nombre": "Sergio Guerrero Haro", "cargo": "Responsable de Estrategia Tecnológica e Innovación en Salud", "entidad": "Microsoft", "rol": "18:30–18:45", "ponencia": ""}, {"nombre": "Kai Zhang", "cargo": "Responsable de Estrategia y desarrollo de negocio sanitario", "entidad": "Huawei España", "rol": "18:45–19:00", "ponencia": "De los silos de datos a la sabiduría clínica"}], "comunicaciones": []}, {"id": "jue-com8", "dia": "Jue 26/03", "hora": "17:30–19:00", "sala": "Sala 3", "tipo": "Sesión Comunicaciones", "titulo": "Sesión de Comunicaciones 8", "subtitulo": "", "modera": [{"nombre": "Manuel Pérez Vallina", "cargo": "Ex - Subdirector de Gestión de Procesos", "entidad": "Servicio Cántabro de Salud"}], "ponentes": [], "comunicaciones": ["La transformación digital de la actividad inspectora en la Comunitat Valenciana: arquitectura técnica y modelo organizativo", "Automatización cartográfica para vigilancia epidemiológica con R SHINY", "Integración dispositivos IoTM en un sistema de telemonitorización (TELEA)", "Resultados de la implementación de un marco de evaluación de activos digitales de salud en el SISCAT", "Desarrollo de herramienta web para la gestión de inteligencia en salud pública (HUGIN)", "Gestión de proyectos de la dirección técnica de sistemas de información de Atención Primaria de Madrid"]}, {"id": "jue-clausura", "dia": "Jue 26/03", "hora": "19:00", "sala": "Sala 1", "tipo": "Clausura", "titulo": "Clausura y Entrega de Premios", "subtitulo": "", "modera": [], "ponentes": [{"nombre": "Miguel López-Valverde Argüeso", "cargo": "Consejero de Digitalización", "entidad": "Comunidad de Madrid", "rol": "Preside"}, {"nombre": "Noemí Cívicos Villa", "cargo": "Directora General de Salud Digital y Sistemas de Información para el SNS", "entidad": "Ministerio de Sanidad", "rol": "Participa"}, {"nombre": "Elvira Alonso Suero", "cargo": "Coordinadora General", "entidad": "XXIX Congreso Nacional de Informática de la Salud", "rol": "Participa"}], "comunicaciones": []}];
+
+const PROGRAMA_TIPO_CSS = {
+  'Sesión Debate': 'debate',
+  'Sesión Tecnológica': 'tecnologica',
+  'Sesión Comunicaciones': 'comunicaciones',
+  'Sesión Medicina Digital': 'medicina',
+  'Sesión Farmacia Digital': 'farmacia',
+  'Sesión Enfermería Digital': 'enfermeria',
+  'Institucional': 'institucional',
+  'Clausura': 'clausura',
+  'Sesión Innovación': 'innovacion',
+  'Conferencia': 'conferencia',
+  'Presentación Posters': 'posters'
+};
+
+function programaTipoCss(tipo) {
+  for (const [k,v] of Object.entries(PROGRAMA_TIPO_CSS)) {
+    if (tipo && tipo.includes(k.replace('Sesión ',''))) return v;
+    if (tipo === k) return v;
+  }
+  return 'institucional';
+}
+
+function programaSalaCss(sala) {
+  if (!sala) return '';
+  if (sala.includes('1')) return 'prog-chip-sala-1';
+  if (sala.includes('2')) return 'prog-chip-sala-2';
+  if (sala.includes('3')) return 'prog-chip-sala-3';
+  return '';
+}
+
+function programaBadgeCss(tipo) {
+  return 'prog-tipo-badge prog-badge-' + programaTipoCss(tipo);
+}
+
+function programaRoleCss(rol) {
+  if (!rol) return 'prog-role-ponente';
+  const r = rol.toLowerCase();
+  if (r.includes('modera')) return 'prog-role-modera';
+  if (r.includes('presenta')) return 'prog-role-presenta';
+  if (r.includes('imparte')) return 'prog-role-imparte';
+  if (r.includes('preside')) return 'prog-role-preside';
+  if (r.includes('participa')) return 'prog-role-participa';
+  if (r.match(/\d{2}:/)) return 'prog-role-time';
+  return 'prog-role-ponente';
+}
+
+let programaCurrentView = 'agenda';
+let programaFiltered = [...programaData];
+
+document.getElementById('progCountTotal').textContent = programaData.length;
+
+function programaSetView(v) {
+  programaCurrentView = v;
+  document.getElementById('progBtnAgenda').classList.toggle('active', v==='agenda');
+  document.getElementById('progBtnCards').classList.toggle('active', v==='cards');
+  document.getElementById('progAgendaView').style.display = v==='agenda' ? '' : 'none';
+  document.getElementById('progCardsView').style.display = v==='cards' ? 'grid' : 'none';
+  programaRender();
+}
+
+function programaMatchesSearch(s, q) {
+  if (!q) return true;
+  const terms = q.toLowerCase().split(' ').filter(Boolean);
+  const hay = [
+    s.titulo, s.subtitulo, s.tipo,
+    ...s.ponentes.map(p => p.nombre + ' ' + p.cargo + ' ' + (p.entidad||'') + ' ' + (p.ponencia||'')),
+    ...s.modera.map(p => p.nombre + ' ' + p.cargo + ' ' + (p.entidad||'')),
+    ...s.comunicaciones
+  ].join(' ').toLowerCase();
+  return terms.every(t => hay.includes(t));
+}
+
+function programaApplyFilters() {
+  const q = document.getElementById('progSearchInput').value.trim();
+  const dia = document.getElementById('progFilterDia').value;
+  const sala = document.getElementById('progFilterSala').value;
+  const tipo = document.getElementById('progFilterTipo').value;
+  programaFiltered = programaData.filter(s => {
+    if (dia && s.dia !== dia) return false;
+    if (sala && s.sala !== sala) return false;
+    if (tipo && !s.tipo.includes(tipo.replace('Sesión ',''))) return false;
+    if (!programaMatchesSearch(s, q)) return false;
+    return true;
+  });
+  document.getElementById('progCountVisible').textContent = programaFiltered.length;
+  programaRender();
+}
+
+function programaResetFilters() {
+  document.getElementById('progSearchInput').value = '';
+  document.getElementById('progFilterDia').value = '';
+  document.getElementById('progFilterSala').value = '';
+  document.getElementById('progFilterTipo').value = '';
+  programaApplyFilters();
+}
+
+const PROGRAMA_DAYS = ['Mar 24/03','Mie 25/03','Jue 26/03'];
+const PROGRAMA_DAY_LABELS = {
+  'Mar 24/03': 'Martes, 24 de marzo de 2026',
+  'Mie 25/03': 'Miércoles, 25 de marzo de 2026',
+  'Jue 26/03': 'Jueves, 26 de marzo de 2026'
+};
+
+function programaRenderAgenda() {
+  const container = document.getElementById('progAgendaView');
+  const fIds = new Set(programaFiltered.map(s => s.id));
+  const dias = PROGRAMA_DAYS.filter(d => {
+    const dia = document.getElementById('progFilterDia').value;
+    return !dia || dia === d;
+  });
+  let html = '';
+  dias.forEach(day => {
+    const daySessions = programaData.filter(s => s.dia === day);
+    if (!daySessions.length) return;
+    const times = [...new Set(daySessions.map(s => s.hora))].sort();
+    const salas = ['Sala 1','Sala 2','Sala 3'];
+    html += `<div class="prog-agenda-day">
+      <div class="prog-day-header"><span>${PROGRAMA_DAY_LABELS[day]}</span></div>
+      <div style="background:white;border-radius:0 0 8px 8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)">`;
+    if (day === 'Mar 24/03') {
+      html += `<div class="prog-time-block">
+        <div class="prog-time-label">16:00<br>16:30</div>
+        <div class="prog-sessions-row">
+          <div style="flex:1;padding:10px 14px;font-size:.83rem;color:#555;font-style:italic">Recogida de Documentación</div>
+        </div>
+      </div>`;
+    }
+    let renderedBreaks = new Set();
+    times.forEach(time => {
+      if (day === 'Mie 25/03' && time === '11:30–13:00' && !renderedBreaks.has('11:00–11:30')) {
+        html += `<div class="prog-break-row">Café y Visita Área de Exposiciones — 11:00 a 11:30</div>`;
+        renderedBreaks.add('11:00–11:30');
+      }
+      if (day === 'Mie 25/03' && time === '16:00–17:30' && !renderedBreaks.has('14:30–16:00')) {
+        html += `<div class="prog-break-row">Descanso — 14:30 a 16:00</div>`;
+        renderedBreaks.add('14:30–16:00');
+      }
+      if (day === 'Mie 25/03' && time === '18:00–19:30' && !renderedBreaks.has('17:30–18:00')) {
+        html += `<div class="prog-break-row">Visita Área de Exposiciones — 17:30 a 18:00</div>`;
+        renderedBreaks.add('17:30–18:00');
+      }
+      if (day === 'Jue 26/03' && time === '11:30–13:00' && !renderedBreaks.has('11:00–11:30')) {
+        html += `<div class="prog-break-row">Café y Visita Área de Exposiciones — 11:00 a 11:30</div>`;
+        renderedBreaks.add('11:00–11:30');
+      }
+      if (day === 'Jue 26/03' && time === '16:00–17:30' && !renderedBreaks.has('14:30–16:00')) {
+        html += `<div class="prog-break-row">Descanso — 14:30 a 16:00</div>`;
+        renderedBreaks.add('14:30–16:00');
+      }
+      const timeSessions = daySessions.filter(s => s.hora === time);
+      const timeLabel = time.replace('–','<br>');
+      html += `<div class="prog-time-block"><div class="prog-time-label">${timeLabel}</div><div class="prog-sessions-row">`;
+      salas.forEach(sala => {
+        const s = timeSessions.find(x => x.sala === sala);
+        if (!s) {
+          if (sala === 'Sala 1') {
+            const fullWidth = timeSessions.find(x => !x.sala || x.sala === '');
+            if (!fullWidth) {
+              html += `<div class="prog-slot-empty">—</div>`;
+            }
+          }
+          return;
+        }
+        const isFiltered = fIds.has(s.id);
+        const css = programaTipoCss(s.tipo);
+        const opacity = isFiltered ? '1' : '0.3';
+        const modera = s.modera[0];
+        const pCount = s.ponentes.length + s.comunicaciones.length;
+        html += `<div class="prog-session-slot tipo-${css}" style="opacity:${opacity}" onclick="progOpenModal('${s.id}')">
+          <div class="prog-slot-sala">${escHtml(s.sala)}</div>
+          <div class="prog-slot-title">${escHtml(s.titulo)}</div>
+          ${s.subtitulo ? `<div class="prog-slot-subtitle">"${escHtml(s.subtitulo)}"</div>` : ''}
+          ${modera ? `<div class="prog-slot-modera">Modera: ${escHtml(modera.nombre)}</div>` : ''}
+          ${pCount ? `<span class="prog-slot-count">${pCount} ${s.comunicaciones.length ? 'comunicaciones' : 'ponentes'}</span>` : ''}
+        </div>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  container.innerHTML = html || '<div class="prog-empty-state">No hay sesiones con los filtros aplicados.</div>';
+}
+
+function programaPersonRow(p, rol) {
+  return `<div class="prog-person-row">
+    <span class="prog-person-role ${programaRoleCss(rol)}">${escHtml(rol)}</span>
+    <div class="prog-person-info">
+      <div class="prog-person-name">${escHtml(p.nombre)}</div>
+      ${p.cargo ? `<div class="prog-person-cargo">${escHtml(p.cargo)}</div>` : ''}
+      ${p.entidad ? `<div class="prog-person-entidad">${escHtml(p.entidad)}</div>` : ''}
+      ${p.ponencia ? `<div class="prog-ponencia-text">"${escHtml(p.ponencia)}"</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function programaRenderCards() {
+  const container = document.getElementById('progCardsView');
+  if (!programaFiltered.length) {
+    container.innerHTML = '<div class="prog-empty-state" style="grid-column:1/-1">No hay sesiones con los filtros aplicados.</div>';
+    return;
+  }
+  container.innerHTML = programaFiltered.map((s,i) => {
+    const pCount = s.ponentes.length;
+    const cCount = s.comunicaciones.length;
+    return `<div class="prog-card" id="prog-card-${i}">
+      <div class="prog-card-header" onclick="document.getElementById('prog-card-'+${i}).classList.toggle('open')">
+        <span class="${programaBadgeCss(s.tipo)}">${escHtml(s.tipo)}</span>
+        <span class="prog-card-title">${escHtml(s.titulo)}</span>
+        <div class="prog-card-meta">
+          <span class="prog-meta-chip prog-chip-dia">${escHtml(s.dia)}</span>
+          <span class="prog-meta-chip prog-chip-hora">${escHtml(s.hora)}</span>
+          <span class="prog-meta-chip ${programaSalaCss(s.sala)}">${escHtml(s.sala)}</span>
+        </div>
+        <span class="prog-expand-icon">▾</span>
+      </div>
+      <div class="prog-card-body">
+        ${s.subtitulo ? `<div class="prog-subtitle-text">"${escHtml(s.subtitulo)}"</div>` : ''}
+        ${s.modera.length ? `<div class="prog-people-section">
+          <div class="prog-people-label">Modera</div>
+          ${s.modera.map(p => programaPersonRow(p, 'Modera')).join('')}
+        </div>` : ''}
+        ${pCount ? `<div class="prog-people-section">
+          <div class="prog-people-label">${pCount} Ponente${pCount!==1?'s':''}</div>
+          ${s.ponentes.map(p => programaPersonRow(p, p.rol||'Ponente')).join('')}
+        </div>` : ''}
+        ${cCount ? `<div class="prog-people-section">
+          <div class="prog-people-label">${cCount} Comunicación${cCount!==1?'es':''}</div>
+          <div class="prog-comms-list">${s.comunicaciones.map(c => `<div class="prog-comm-item">${escHtml(c)}</div>`).join('')}</div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function programaRender() {
+  if (programaCurrentView === 'agenda') programaRenderAgenda();
+  else programaRenderCards();
+}
+
+function progOpenModal(id) {
+  const s = programaData.find(x => x.id === id);
+  if (!s) return;
+  const pCount = s.ponentes.length;
+  const cCount = s.comunicaciones.length;
+  document.getElementById('progModalTitle').innerHTML = `
+    <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
+      <span class="${programaBadgeCss(s.tipo)}">${escHtml(s.tipo)}</span>
+      <span class="prog-meta-chip prog-chip-dia">${escHtml(s.dia)}</span>
+      <span class="prog-meta-chip prog-chip-hora">${escHtml(s.hora)}</span>
+      <span class="prog-meta-chip ${programaSalaCss(s.sala)}">${escHtml(s.sala)}</span>
+    </div>
+    <div style="font-size:1.05rem;font-weight:700;margin-top:8px;color:#1a1a2e">${escHtml(s.titulo)}</div>
+  `;
+  document.getElementById('progModalBody').innerHTML = `
+    ${s.subtitulo ? `<div class="prog-subtitle-text">"${escHtml(s.subtitulo)}"</div>` : ''}
+    ${s.modera.length ? `<div class="prog-people-section">
+      <div class="prog-people-label">Modera</div>
+      ${s.modera.map(p => programaPersonRow(p, 'Modera')).join('')}
+    </div>` : ''}
+    ${pCount ? `<div class="prog-people-section">
+      <div class="prog-people-label">${pCount} Ponente${pCount!==1?'s':''}</div>
+      ${s.ponentes.map(p => programaPersonRow(p, p.rol||'Ponente')).join('')}
+    </div>` : ''}
+    ${cCount ? `<div class="prog-people-section">
+      <div class="prog-people-label">${cCount} Comunicación${cCount!==1?'es':''}</div>
+      <div class="prog-comms-list">${s.comunicaciones.map(c => `<div class="prog-comm-item">${escHtml(c)}</div>`).join('')}</div>
+    </div>` : ''}
+  `;
+  document.getElementById('progModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function progCloseModal(e) {
+  if (e.target === document.getElementById('progModalOverlay')) progCloseModalDirect();
+}
+function progCloseModalDirect() {
+  document.getElementById('progModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key==='Escape') progCloseModalDirect(); });
+
+// Initial render
+programaApplyFilters();
+
+// ===================================================
+// ADMINISTRACIÓN TAB LOGIC
+// ===================================================
+const adminData = [{"nombre": "Ismael Vargas Pina", "cargo": "Director General de Sistemas de Información y Comunicaciones", "organizacion": "Servicio Andaluz de Salud (SAS)", "ccaa": "Andalucía", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Muy Alto", "relevancia": "El SAS atiende a más de 8 millones de personas. Ismael Vargas es el máximo responsable TI del mayor sistema sanitario de España. Sus licitaciones son de los mayores volúmenes del SNS. Presencia en Debate 7 indica interés en la hoja de ruta digital.", "estrategia": "Abordar tras Debate 7 (Jue 19:00) o Clausura. Objetivo: entender el roadmap de interoperabilidad del SAS y si hay proyectos de EHDS en pipeline. Canal potencial: Ayesa Digital."}, {"nombre": "Carlos Telleria Orriols", "cargo": "Director de la Agencia del Dato de Aragón", "organizacion": "Gobierno de Aragón", "ccaa": "Aragón", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Director de la Agencia del Dato de Aragón, la primera agencia autonómica del dato en España. Aragón tiene una estructura de gobernanza del dato madura y es candidato ideal para un proyecto EHDS de referencia. Canal natural: Inycom (con sede en Zaragoza).", "estrategia": "Abordar tras Debate 4 (Mie 17:30). Es el perfil de dato más maduro de las CCAA en el congreso. Llevar propuesta concreta de despliegue EHDS con referencia a la Agencia del Dato."}, {"nombre": "Julia Calabuig Pérez", "cargo": "Directora General de Información Sanitaria, Calidad y Evaluación", "organizacion": "Conselleria de Sanitat de la Generalitat Valenciana", "ccaa": "C. Valenciana", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Responsable de la información sanitaria en la GVA. Su presencia en la mesa de interoperabilidad confirma que la GVA está activamente trabajando en integración de datos. GVA tiene sistemas legacy complejos (múltiples HIS) que necesitan interoperabilidad.", "estrategia": "Abordar tras Debate 4 (Mie 17:30). Coffee break post-sesión es la ventana perfecta. Framing: TietAI conecta los sistemas legacy de la GVA hacia el espacio de datos EHDS."}, {"nombre": "Jenaro Bejarano García", "cargo": "Subdirector de la Oficina de Gobierno del Dato e Inteligencia Artificial", "organizacion": "Servicio Canario de la Salud (SCS)", "ccaa": "Canarias", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Modera Sesión de Comunicaciones 1 (Miércoles 09:30–11:00, Sala 3).", "interes": "Muy Alto", "relevancia": "El SCS tiene una Oficina de Gobierno del Dato e IA: uno de los perfiles más avanzados técnicamente en datos sanitarios de una CCAA. Comprende perfectamente la propuesta de TietAI. Es el tipo de interlocutor ideal para un proyecto EHDS.", "estrategia": "Abordar en coffee 11:00–11:30 tras moderar Comunicaciones 1. Es el perfil técnico de dato más avanzado del congreso en una CCAA. Conversación de igual a igual sobre arquitectura EHDS."}, {"nombre": "Josep Manuel Pomar Reynes", "cargo": "Director Gerente", "organizacion": "Institut Català de la Salut (ICS)", "ccaa": "Cataluña", "tipo_decisor": "Estratégico Autonómico", "presencia": "Modera Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "El ICS es la mayor organización sanitaria pública de España (más de 8 millones de personas atendidas). Pomar modera la sesión de interoperabilidad: está activamente buscando soluciones en este espacio. Un proyecto piloto con el ICS sería el flagship de máximo impacto para TietAI.", "estrategia": "Presentarse ANTES del inicio del Debate 4. Es el moderador: estará accesible unos minutos antes. Pitch rápido (1 min) y solicitar una reunión posterior. Es el objetivo de mayor prioridad del congreso."}, {"nombre": "Pol Pérez i Sust", "cargo": "Director del Área de SI del Servei Català de la Salut. Coordinador General de las TIC del Departament de Salut", "organizacion": "CatSalut / Generalitat de Catalunya", "ccaa": "Cataluña", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Muy Alto", "relevancia": "Responsable TI y sistemas de información de CatSalut. Es quien contrata y aprueba los proyectos de TI en el sistema sanitario catalán. Su presencia en el Debate 7 indica que está definiendo la hoja de ruta 2026-2031.", "estrategia": "Abordar tras Debate 7 (Jue 19:00) o en la Clausura. Es el decisor de contratación TI en CatSalut. Llevar propuesta concreta de proyecto piloto EHDS."}, {"nombre": "Antoni Joan Colombas Salas", "cargo": "Subdirector de Gestión y Gobernanza del Dato", "organizacion": "Govern de les Illes Balears", "ccaa": "Illes Balears", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Responsable de la gobernanza del dato en Illes Balears. Su presencia en la mesa de interoperabilidad confirma interés directo. Illes Balears tiene proyectos avanzados de gobernanza del dato y es candidato natural para un proyecto EHDS.", "estrategia": "Abordar tras Debate 4 (Mie 17:30). Es el perfil más técnico y específico del congreso en gobernanza del dato en una CCAA. TietAI encaja directamente en su roadmap."}, {"nombre": "María Dolores Tomé Cotarelo", "cargo": "Vocal Asesora del Gabinete Técnico, Secretaría General Salud Digital SNS", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 4 — Interoperabilidad (Miércoles 16:00–17:30).", "interes": "Muy Alto", "relevancia": "Asesora técnica directa del Secretario General en materia de datos e interoperabilidad. Presente en la mesa más relevante del congreso para TietAI. Conoce los estándares y requisitos EHDS.", "estrategia": "Abordar INMEDIATAMENTE tras el Debate 4 (17:30 Mie). Es el contacto más técnico del Ministerio. Llevar one-pager sobre la propuesta EHDS de TietAI."}, {"nombre": "Noemí Cívicos Villa", "cargo": "Directora General de Salud Digital y Sistemas de Información del SNS", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Modera Sesión de Apertura (Martes) y Sesión de Clausura (Jueves 19:00).", "interes": "Muy Alto", "relevancia": "Directora responsable de los sistemas de información del SNS. Supervisa la interoperabilidad, el EHDS y la estrategia de datos del sistema público. Es la persona que valida proyectos de integración a nivel nacional.", "estrategia": "Muy accesible en la apertura y clausura. Abordar en el coffee del jueves tras el Debate 7. Mencionar EHDS y la estrategia 2026-2031 como contexto."}, {"nombre": "Ruth del Campo Becares", "cargo": "Directora General del Dato", "organizacion": "Ministerio para la Transformación Digital y de la Función Pública", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Presente en Inauguración Oficial (Martes 16:30).", "interes": "Muy Alto", "relevancia": "Máxima responsable de la política de datos en España, incluyendo los datos sanitarios en el contexto del EHDS. El EHDS es una regulación que afecta directamente a su ámbito competencial. TietAI está en el corazón de la infraestructura de datos que ella regula.", "estrategia": "Acceso difícil. Aprovechar la inauguración o la visita a exposiciones. Framing: TietAI como infraestructura de cumplimiento del EHDS para el SNS."}, {"nombre": "Ines Gallego Camiña", "cargo": "Directora General de Transformación, Planificación y Digitalización en Salud", "organizacion": "Departamento de Salud del Gobierno Vasco", "ccaa": "País Vasco", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Muy Alto", "relevancia": "DG de digitalización en salud del País Vasco. Responsable de la estrategia de datos e interoperabilidad en Osakidetza. El sistema vasco tiene múltiples sistemas legacy (Osabide, OsaWeb, laboratorios) que son candidatos directos.", "estrategia": "Abordar tras Debate 2 (Mie 13:00). Es la decisora técnica-estratégica en el sistema vasco. Canal potencial: Inycom (fuerte presencia en Navarra y zona norte)."}, {"nombre": "María José Tarazón Muñoz", "cargo": "Subdirectora General de TIC para la Salud", "organizacion": "Conselleria de Sanitat de la Generalitat Valenciana", "ccaa": "C. Valenciana", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Alto", "relevancia": "Subdirectora de TI del sistema sanitario valenciano. Es la responsable técnica de las licitaciones de TI en la GVA. La GVA tiene múltiples sistemas legacy (Abucasis, Orion Health, etc.) que son candidatos directos a la interoperabilidad de TietAI.", "estrategia": "Abordar en coffee 11:00–11:30 tras Debate 1. Es la puerta técnica de entrada al mercado de la GVA."}, {"nombre": "Rocío Montalbán Carrasco", "cargo": "Subdirectora General de Salud Digital", "organizacion": "Consejería de Salud del Gobierno de Cantabria", "ccaa": "Cantabria", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Alto", "relevancia": "Subdirectora de Salud Digital en Cantabria. Su presencia en el Debate de la estrategia 2026-2031 indica que está definiendo el roadmap digital del sistema cántabro. Cantabria tiene proyectos de innovación digital destacados.", "estrategia": "Abordar tras Debate 7 (Jue 19:00). Framing: TietAI como componente de la estrategia digital 2026-2031 de Cantabria en materia de EHDS."}, {"nombre": "Juan Madrona Tárraga", "cargo": "Coordinador Regional de Coordinación y Gobernanza de la DG de Salud Digital", "organizacion": "Junta de Castilla-La Mancha", "ccaa": "Castilla-La Mancha", "tipo_decisor": "Operativo Datos / EHDS", "presencia": "Ponente en Sesión Debate 6 — Sostenibilidad inversiones (Jueves 16:00–17:30).", "interes": "Alto", "relevancia": "Perfil de gobernanza del dato y salud digital de Castilla-La Mancha. La JCCM tiene la Agencia de Transformación Digital como ente propio para la digitalización sanitaria. Responsable de coordinar los proyectos digitales en salud.", "estrategia": "Abordar tras Debate 6 (Jue 17:30). Interés en proyectos de transformación digital con financiación europea. Mencionar la alineación de TietAI con el EHDS y los fondos Next Generation."}, {"nombre": "Carlos Gallego Pérez", "cargo": "Director de Salud Digital", "organizacion": "Sistema de Salud de Catalunya (CatSalut)", "ccaa": "Cataluña", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 5 — IA en la asistencia (Miércoles 18:00–19:30).", "interes": "Alto", "relevancia": "Director de salud digital de CatSalut, la aseguradora pública catalana. Responsable de la estrategia de datos e IA. Catalunya es pionera en espacios de datos sanitarios en España y un referente para el EHDS.", "estrategia": "Abordar tras Debate 5 o en la visita a exposiciones 17:30. Framing: TietAI como infraestructura de ingesta hacia el espacio de datos de CatSalut compatible con EHDS."}, {"nombre": "Benigno Rosón Calvo", "cargo": "Subdirector General de Sistemas y Tecnologías de la Información", "organizacion": "Servicio Gallego de Salud (SERGAS)", "ccaa": "Galicia", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Alto", "relevancia": "Responsable TI del SERGAS. El sistema gallego tiene sistemas legacy propios (IANUS, Galeno) que necesitan interoperabilidad. SERGAS es conocido por su capacidad de contratación propia y proyectos de innovación.", "estrategia": "Abordar tras Debate 2 (Mie 13:00). Framing: TietAI como capa de interoperabilidad sobre los sistemas propios de SERGAS hacia el EHDS."}, {"nombre": "Amador Ruiz Torrejón", "cargo": "Coordinador de Sistemas de Información Asistencial", "organizacion": "Servicio de Salud de las Islas Baleares", "ccaa": "Illes Balears", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Alto", "relevancia": "Coordinador de sistemas asistenciales: responsable técnico de los HIS y sistemas legacy del sistema balear. Perfil operativo con conocimiento directo de los sistemas a integrar.", "estrategia": "Abordar tras Debate 2 (Mie 13:00). Perfil técnico: puede ser champion interno para un proyecto TietAI en Illes Balears."}, {"nombre": "José Manuel Alcaraz Muñoz", "cargo": "Subdirector de Tecnologías de Información", "organizacion": "Servicio Murciano de Salud (SMS)", "ccaa": "Murcia", "tipo_decisor": "Operativo TI / Contratación", "presencia": "Ponente en Sesión Debate 7 — Estrategia 2026-2031 (Jueves 17:30–19:00).", "interes": "Alto", "relevancia": "Responsable TI del sistema sanitario murciano. El SMS está en proceso activo de modernización de sus sistemas. Su presencia en el Debate 7 indica interés en definir proyectos para la nueva estrategia.", "estrategia": "Abordar tras Debate 7 (Jue 19:00). El SMS tiene presupuesto propio de TI y proyectos de digitalización en curso. Contacto directo para proyecto piloto."}, {"nombre": "Adolfo Muñoz Carrero", "cargo": "Director de la Unidad de Investigación de Telemedicina y Salud Digital", "organizacion": "Instituto de Salud Carlos III (ISCIII)", "ccaa": "Nacional", "tipo_decisor": "Investigación / PERTE", "presencia": "Modera Sesión de Proyectos Innovadores (Jueves 16:00–17:30, Sala 2).", "interes": "Alto", "relevancia": "El ISCIII es el principal organismo de investigación sanitaria de España. Adolfo Muñoz modera la sesión de proyectos innovadores. El ISCIII participa en proyectos EHDS europeos (TEHDAS, etc.).", "estrategia": "Abordar durante o tras la Sesión de Proyectos Innovadores (Jue 16:00–17:30). Framing: TietAI como infraestructura de datos para proyectos de investigación del ISCIII compatibles con EHDS."}, {"nombre": "Juan Fernando Muñoz Montalvo", "cargo": "Secretario General de Salud Digital, Información e Innovación del SNS", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Conferencia de Apertura (Martes 17:30). Inaugura el congreso.", "interes": "Alto", "relevancia": "Máximo responsable de la Estrategia de Salud Digital 2026-2031. Cualquier proyecto de interoperabilidad a nivel SNS pasa por su dirección. Define los ejes de inversión donde encaja TietAI.", "estrategia": "Acceso difícil directo. Trabajar a través de Noemí Cívicos o contactos de CCAA que tengan relación con su equipo. Si hay oportunidad en coffee break, presentación corporativa de 2 min."}, {"nombre": "María Fe Lapeña Gutiérrez", "cargo": "Subdirectora General de Servicios Digitales de Salud", "organizacion": "Ministerio de Sanidad", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Ponente en Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Alto", "relevancia": "Responsable de los servicios digitales del SNS (HCE compartida, receta electrónica, carpeta ciudadana de salud). Sus plataformas son objetivo de integración con el EHDS.", "estrategia": "Abordar tras Debate 1 o en el coffee 11:00–11:30. Su subdirección es cliente potencial directo de TietAI para proyectos nacionales."}, {"nombre": "María Fernández Rancaño", "cargo": "Directora Adjunta de Servicios Públicos Electrónicos", "organizacion": "Red.es", "ccaa": "Nacional", "tipo_decisor": "Estratégico Nacional", "presencia": "Ponente en Sesión Debate 6 — Sostenibilidad inversiones (Jueves 16:00–17:30).", "interes": "Alto", "relevancia": "Red.es gestiona la financiación europea (fondos Next Generation, PERTE) para proyectos de digitalización del SNS. Es la puerta de entrada a la financiación pública para proyectos de TietAI.", "estrategia": "Abordar tras Debate 6 (Jue 17:30). Objetivo: entender las convocatorias abiertas o previstas de Red.es para proyectos de interoperabilidad y EHDS donde TietAI pueda participar."}, {"nombre": "Raquel Yotti Álvarez", "cargo": "Comisionada del PERTE para la Salud de Vanguardia", "organizacion": "Ministerio de Ciencia, Innovación y Universidades", "ccaa": "Nacional", "tipo_decisor": "Investigación / PERTE", "presencia": "Modera Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Alto", "relevancia": "El PERTE de Salud de Vanguardia financia proyectos de digitalización sanitaria avanzada. Los proyectos de interoperabilidad y EHDS encajan directamente en sus líneas. Es la puerta de entrada a financiación PERTE para TietAI.", "estrategia": "Abordar tras Debate 1 o en el coffee 11:00. Objetivo: entender si hay convocatorias PERTE abiertas o previstas donde TietAI pueda presentar un proyecto junto a una CCAA."}, {"nombre": "Javier Martínez Gilabert", "cargo": "Director General de Transformación Digital", "organizacion": "Consejería de Economía, Hacienda, Fondos Europeos y Transformación Digital del Gobierno de Navarra", "ccaa": "Navarra", "tipo_decisor": "Estratégico Autonómico", "presencia": "Ponente en Sesión Debate 6 — Sostenibilidad inversiones (Jueves 16:00–17:30).", "interes": "Alto", "relevancia": "Director General de Transformación Digital de Navarra y responsable de la gestión de Fondos Europeos para digitalización. Presencia en el Debate de sostenibilidad indica que gestiona la financiación europea para proyectos TIC en el sistema sanitario navarro.", "estrategia": "Abordar tras Debate 6 (Jue 17:30). Objetivo: identificar convocatorias de fondos europeos en Navarra donde TietAI pueda participar. Canal potencial: Inycom (sede en Zaragoza, fuerte en Navarra)."}, {"nombre": "Gonzalo Tamayo Medel", "cargo": "Viceconsejero de Salud y Transformación Digital", "organizacion": "Departamento de Salud del Gobierno Vasco", "ccaa": "País Vasco", "tipo_decisor": "Estratégico Autonómico", "presencia": "Modera Sesión Debate 2 (Miércoles 11:30–13:00).", "interes": "Alto", "relevancia": "Viceconsejero de salud con competencias en transformación digital. Osakidetza es uno de los sistemas sanitarios más digitalizados de España. Decisor político de alto nivel.", "estrategia": "Abordar tras Debate 2 (13:00) o en el descanso 13:00–14:30. Framing político: TietAI como herramienta para cumplir el EHDS y posicionar a Osakidetza como referente europeo."}, {"nombre": "Lidia Clara Rodríguez García", "cargo": "Directora General de Planificación, Gestión del Conocimiento y Transformación Digital Sanitaria", "organizacion": "Consejería de Salud del Principado de Asturias", "ccaa": "Asturias", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 1 (Miércoles 09:30–11:00).", "interes": "Medio", "relevancia": "DG de transformación digital sanitaria en Asturias. Su cargo combina planificación y transformación digital: tiene visión estratégica sobre los proyectos digitales del sistema asturiano.", "estrategia": "Abordar en coffee 11:00–11:30 tras Debate 1. Framing: TietAI como componente de la hoja de ruta de transformación digital de Asturias."}, {"nombre": "Nuria Ruiz Hombrebueno", "cargo": "Directora General de Salud Digital", "organizacion": "Consejería de Digitalización de la Comunidad de Madrid", "ccaa": "Madrid", "tipo_decisor": "Innovación / Salud Digital", "presencia": "Ponente en Sesión Debate 3 (Miércoles 13:00–14:30).", "interes": "Medio", "relevancia": "DG de Salud Digital en la Comunidad de Madrid. Madrid tiene el mayor sistema sanitario por complejidad de España (SERMAS). Los proyectos de interoperabilidad en SERMAS son los de mayor volumen económico del SNS.", "estrategia": "Abordar en descanso 14:30–16:00 tras Debate 3. Madrid es mercado de alto valor pero también muy competido. Framing: TietAI como solución para la estrategia EHDS del SERMAS."}];
+
+// Populate CCAA filter
+(function() {
+  const ccaas = [...new Set(adminData.map(d=>d.ccaa))].sort((a,b)=>{
+    if(a==='Nacional') return -1; if(b==='Nacional') return 1; return a.localeCompare(b,'es');
+  });
+  const sel = document.getElementById('adminFCcaa');
+  ccaas.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+})();
+
+function adminTipoCss(t) {
+  if(!t) return '';
+  if(t.includes('Estratégico Nacional')) return 'admin-chip-tipo-estrategico-nacional';
+  if(t.includes('Estratégico Autonómico')) return 'admin-chip-tipo-estrategico-autonomico';
+  if(t.includes('Operativo TI')) return 'admin-chip-tipo-operativo-ti';
+  if(t.includes('Datos')) return 'admin-chip-tipo-datos-ehds';
+  if(t.includes('Innovación')) return 'admin-chip-tipo-innovacion';
+  if(t.includes('Investigación')) return 'admin-chip-tipo-investigacion';
+  return '';
+}
+
+function adminInteresCss(i) {
+  if(i==='Muy Alto') return 'admin-interes-muy-alto';
+  if(i==='Alto') return 'admin-interes-alto';
+  return 'admin-interes-medio';
+}
+
+function adminStripeCss(i) {
+  if(i==='Muy Alto') return 'admin-stripe-muy-alto';
+  if(i==='Alto') return 'admin-stripe-alto';
+  return 'admin-stripe-medio';
+}
+
+function adminInitials(n) {
+  return n.split(' ').filter((_,i,a)=>i===0||i===a.length-1).map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+
+function adminRender() {
+  const q = document.getElementById('adminSearchInput').value.toLowerCase().trim();
+  const fi = document.getElementById('adminFInteres').value;
+  const ft = document.getElementById('adminFTipo').value;
+  const fc = document.getElementById('adminFCcaa').value;
+  const filtered = adminData.filter(d => {
+    if(fi && d.interes!==fi) return false;
+    if(ft && d.tipo_decisor!==ft) return false;
+    if(fc && d.ccaa!==fc) return false;
+    if(q) {
+      const hay = [d.nombre,d.cargo,d.organizacion,d.ccaa,d.tipo_decisor,d.presencia,d.relevancia,d.estrategia].join(' ').toLowerCase();
+      if(!q.split(' ').filter(Boolean).every(t=>hay.includes(t))) return false;
+    }
+    return true;
+  });
+  document.getElementById('adminCount').textContent = filtered.length;
+  const c = document.getElementById('adminContainer');
+  if(!filtered.length) {
+    c.innerHTML = '<div class="admin-empty-state">No se encontraron contactos con los filtros aplicados.</div>';
+    return;
+  }
+  c.innerHTML = filtered.map((d,i) => `
+    <div class="admin-card" id="adm-c${i}">
+      <div class="admin-card-header" onclick="document.getElementById('adm-c${i}').classList.toggle('open')">
+        <div class="admin-priority-stripe ${adminStripeCss(d.interes)}"></div>
+        <div class="admin-avatar">${escHtml(adminInitials(d.nombre))}</div>
+        <div class="admin-card-main">
+          <div class="admin-card-name">${escHtml(d.nombre)}</div>
+          <div class="admin-card-cargo">${escHtml(d.cargo)}</div>
+          <div class="admin-card-chips">
+            <span class="admin-chip admin-chip-org">${escHtml(d.organizacion)}</span>
+            <span class="admin-chip admin-chip-ccaa">${escHtml(d.ccaa)}</span>
+            <span class="admin-chip ${adminTipoCss(d.tipo_decisor)}">${escHtml(d.tipo_decisor)}</span>
+          </div>
+        </div>
+        <span class="admin-interes-badge ${adminInteresCss(d.interes)}">${escHtml(d.interes)}</span>
+        <span class="admin-expand-icon">▾</span>
+      </div>
+      <div class="admin-card-body">
+        <div class="admin-presencia-block">
+          <div class="admin-ib-label">Presencia en el congreso</div>
+          <div class="admin-ib-text">${escHtml(d.presencia)}</div>
+        </div>
+        <div class="admin-info-block full">
+          <div class="admin-ib-label">Por qué es relevante para TietAI</div>
+          <div class="admin-ib-text">${escHtml(d.relevancia)}</div>
+        </div>
+        <div class="admin-estrategia-block">
+          <div class="admin-ib-label">Estrategia de acercamiento</div>
+          <div class="admin-ib-text">${escHtml(d.estrategia)}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function adminReset() {
+  document.getElementById('adminSearchInput').value='';
+  document.getElementById('adminFInteres').value='';
+  document.getElementById('adminFTipo').value='';
+  document.getElementById('adminFCcaa').value='';
+  adminRender();
+}
+
+adminRender();
+</script>
+</body>
+</html>
